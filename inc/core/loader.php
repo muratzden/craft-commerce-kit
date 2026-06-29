@@ -12,6 +12,8 @@ require_once CCK_PLUGIN_DIR . 'inc/core/tokens.php';
 
 require_once CCK_PLUGIN_DIR . 'inc/brand-packs/tilla-leather.php';
 require_once CCK_PLUGIN_DIR . 'inc/templates/registry.php';
+require_once CCK_PLUGIN_DIR . 'inc/components/registry.php';
+require_once CCK_PLUGIN_DIR . 'inc/components/renderer.php';
 
 require_once CCK_PLUGIN_DIR . 'inc/components/hero.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/section-title.php';
@@ -19,6 +21,9 @@ require_once CCK_PLUGIN_DIR . 'inc/components/trust-block.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/image-text.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/cta.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/collection-grid.php';
+require_once CCK_PLUGIN_DIR . 'inc/components/components/hero.php';
+require_once CCK_PLUGIN_DIR . 'inc/components/components/usp.php';
+require_once CCK_PLUGIN_DIR . 'inc/components/components/product-grid.php';
 
 require_once CCK_PLUGIN_DIR . 'inc/shortcodes/shortcodes.php';
 
@@ -58,6 +63,7 @@ if ( is_admin() ) {
 }
 
 add_action( 'wp_enqueue_scripts', 'cck_enqueue_assets' );
+add_filter( 'pre_do_shortcode_tag', 'cck_enqueue_assets_for_shortcode', 10, 2 );
 add_action( 'wp_head', 'cck_print_design_tokens', 5 );
 add_action( 'init', 'cck_register_shortcodes' );
 

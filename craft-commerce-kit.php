@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Craft Commerce Kit
- * Plugin URI:  https://example.com/craft-commerce-kit
+ * Plugin URI:  https://muratozden.com.tr/craft-commerce-kit
  * Description: A theme-independent WooCommerce UI framework for premium artisan, boutique, handmade, craft, and quiet luxury commerce brands.
  * Version:     0.1.0
  * Author:      Craft Commerce Kit

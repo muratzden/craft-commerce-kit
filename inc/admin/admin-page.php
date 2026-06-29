@@ -58,7 +58,13 @@ if ( ! function_exists( 'cck_get_current_admin_page' ) ) {
 	 * @return string
 	 */
 	function cck_get_current_admin_page() {
-		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : 'craft-commerce-kit';
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		$page   = 'craft-commerce-kit';
+
+		if ( $screen && ! empty( $screen->id ) ) {
+			$page = str_replace( 'craft-commerce-kit_page_', '', $screen->id );
+			$page = str_replace( 'toplevel_page_', '', $page );
+		}
 
 		return array_key_exists( $page, cck_get_admin_nav_items() ) ? $page : 'craft-commerce-kit';
 	}
@@ -129,15 +135,64 @@ if ( ! function_exists( 'cck_get_admin_components' ) ) {
 	 * @return array
 	 */
 	function cck_get_admin_components() {
-		return array(
-			'Hero',
-			'Section Title',
-			'Trust Block',
-			'Image Text',
-			'CTA',
-			'Collection Grid',
-			'Product Trust Notes',
+		return function_exists( 'cck_get_component_registry' ) ? cck_get_component_registry() : array();
+	}
+}
+
+
+
+if ( ! function_exists( 'cck_get_admin_component_label' ) ) {
+	/**
+	 * Get component label for admin display.
+	 *
+	 * @param array|string $component Component metadata or label.
+	 * @return string
+	 */
+	function cck_get_admin_component_label( $component ) {
+		if ( is_array( $component ) ) {
+			if ( ! empty( $component['label'] ) ) {
+				return $component['label'];
+			}
+
+			return isset( $component['id'] ) ? $component['id'] : '';
+		}
+
+		return (string) $component;
+	}
+}
+
+if ( ! function_exists( 'cck_get_component_category_label' ) ) {
+	/**
+	 * Get component category label.
+	 *
+	 * @param string $category Component category.
+	 * @return string
+	 */
+	function cck_get_component_category_label( $category ) {
+		$labels = array(
+			'ui'       => __( 'UI Component', 'craft-commerce-kit' ),
+			'commerce' => __( 'Commerce Component', 'craft-commerce-kit' ),
 		);
+
+		return isset( $labels[ $category ] ) ? $labels[ $category ] : ucfirst( $category );
+	}
+}
+
+if ( ! function_exists( 'cck_get_component_status_label' ) ) {
+	/**
+	 * Get component status label.
+	 *
+	 * @param string $status Component status.
+	 * @return string
+	 */
+	function cck_get_component_status_label( $status ) {
+		$labels = array(
+			'active'   => __( 'Active', 'craft-commerce-kit' ),
+			'planned'  => __( 'Planned', 'craft-commerce-kit' ),
+			'disabled' => __( 'Disabled', 'craft-commerce-kit' ),
+		);
+
+		return isset( $labels[ $status ] ) ? $labels[ $status ] : ucfirst( $status );
 	}
 }
 
@@ -229,7 +284,7 @@ if ( ! function_exists( 'cck_render_admin_page' ) ) {
 				<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'Components', 'craft-commerce-kit' ); ?></h2><span class="cck-admin-badge"><?php echo esc_html( count( $components ) ); ?></span></div>
 				<ul class="cck-admin-checklist">
 					<?php foreach ( $components as $component ) : ?>
-						<li><input type="checkbox" checked disabled aria-label="<?php echo esc_attr( $component ); ?>"><span><?php echo esc_html( $component ); ?></span></li>
+						<li><input type="checkbox" checked disabled aria-label="<?php echo esc_attr( cck_get_admin_component_label( $component ) ); ?>"><span><?php echo esc_html( cck_get_admin_component_label( $component ) ); ?></span></li>
 					<?php endforeach; ?>
 				</ul>
 			</div>
@@ -271,15 +326,28 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 	function cck_render_components_page() {
 		$components = cck_get_admin_components();
 
-		cck_render_admin_workspace_open( __( 'Components', 'craft-commerce-kit' ), __( 'Component Manager will be available in Sprint 04.', 'craft-commerce-kit' ) );
+		cck_render_admin_workspace_open( __( 'Components', 'craft-commerce-kit' ), __( 'Reusable storefront components registered in Craft Commerce Kit.', 'craft-commerce-kit' ) );
 		?>
 		<div class="cck-admin-card cck-admin-card--wide">
 			<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'Registered Components', 'craft-commerce-kit' ); ?></h2><span class="cck-admin-badge"><?php echo esc_html( count( $components ) ); ?></span></div>
-			<ul class="cck-admin-checklist">
+			<div class="cck-admin-component-grid">
 				<?php foreach ( $components as $component ) : ?>
-					<li><input type="checkbox" checked disabled aria-label="<?php echo esc_attr( $component ); ?>"><span><?php echo esc_html( $component ); ?></span></li>
+					<?php
+					$component_id = isset( $component['id'] ) ? sanitize_key( $component['id'] ) : '';
+					$label        = cck_get_admin_component_label( $component );
+					$description  = isset( $component['description'] ) ? $component['description'] : '';
+					$category     = isset( $component['category'] ) ? $component['category'] : 'ui';
+					$status       = isset( $component['status'] ) ? $component['status'] : 'active';
+					$shortcode    = '[cck_component id="' . $component_id . '"]';
+					?>
+					<article class="cck-admin-component-card">
+						<div class="cck-admin-card__heading"><h2><?php echo esc_html( $label ); ?></h2><span class="cck-admin-status cck-admin-status--active"><?php echo esc_html( cck_get_component_status_label( $status ) ); ?></span></div>
+						<p><?php echo esc_html( $description ); ?></p>
+						<div class="cck-admin-template-meta"><span><?php echo esc_html( cck_get_component_category_label( $category ) ); ?></span><span><?php esc_html_e( 'Shortcode Ready', 'craft-commerce-kit' ); ?></span></div>
+						<div class="cck-admin-shortcode-example"><code><?php echo esc_html( $shortcode ); ?></code><button type="button" class="button cck-admin-copy" data-cck-copy="<?php echo esc_attr( $shortcode ); ?>"><?php esc_html_e( 'Copy', 'craft-commerce-kit' ); ?></button></div>
+					</article>
 				<?php endforeach; ?>
-			</ul>
+			</div>
 		</div>
 		<?php
 		cck_render_admin_workspace_close();

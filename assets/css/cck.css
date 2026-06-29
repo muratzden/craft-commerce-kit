@@ -294,3 +294,117 @@
 		grid-template-columns: 1fr;
 	}
 }
+
+
+.cck-component {
+	box-sizing: border-box;
+}
+
+.cck-component *,
+.cck-component *::before,
+.cck-component *::after {
+	box-sizing: inherit;
+}
+
+.cck-hero__card {
+	display: grid;
+	gap: 10px;
+	min-height: 220px;
+	padding: var(--cck-spacing-md);
+	border: 1px solid var(--cck-colors-border);
+	border-radius: var(--cck-radius-md);
+	background: var(--cck-colors-surface);
+	box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+}
+
+.cck-hero__card span,
+.cck-hero__card small {
+	color: var(--cck-colors-muted);
+}
+
+.cck-hero__card strong {
+	color: var(--cck-colors-heading);
+	font-size: 1.8rem;
+	line-height: 1.15;
+}
+
+.cck-usp {
+	padding: var(--cck-spacing-xl) 0;
+	background: var(--cck-colors-surface);
+}
+
+.cck-usp-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: var(--cck-spacing-md);
+}
+
+.cck-usp-item,
+.cck-product-card {
+	padding: var(--cck-spacing-md);
+	border: 1px solid var(--cck-colors-border);
+	border-radius: var(--cck-radius-md);
+	background: var(--cck-colors-surface-alt);
+}
+
+.cck-usp-item h3,
+.cck-product-card h3 {
+	margin: 0 0 10px;
+	color: var(--cck-colors-heading);
+}
+
+.cck-usp-item p,
+.cck-product-card p {
+	margin: 0;
+	color: var(--cck-colors-muted);
+}
+
+.cck-product-grid {
+	padding: var(--cck-spacing-xl) 0;
+	background: var(--cck-colors-surface);
+}
+
+.cck-product-grid__items {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: var(--cck-spacing-md);
+}
+
+.cck-product-card__link {
+	display: grid;
+	gap: 12px;
+	color: inherit;
+	text-decoration: none;
+}
+
+.cck-product-card__image {
+	aspect-ratio: 1 / 1;
+	overflow: hidden;
+	border-radius: var(--cck-radius-sm);
+	background: var(--cck-colors-surface);
+}
+
+.cck-product-card__image img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.cck-product-card__price {
+	font-weight: 700;
+}
+
+@media (max-width: 900px) {
+	.cck-usp-grid,
+	.cck-product-grid__items {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 560px) {
+	.cck-usp-grid,
+	.cck-product-grid__items {
+		grid-template-columns: 1fr;
+	}
+}

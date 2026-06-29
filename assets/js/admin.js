@@ -36,13 +36,21 @@
 		callback();
 	}
 
-	document.addEventListener('click', function (event) {
-		var button = event.target.closest('.cck-admin-copy');
+	document.addEventListener('DOMContentLoaded', function () {
+		var adminRoot = document.querySelector('.cck-admin-dashboard');
 
-		if (!button) {
+		if (!adminRoot) {
 			return;
 		}
 
-		copyText(button.getAttribute('data-cck-copy') || '', button);
+		adminRoot.addEventListener('click', function (event) {
+			var button = event.target.closest('.cck-admin-copy');
+
+			if (!button || !adminRoot.contains(button)) {
+				return;
+			}
+
+			copyText(button.getAttribute('data-cck-copy') || '', button);
+		});
 	});
 })();

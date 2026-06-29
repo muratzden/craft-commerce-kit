@@ -1,5 +1,9 @@
 (function () {
 	document.addEventListener('DOMContentLoaded', function () {
-		document.body.classList.add('cck-ready');
+		var elements = document.querySelectorAll('.cck-component, .cck-section');
+
+		elements.forEach(function (element) {
+			element.classList.add('cck-ready');
+		});
 	});
 })();
