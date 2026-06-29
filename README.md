@@ -4,7 +4,7 @@ Tags: woocommerce, ecommerce, components, storefront, shortcodes
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.5.0
+Stable tag: 0.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,7 @@ WooCommerce shortcode, available only when WooCommerce is active:
 
 Component Engine shortcodes:
 
+* `[cck_layout id="homepage"]`
 * `[cck_component id="hero"]`
 * `[cck_component id="usp"]`
 * `[cck_component id="product_grid"]`
@@ -64,7 +65,7 @@ Renderer: validates the manifest, reads defaults, applies shortcode overrides, l
 
 Settings: each component can define typed settings with labels, descriptions, defaults, required flags, and sanitize callbacks. The admin Components screen can render these settings automatically as a preview-only form.
 
-Hooks: `cck_component_manifest`, `cck_component_defaults`, `cck_before_render_component`, and `cck_after_render_component` are available for future extensions and premium component packs.
+Hooks: `cck_component_manifest`, `cck_component_defaults`, `cck_before_render_component`, and `cck_after_render_component` are available for future extensions and premium component packs. Layout registry and renderer APIs prepare component-based page composition for future visual workflows.
 
 == Component Framework ==
 
@@ -85,6 +86,17 @@ Available helper functions:
 * `cck_get_component_defaults()`
 * `cck_render_component()`
 
+
+
+== Layout Engine ==
+
+The Layout Engine renders component-based layouts from layout manifests. Layouts are discovered automatically from `inc/layouts/layouts/*.php`.
+
+The first registered layout is Homepage and can be rendered with:
+
+`[cck_layout id="homepage"]`
+
+The layout renderer is prepared for future JSON-style component definitions, but this release does not read JSON, save layouts, or add a drag-and-drop editor.
 
 == Component Settings UI ==
 
@@ -131,6 +143,9 @@ Craft Commerce Kit works with WooCommerce when WooCommerce is active. It does no
 Deactivating the plugin removes its shortcodes, assets, and admin page. It does not delete pages, products, settings, themes, or WooCommerce data.
 
 == Changelog ==
+
+= 0.6.0 =
+* Added Layout Engine foundation with automatic layout registry, homepage layout, layout renderer, shortcode, and admin Layouts page.
 
 = 0.5.0 =
 * Added preview-only Component Settings UI generated automatically from manifest settings definitions.

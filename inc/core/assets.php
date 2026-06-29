@@ -24,6 +24,7 @@ if ( ! function_exists( 'cck_get_frontend_shortcodes' ) ) {
 			'cck_collection_grid',
 			'cck_product_trust_notes',
 			'cck_component',
+			'cck_layout',
 		);
 	}
 }
@@ -148,6 +149,7 @@ if ( ! function_exists( 'cck_enqueue_admin_assets' ) ) {
 			'toplevel_page_craft-commerce-kit',
 			'craft-commerce-kit_page_craft-commerce-kit-components',
 			'craft-commerce-kit_page_craft-commerce-kit-templates',
+			'craft-commerce-kit_page_craft-commerce-kit-layouts',
 			'craft-commerce-kit_page_craft-commerce-kit-brand',
 			'craft-commerce-kit_page_craft-commerce-kit-commerce',
 			'craft-commerce-kit_page_craft-commerce-kit-system',

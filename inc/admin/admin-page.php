@@ -27,6 +27,7 @@ if ( ! function_exists( 'cck_register_admin_page' ) ) {
 		add_submenu_page( 'craft-commerce-kit', __( 'Dashboard', 'craft-commerce-kit' ), __( 'Dashboard', 'craft-commerce-kit' ), 'manage_options', 'craft-commerce-kit', 'cck_render_admin_page' );
 		add_submenu_page( 'craft-commerce-kit', __( 'Components', 'craft-commerce-kit' ), __( 'Components', 'craft-commerce-kit' ), 'manage_options', 'craft-commerce-kit-components', 'cck_render_components_page' );
 		add_submenu_page( 'craft-commerce-kit', __( 'Templates', 'craft-commerce-kit' ), __( 'Templates', 'craft-commerce-kit' ), 'manage_options', 'craft-commerce-kit-templates', 'cck_render_templates_page' );
+		add_submenu_page( 'craft-commerce-kit', __( 'Layouts', 'craft-commerce-kit' ), __( 'Layouts', 'craft-commerce-kit' ), 'manage_options', 'craft-commerce-kit-layouts', 'cck_render_layouts_page' );
 		add_submenu_page( 'craft-commerce-kit', __( 'Brand', 'craft-commerce-kit' ), __( 'Brand', 'craft-commerce-kit' ), 'manage_options', 'craft-commerce-kit-brand', 'cck_render_brand_page' );
 		add_submenu_page( 'craft-commerce-kit', __( 'Commerce', 'craft-commerce-kit' ), __( 'Commerce', 'craft-commerce-kit' ), 'manage_options', 'craft-commerce-kit-commerce', 'cck_render_commerce_page' );
 		add_submenu_page( 'craft-commerce-kit', __( 'System', 'craft-commerce-kit' ), __( 'System', 'craft-commerce-kit' ), 'manage_options', 'craft-commerce-kit-system', 'cck_render_system_page' );
@@ -44,6 +45,7 @@ if ( ! function_exists( 'cck_get_admin_nav_items' ) ) {
 			'craft-commerce-kit'            => __( 'Dashboard', 'craft-commerce-kit' ),
 			'craft-commerce-kit-components' => __( 'Components', 'craft-commerce-kit' ),
 			'craft-commerce-kit-templates'  => __( 'Templates', 'craft-commerce-kit' ),
+			'craft-commerce-kit-layouts'    => __( 'Layouts', 'craft-commerce-kit' ),
 			'craft-commerce-kit-brand'      => __( 'Brand', 'craft-commerce-kit' ),
 			'craft-commerce-kit-commerce'   => __( 'Commerce', 'craft-commerce-kit' ),
 			'craft-commerce-kit-system'     => __( 'System', 'craft-commerce-kit' ),
@@ -410,6 +412,65 @@ if ( ! function_exists( 'cck_render_templates_page' ) ) {
 					<div class="cck-admin-template-actions"><button type="button" class="button" disabled><?php esc_html_e( 'Preview', 'craft-commerce-kit' ); ?></button><button type="button" class="button button-primary" disabled><?php esc_html_e( 'Import', 'craft-commerce-kit' ); ?></button></div>
 				</div>
 			<?php endforeach; ?>
+		</div>
+		<?php
+		cck_render_admin_workspace_close();
+	}
+}
+
+
+if ( ! function_exists( 'cck_render_layouts_page' ) ) {
+	/**
+	 * Layouts admin sayfasini render eder.
+	 *
+	 * @return void
+	 */
+	function cck_render_layouts_page() {
+		$layouts = function_exists( 'cck_get_layout_registry' ) ? cck_get_layout_registry() : array();
+
+		cck_render_admin_workspace_open( __( 'Layouts', 'craft-commerce-kit' ), __( 'Component-based layouts available for shortcode rendering.', 'craft-commerce-kit' ) );
+		?>
+		<div class="cck-admin-card cck-admin-card--wide">
+			<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'Registered Layouts', 'craft-commerce-kit' ); ?></h2><span class="cck-admin-badge"><?php echo esc_html( count( $layouts ) ); ?></span></div>
+			<table class="cck-admin-table">
+				<thead>
+					<tr>
+						<th scope="col"><?php esc_html_e( 'Layout', 'craft-commerce-kit' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Version', 'craft-commerce-kit' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Components', 'craft-commerce-kit' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Used Components', 'craft-commerce-kit' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Shortcode', 'craft-commerce-kit' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $layouts as $layout ) : ?>
+						<?php
+						$layout_id      = isset( $layout['id'] ) ? sanitize_key( $layout['id'] ) : '';
+						$name           = isset( $layout['name'] ) ? $layout['name'] : $layout_id;
+						$description    = isset( $layout['description'] ) ? $layout['description'] : '';
+						$version        = isset( $layout['version'] ) ? $layout['version'] : CCK_VERSION;
+						$components     = isset( $layout['components'] ) && is_array( $layout['components'] ) ? $layout['components'] : array();
+						$component_ids  = array();
+						$shortcode      = '[cck_layout id="' . $layout_id . '"]';
+
+						foreach ( $components as $component ) {
+							$normalized = cck_normalize_layout_component( $component );
+
+							if ( ! empty( $normalized['id'] ) ) {
+								$component_ids[] = $normalized['id'];
+							}
+						}
+						?>
+						<tr>
+							<td><strong><?php echo esc_html( $name ); ?></strong><br><span><?php echo esc_html( $description ); ?></span></td>
+							<td><?php echo esc_html( $version ); ?></td>
+							<td><?php echo esc_html( count( $component_ids ) ); ?></td>
+							<td><?php echo esc_html( implode( ', ', $component_ids ) ); ?></td>
+							<td><code><?php echo esc_html( $shortcode ); ?></code><br><button type="button" class="button cck-admin-copy" data-cck-copy="<?php echo esc_attr( $shortcode ); ?>"><?php esc_html_e( 'Copy', 'craft-commerce-kit' ); ?></button></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
 		</div>
 		<?php
 		cck_render_admin_workspace_close();
