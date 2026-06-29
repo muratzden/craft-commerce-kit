@@ -45,13 +45,13 @@ if ( ! function_exists( 'cck_validate_layout_manifest' ) ) {
 	 * @param string $layout_path Layout dosya yolu.
 	 * @return array
 	 */
-	function cck_validate_layout_manifest( $manifest, $layout_path ) {
+	function cck_validate_layout_manifest( $manifest, $layout_path, $fallback_id = '' ) {
 		if ( ! is_array( $manifest ) ) {
 			cck_debug_log( 'Layout manifest array de?il: ' . $layout_path );
 			return array();
 		}
 
-		$layout_id = sanitize_key( cck_manifest_get( $manifest, 'id', basename( $layout_path, '.php' ) ) );
+		$layout_id = sanitize_key( cck_manifest_get( $manifest, 'id', $fallback_id ? $fallback_id : basename( $layout_path, '.php' ) ) );
 
 		if ( empty( $layout_id ) ) {
 			cck_debug_log( 'Layout id bo?: ' . $layout_path );
@@ -78,15 +78,23 @@ if ( ! function_exists( 'cck_load_layout_manifest' ) ) {
 	 * @param string $layout_path Layout dosya yolu.
 	 * @return array
 	 */
-	function cck_load_layout_manifest( $layout_path ) {
+	function cck_load_layout_manifest( $layout_path, $layout_id = '' ) {
 		if ( ! is_string( $layout_path ) || ! file_exists( $layout_path ) ) {
 			cck_debug_log( 'Layout dosyas? bulunamad?.' );
 			return array();
 		}
 
-		$manifest = require $layout_path;
+		$layout_id    = sanitize_key( $layout_id ? $layout_id : basename( $layout_path, '.php' ) );
+		$located_path = cck_locate_layout_manifest( $layout_id, $layout_path );
 
-		return cck_validate_layout_manifest( $manifest, $layout_path );
+		if ( empty( $located_path ) || ! file_exists( $located_path ) ) {
+			cck_debug_log( 'Layout manifest bulunamad?: ' . $layout_id );
+			return array();
+		}
+
+		$manifest = require $located_path;
+
+		return cck_validate_layout_manifest( $manifest, $located_path, $layout_id );
 	}
 }
 
@@ -106,7 +114,7 @@ if ( ! function_exists( 'cck_get_layout_registry' ) ) {
 		$registry = array();
 
 		foreach ( cck_get_layout_manifest_files() as $layout_path ) {
-			$layout = cck_load_layout_manifest( $layout_path );
+			$layout = cck_load_layout_manifest( $layout_path, basename( $layout_path, '.php' ) );
 
 			if ( empty( $layout['id'] ) ) {
 				continue;

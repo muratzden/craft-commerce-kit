@@ -4,7 +4,7 @@ Tags: woocommerce, ecommerce, components, storefront, shortcodes
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.8.0
+Stable tag: 0.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -90,6 +90,36 @@ Available helper functions:
 
 
 
+
+== Template Override ==
+
+Craft Commerce Kit supports WordPress-native template overrides from the active theme.
+
+Theme override structure:
+
+```text
+craft-commerce-kit/
+    components/
+        hero/
+            render.php
+    layouts/
+        homepage/
+            manifest.php
+```
+
+Component render lookup priority:
+
+1. Child theme: `craft-commerce-kit/components/{component-id}/render.php`
+2. Parent theme: `craft-commerce-kit/components/{component-id}/render.php`
+3. Plugin default component render file
+
+Layout manifest lookup priority:
+
+1. Active theme: `craft-commerce-kit/layouts/{layout-id}/manifest.php`
+2. Plugin default layout manifest
+
+Users should override templates in a theme instead of editing plugin files.
+
 == Layout Manager ==
 
 The Layout Manager makes registered layouts easier to inspect inside the admin console.
@@ -169,6 +199,12 @@ Craft Commerce Kit works with WooCommerce when WooCommerce is active. It does no
 Deactivating the plugin removes its shortcodes, assets, and admin page. It does not delete pages, products, settings, themes, or WooCommerce data.
 
 == Changelog ==
+
+= 0.9.0 =
+* Added WordPress-native template override system.
+* Added component template override support.
+* Added layout manifest override support.
+* Added reusable template locator helpers.
 
 = 0.8.0 =
 * Added Layout Manager section to the admin console.

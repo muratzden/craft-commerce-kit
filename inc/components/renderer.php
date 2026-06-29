@@ -24,27 +24,34 @@ if ( ! function_exists( 'cck_load_component_renderer' ) ) {
 	 * Component render dosyas?n? y?kler.
 	 *
 	 * @param array $manifest Component manifest verisi.
-	 * @return string
+	 * @return callable|string
 	 */
 	function cck_load_component_renderer( $manifest ) {
 		$component_id = cck_manifest_get( $manifest, 'id', '' );
-		$render_path  = cck_manifest_get( $manifest, '_render', '' );
+		$render_path  = cck_locate_component_template( $component_id, cck_manifest_get( $manifest, '_render', '' ) );
 
 		if ( empty( $component_id ) || empty( $render_path ) || ! file_exists( $render_path ) ) {
 			cck_debug_log( 'Component render dosyas? y?klenemedi: ' . cck_to_string( $component_id ) );
 			return '';
 		}
 
+		ob_start();
 		require_once $render_path;
+		ob_end_clean();
 
 		$callback = cck_get_component_render_callback( $component_id );
 
-		if ( ! is_callable( $callback ) ) {
-			cck_debug_log( 'Component callback bulunamad?: ' . $component_id );
-			return '';
+		if ( is_callable( $callback ) ) {
+			return $callback;
 		}
 
-		return $callback;
+		return function ( $values, $manifest ) use ( $render_path ) {
+			$atts = $values;
+			ob_start();
+			include $render_path;
+
+			return ob_get_clean();
+		};
 	}
 }
 
