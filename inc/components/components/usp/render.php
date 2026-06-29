@@ -1,6 +1,6 @@
 <?php
 /**
- * USP component renderer.
+ * USP component render dosyas?.
  *
  * @package CraftCommerceKit
  */
@@ -9,25 +9,25 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_component_package_render_usp' ) ) {
 	/**
-	 * Render the USP component.
+	 * USP component ??kt?s?n? olu?turur.
 	 *
-	 * @param array $atts     Component attributes.
-	 * @param array $manifest Component manifest.
+	 * @param array $atts     Temizlenmi? component de?erleri.
+	 * @param array $manifest Component manifest verisi.
 	 * @return string
 	 */
 	function cck_component_package_render_usp( $atts = array(), $manifest = array() ) {
 		$items = array(
 			array(
-				'title' => __( 'Handmade Quality', 'craft-commerce-kit' ),
-				'text'  => __( 'Designed for product stories that value material, process, and detail.', 'craft-commerce-kit' ),
+				'title' => isset( $atts['item_one_title'] ) ? $atts['item_one_title'] : '',
+				'text'  => isset( $atts['item_one_text'] ) ? $atts['item_one_text'] : '',
 			),
 			array(
-				'title' => __( 'WooCommerce Ready', 'craft-commerce-kit' ),
-				'text'  => __( 'Built to complement WooCommerce storefront flows without replacing native behavior.', 'craft-commerce-kit' ),
+				'title' => isset( $atts['item_two_title'] ) ? $atts['item_two_title'] : '',
+				'text'  => isset( $atts['item_two_text'] ) ? $atts['item_two_text'] : '',
 			),
 			array(
-				'title' => __( 'Modular Design', 'craft-commerce-kit' ),
-				'text'  => __( 'Reusable sections can be rendered independently through the component engine.', 'craft-commerce-kit' ),
+				'title' => isset( $atts['item_three_title'] ) ? $atts['item_three_title'] : '',
+				'text'  => isset( $atts['item_three_text'] ) ? $atts['item_three_text'] : '',
 			),
 		);
 

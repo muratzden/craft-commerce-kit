@@ -9,9 +9,9 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_get_component_render_callback' ) ) {
 	/**
-	 * Get a component render callback name.
+	 * Component render callback ad?n? d?nd?r?r.
 	 *
-	 * @param string $component_id Component ID.
+	 * @param string $component_id Component kimli?i.
 	 * @return string
 	 */
 	function cck_get_component_render_callback( $component_id ) {
@@ -21,9 +21,9 @@ if ( ! function_exists( 'cck_get_component_render_callback' ) ) {
 
 if ( ! function_exists( 'cck_load_component_renderer' ) ) {
 	/**
-	 * Load a component render file.
+	 * Component render dosyas?n? y?kler.
 	 *
-	 * @param array $manifest Component manifest.
+	 * @param array $manifest Component manifest verisi.
 	 * @return string
 	 */
 	function cck_load_component_renderer( $manifest ) {
@@ -39,12 +39,39 @@ if ( ! function_exists( 'cck_load_component_renderer' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_sanitize_component_atts' ) ) {
+	/**
+	 * Shortcode de?erlerini manifest ayarlar?na g?re temizler.
+	 *
+	 * @param array $atts     Shortcode de?erleri.
+	 * @param array $manifest Component manifest verisi.
+	 * @return array
+	 */
+	function cck_sanitize_component_atts( $atts, $manifest ) {
+		$component_id = isset( $manifest['id'] ) ? $manifest['id'] : '';
+		$settings     = isset( $manifest['settings'] ) && is_array( $manifest['settings'] ) ? $manifest['settings'] : array();
+		$values       = cck_get_component_defaults( $component_id );
+		$atts         = is_array( $atts ) ? $atts : array();
+
+		foreach ( $settings as $setting_id => $setting ) {
+			if ( ! array_key_exists( $setting_id, $atts ) ) {
+				continue;
+			}
+
+			$sanitize_callback = isset( $setting['sanitize_callback'] ) && is_callable( $setting['sanitize_callback'] ) ? $setting['sanitize_callback'] : 'sanitize_text_field';
+			$values[ $setting_id ] = call_user_func( $sanitize_callback, wp_unslash( $atts[ $setting_id ] ) );
+		}
+
+		return $values;
+	}
+}
+
 if ( ! function_exists( 'cck_render_component' ) ) {
 	/**
-	 * Render a registered component.
+	 * Kay?tl? bir component'i g?venli ?ekilde render eder.
 	 *
-	 * @param string $component_id Component ID.
-	 * @param array  $atts         Component attributes.
+	 * @param string $component_id Component kimli?i.
+	 * @param array  $atts         Shortcode de?erleri.
 	 * @return string
 	 */
 	function cck_render_component( $component_id, $atts = array() ) {
@@ -63,8 +90,10 @@ if ( ! function_exists( 'cck_render_component' ) ) {
 
 		cck_enqueue_frontend_assets();
 
+		$values = cck_sanitize_component_atts( $atts, $manifest );
+
 		ob_start();
-		$html = call_user_func( $callback, is_array( $atts ) ? $atts : array(), $manifest );
+		$html = call_user_func( $callback, $values, $manifest );
 
 		if ( is_string( $html ) ) {
 			echo wp_kses_post( $html );
@@ -76,26 +105,29 @@ if ( ! function_exists( 'cck_render_component' ) ) {
 
 if ( ! function_exists( 'cck_component_shortcode' ) ) {
 	/**
-	 * Render a component from shortcode attributes.
+	 * Shortcode ?zerinden component render eder.
 	 *
-	 * @param array $atts Shortcode attributes.
+	 * @param array $atts Shortcode de?erleri.
 	 * @return string
 	 */
 	function cck_component_shortcode( $atts ) {
-		$atts = shortcode_atts(
+		$raw_atts = is_array( $atts ) ? $atts : array();
+		$base_atts = shortcode_atts(
 			array(
 				'id' => 'hero',
 			),
-			(array) $atts,
+			$raw_atts,
 			'cck_component'
 		);
 
-		$component_id = sanitize_key( $atts['id'] );
+		$component_id = sanitize_key( $base_atts['id'] );
 
 		if ( empty( $component_id ) ) {
 			return '';
 		}
 
-		return cck_render_component( $component_id, $atts );
+		$raw_atts['id'] = $component_id;
+
+		return cck_render_component( $component_id, $raw_atts );
 	}
 }

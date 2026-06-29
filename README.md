@@ -4,7 +4,7 @@ Tags: woocommerce, ecommerce, components, storefront, shortcodes
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.2.0
+Stable tag: 0.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,7 +48,7 @@ Component Engine shortcodes:
 * `[cck_component id="usp"]`
 * `[cck_component id="product_grid"]`
 
-The component framework currently includes Hero, USP, and Product Grid packages. Each package contains a `manifest.php` file for metadata and a `render.php` file for output. Frontend assets are loaded only when a CCK shortcode or component renders.
+The component framework currently includes Hero, USP, and Product Grid packages. Each package contains a `manifest.php` file for metadata, supports, preview data, and settings definitions, plus a `render.php` file for output. Frontend assets are loaded only when a CCK shortcode or component renders.
 
 
 == Component Framework ==
@@ -66,6 +66,8 @@ Available helper functions:
 
 * `cck_get_component()`
 * `cck_get_component_manifest()`
+* `cck_get_component_settings()`
+* `cck_get_component_defaults()`
 * `cck_render_component()`
 
 == Component Examples ==
@@ -107,6 +109,9 @@ Craft Commerce Kit works with WooCommerce when WooCommerce is active. It does no
 Deactivating the plugin removes its shortcodes, assets, and admin page. It does not delete pages, products, settings, themes, or WooCommerce data.
 
 == Changelog ==
+
+= 0.4.0 =
+* Added component definition settings, manifest defaults, settings helpers, and shortcode override rendering.
 
 = 0.2.0 =
 * Added component framework architecture with package manifests, automatic registry scanning, and on-demand render loading.

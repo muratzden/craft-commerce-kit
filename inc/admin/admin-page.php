@@ -323,7 +323,7 @@ if ( ! function_exists( 'cck_render_admin_page' ) ) {
 
 if ( ! function_exists( 'cck_render_components_page' ) ) {
 	/**
-	 * Render components page.
+	 * Components admin sayfas?n? render eder.
 	 *
 	 * @return void
 	 */
@@ -334,33 +334,41 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 		?>
 		<div class="cck-admin-card cck-admin-card--wide">
 			<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'Registered Components', 'craft-commerce-kit' ); ?></h2><span class="cck-admin-badge"><?php echo esc_html( count( $components ) ); ?></span></div>
-			<div class="cck-admin-component-grid">
-				<?php foreach ( $components as $component ) : ?>
-					<?php
-					$component_id = isset( $component['id'] ) ? sanitize_key( $component['id'] ) : '';
-					$label        = cck_get_admin_component_label( $component );
-					$description  = isset( $component['description'] ) ? $component['description'] : '';
-					$category     = isset( $component['category'] ) ? $component['category'] : 'ui';
-					$status       = isset( $component['status'] ) ? $component['status'] : 'active';
-					$version      = isset( $component['version'] ) ? $component['version'] : CCK_VERSION;
-					$supports     = isset( $component['supports'] ) && is_array( $component['supports'] ) ? $component['supports'] : array();
-					$shortcode    = '[cck_component id="' . $component_id . '"]';
-					?>
-					<article class="cck-admin-component-card">
-						<div class="cck-admin-card__heading"><h2><?php echo esc_html( $label ); ?></h2><span class="cck-admin-status cck-admin-status--active"><?php echo esc_html( cck_get_component_status_label( $status ) ); ?></span></div>
-						<p><?php echo esc_html( $description ); ?></p>
-						<div class="cck-admin-template-meta"><span><?php echo esc_html( cck_get_component_category_label( $category ) ); ?></span><span><?php echo esc_html( sprintf( __( 'Version %s', 'craft-commerce-kit' ), $version ) ); ?></span><span><?php esc_html_e( 'Shortcode Ready', 'craft-commerce-kit' ); ?></span></div>
-						<?php if ( ! empty( $supports ) ) : ?>
-							<div class="cck-admin-component-tags">
-								<?php foreach ( $supports as $support ) : ?>
-									<span><?php echo esc_html( $support ); ?></span>
-								<?php endforeach; ?>
-							</div>
-						<?php endif; ?>
-						<div class="cck-admin-shortcode-example"><code><?php echo esc_html( $shortcode ); ?></code><button type="button" class="button cck-admin-copy" data-cck-copy="<?php echo esc_attr( $shortcode ); ?>"><?php esc_html_e( 'Copy', 'craft-commerce-kit' ); ?></button></div>
-					</article>
-				<?php endforeach; ?>
-			</div>
+			<table class="cck-admin-table">
+				<thead>
+					<tr>
+						<th scope="col"><?php esc_html_e( 'Component', 'craft-commerce-kit' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Category', 'craft-commerce-kit' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Version', 'craft-commerce-kit' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Supports', 'craft-commerce-kit' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Settings', 'craft-commerce-kit' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Shortcode', 'craft-commerce-kit' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $components as $component ) : ?>
+						<?php
+						$component_id   = isset( $component['id'] ) ? sanitize_key( $component['id'] ) : '';
+						$label          = cck_get_admin_component_label( $component );
+						$description    = isset( $component['description'] ) ? $component['description'] : '';
+						$category       = isset( $component['category'] ) ? $component['category'] : 'ui';
+						$version        = isset( $component['version'] ) ? $component['version'] : CCK_VERSION;
+						$supports       = isset( $component['supports'] ) && is_array( $component['supports'] ) ? $component['supports'] : array();
+						$settings       = isset( $component['settings'] ) && is_array( $component['settings'] ) ? $component['settings'] : array();
+						$shortcode      = '[cck_component id="' . $component_id . '"]';
+						$supports_label = empty( $supports ) ? __( 'None', 'craft-commerce-kit' ) : implode( ', ', $supports );
+						?>
+						<tr>
+							<td><strong><?php echo esc_html( $label ); ?></strong><br><span><?php echo esc_html( $description ); ?></span></td>
+							<td><?php echo esc_html( cck_get_component_category_label( $category ) ); ?></td>
+							<td><?php echo esc_html( $version ); ?></td>
+							<td><?php echo esc_html( $supports_label ); ?></td>
+							<td><?php echo esc_html( count( $settings ) ); ?></td>
+							<td><code><?php echo esc_html( $shortcode ); ?></code><br><button type="button" class="button cck-admin-copy" data-cck-copy="<?php echo esc_attr( $shortcode ); ?>"><?php esc_html_e( 'Copy', 'craft-commerce-kit' ); ?></button></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
 		</div>
 		<?php
 		cck_render_admin_workspace_close();

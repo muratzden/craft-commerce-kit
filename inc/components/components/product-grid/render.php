@@ -1,6 +1,6 @@
 <?php
 /**
- * Product Grid component renderer.
+ * Product Grid component render dosyas?.
  *
  * @package CraftCommerceKit
  */
@@ -9,10 +9,10 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_component_package_render_product_grid' ) ) {
 	/**
-	 * Render the product grid component.
+	 * Product Grid component ??kt?s?n? olu?turur.
 	 *
-	 * @param array $atts     Component attributes.
-	 * @param array $manifest Component manifest.
+	 * @param array $atts     Temizlenmi? component de?erleri.
+	 * @param array $manifest Component manifest verisi.
 	 * @return string
 	 */
 	function cck_component_package_render_product_grid( $atts = array(), $manifest = array() ) {
@@ -20,11 +20,14 @@ if ( ! function_exists( 'cck_component_package_render_product_grid' ) ) {
 			return '<section class="cck-component cck-product-grid"><div class="cck-container"><p>' . esc_html__( 'WooCommerce is required to display products.', 'craft-commerce-kit' ) . '</p></div></section>';
 		}
 
+		$limit = isset( $atts['limit'] ) ? absint( $atts['limit'] ) : 4;
+		$limit = max( 1, min( 12, $limit ) );
+
 		$query = new WP_Query(
 			array(
 				'post_type'           => 'product',
 				'post_status'         => 'publish',
-				'posts_per_page'      => 4,
+				'posts_per_page'      => $limit,
 				'ignore_sticky_posts' => true,
 				'no_found_rows'       => true,
 			)
@@ -35,8 +38,10 @@ if ( ! function_exists( 'cck_component_package_render_product_grid' ) ) {
 		<section class="cck-component cck-product-grid">
 			<div class="cck-container">
 				<div class="cck-section-heading">
-					<p class="cck-eyebrow"><?php esc_html_e( 'Latest Products', 'craft-commerce-kit' ); ?></p>
-					<h2><?php esc_html_e( 'Fresh from the storefront.', 'craft-commerce-kit' ); ?></h2>
+					<?php if ( ! empty( $atts['eyebrow'] ) ) : ?>
+						<p class="cck-eyebrow"><?php echo esc_html( $atts['eyebrow'] ); ?></p>
+					<?php endif; ?>
+					<h2><?php echo esc_html( $atts['title'] ); ?></h2>
 				</div>
 				<div class="cck-product-grid__items">
 					<?php if ( $query->have_posts() ) : ?>

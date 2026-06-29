@@ -1,6 +1,6 @@
 <?php
 /**
- * Hero component renderer.
+ * Hero component render dosyas?.
  *
  * @package CraftCommerceKit
  */
@@ -9,34 +9,28 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_component_package_render_hero' ) ) {
 	/**
-	 * Render the hero component.
+	 * Hero component ??kt?s?n? olu?turur.
 	 *
-	 * @param array $atts     Component attributes.
-	 * @param array $manifest Component manifest.
+	 * @param array $atts     Temizlenmi? component de?erleri.
+	 * @param array $manifest Component manifest verisi.
 	 * @return string
 	 */
 	function cck_component_package_render_hero( $atts = array(), $manifest = array() ) {
-		$atts = shortcode_atts(
-			array(
-				'eyebrow'      => __( 'Craft Commerce Kit', 'craft-commerce-kit' ),
-				'title'        => __( 'Premium storefront components for WooCommerce.', 'craft-commerce-kit' ),
-				'description'  => __( 'Build reusable commerce sections with a theme-independent component foundation.', 'craft-commerce-kit' ),
-				'button_label' => __( 'Explore Components', 'craft-commerce-kit' ),
-				'button_url'   => '#',
-			),
-			$atts,
-			'cck_component_hero'
-		);
-
 		ob_start();
 		?>
 		<section class="cck-component cck-hero">
 			<div class="cck-container cck-hero__inner">
 				<div class="cck-hero__content">
-					<p class="cck-eyebrow"><?php echo esc_html( $atts['eyebrow'] ); ?></p>
+					<?php if ( ! empty( $atts['eyebrow'] ) ) : ?>
+						<p class="cck-eyebrow"><?php echo esc_html( $atts['eyebrow'] ); ?></p>
+					<?php endif; ?>
 					<h2><?php echo esc_html( $atts['title'] ); ?></h2>
-					<p><?php echo esc_html( $atts['description'] ); ?></p>
-					<a class="cck-button cck-button--primary" href="<?php echo esc_url( $atts['button_url'] ); ?>"><?php echo esc_html( $atts['button_label'] ); ?></a>
+					<?php if ( ! empty( $atts['subtitle'] ) ) : ?>
+						<p><?php echo esc_html( $atts['subtitle'] ); ?></p>
+					<?php endif; ?>
+					<?php if ( ! empty( $atts['button_text'] ) ) : ?>
+						<a class="cck-button cck-button--primary" href="<?php echo esc_url( $atts['button_url'] ); ?>"><?php echo esc_html( $atts['button_text'] ); ?></a>
+					<?php endif; ?>
 				</div>
 				<div class="cck-hero__visual" aria-hidden="true">
 					<div class="cck-hero__card">
