@@ -4,7 +4,7 @@ Tags: woocommerce, ecommerce, components, storefront, shortcodes
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.6.0
+Stable tag: 0.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,21 @@ Available helper functions:
 
 
 
+
+== Sprint 07 -- Layout Engine Foundation ==
+
+Sprint 07 adds the Layout Engine foundation for rendering registered components inside layouts.
+
+Shortcode:
+
+`[cck_layout id="homepage"]`
+
+Layout files:
+
+* `inc/layouts/layout-registry.php`
+* `inc/layouts/layout-renderer.php`
+* `inc/layouts/layouts/homepage.php`
+
 == Layout Engine ==
 
 The Layout Engine renders component-based layouts from layout manifests. Layouts are discovered automatically from `inc/layouts/layouts/*.php`.
@@ -144,8 +159,13 @@ Deactivating the plugin removes its shortcodes, assets, and admin page. It does 
 
 == Changelog ==
 
-= 0.6.0 =
-* Added Layout Engine foundation with automatic layout registry, homepage layout, layout renderer, shortcode, and admin Layouts page.
+= 0.7.0 =
+* Added Layout Engine foundation.
+* Added layout registry.
+* Added layout renderer.
+* Added homepage layout manifest.
+* Added [cck_layout] shortcode.
+* Added support for rendering registered components inside layouts.
 
 = 0.5.0 =
 * Added preview-only Component Settings UI generated automatically from manifest settings definitions.
