@@ -366,6 +366,15 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 							<td><?php echo esc_html( count( $settings ) ); ?></td>
 							<td><code><?php echo esc_html( $shortcode ); ?></code><br><button type="button" class="button cck-admin-copy" data-cck-copy="<?php echo esc_attr( $shortcode ); ?>"><?php esc_html_e( 'Copy', 'craft-commerce-kit' ); ?></button></td>
 						</tr>
+						<tr class="cck-admin-settings-row">
+							<td colspan="6">
+								<div class="cck-admin-settings-panel">
+									<h3><?php esc_html_e( 'Settings Form Preview', 'craft-commerce-kit' ); ?></h3>
+									<p><?php esc_html_e( 'Preview only. Saving will be available in a future sprint.', 'craft-commerce-kit' ); ?></p>
+									<?php echo cck_render_component_settings_preview( $component ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Settings renderer t?m ??kt?lar? escape eder. ?>
+								</div>
+							</td>
+						</tr>
 					<?php endforeach; ?>
 				</tbody>
 			</table>

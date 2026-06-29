@@ -36,79 +36,42 @@ if ( ! function_exists( 'cck_get_component_supported_features' ) ) {
 	}
 }
 
-if ( ! function_exists( 'cck_normalize_component_settings' ) ) {
+if ( ! function_exists( 'cck_get_component_manifest_files' ) ) {
 	/**
-	 * Component ayarlar?n? g?venli ve standart bir yap?ya d?n??t?r?r.
+	 * Component manifest dosyalar?n? tek noktadan okur.
 	 *
-	 * @param array $settings Manifest ayarlar?.
 	 * @return array
 	 */
-	function cck_normalize_component_settings( $settings ) {
-		$normalized = array();
+	function cck_get_component_manifest_files() {
+		$manifest_files = glob( cck_get_component_packages_path() . '*/manifest.php' );
 
-		if ( ! is_array( $settings ) ) {
-			return $normalized;
-		}
-
-		foreach ( $settings as $setting_id => $setting ) {
-			$setting_id = sanitize_key( $setting_id );
-
-			if ( empty( $setting_id ) || ! is_array( $setting ) ) {
-				continue;
-			}
-
-			$sanitize_callback = isset( $setting['sanitize_callback'] ) ? $setting['sanitize_callback'] : 'sanitize_text_field';
-
-			if ( ! is_callable( $sanitize_callback ) ) {
-				$sanitize_callback = 'sanitize_text_field';
-			}
-
-			$normalized[ $setting_id ] = array(
-				'type'              => isset( $setting['type'] ) ? sanitize_key( $setting['type'] ) : 'text',
-				'label'             => isset( $setting['label'] ) ? $setting['label'] : $setting_id,
-				'description'       => isset( $setting['description'] ) ? $setting['description'] : '',
-				'default'           => isset( $setting['default'] ) ? $setting['default'] : '',
-				'required'          => ! empty( $setting['required'] ),
-				'sanitize_callback' => $sanitize_callback,
-			);
-		}
-
-		return $normalized;
-	}
-}
-
-if ( ! function_exists( 'cck_normalize_component_manifest' ) ) {
-	/**
-	 * Component manifest verisini framework API'leri i?in do?rular ve normalize eder.
-	 *
-	 * @param array  $manifest      Component manifest verisi.
-	 * @param string $component_dir Component dizini.
-	 * @return array
-	 */
-	function cck_normalize_component_manifest( $manifest, $component_dir ) {
-		$component_id = isset( $manifest['id'] ) ? sanitize_key( $manifest['id'] ) : '';
-
-		if ( empty( $component_id ) ) {
+		if ( ! is_array( $manifest_files ) ) {
 			return array();
 		}
 
-		$supports = isset( $manifest['supports'] ) && is_array( $manifest['supports'] ) ? $manifest['supports'] : array();
-		$supports = array_values( array_intersect( array_map( 'sanitize_key', $supports ), cck_get_component_supported_features() ) );
+		sort( $manifest_files );
 
-		$manifest['id']          = $component_id;
-		$manifest['name']        = isset( $manifest['name'] ) ? $manifest['name'] : $component_id;
-		$manifest['label']       = $manifest['name'];
-		$manifest['description'] = isset( $manifest['description'] ) ? $manifest['description'] : '';
-		$manifest['version']     = isset( $manifest['version'] ) ? sanitize_text_field( $manifest['version'] ) : '1.0.0';
-		$manifest['category']    = isset( $manifest['category'] ) ? sanitize_key( $manifest['category'] ) : 'ui';
-		$manifest['icon']        = isset( $manifest['icon'] ) ? sanitize_key( $manifest['icon'] ) : 'layout';
-		$manifest['preview']     = isset( $manifest['preview'] ) ? esc_url_raw( $manifest['preview'] ) : '';
-		$manifest['supports']    = $supports;
-		$manifest['settings']    = cck_normalize_component_settings( isset( $manifest['settings'] ) ? $manifest['settings'] : array() );
-		$manifest['_path']       = trailingslashit( $component_dir );
-		$manifest['_render']     = trailingslashit( $component_dir ) . 'render.php';
+		return $manifest_files;
+	}
+}
 
-		return $manifest;
+if ( ! function_exists( 'cck_load_component_manifest' ) ) {
+	/**
+	 * Manifest dosyas?n? y?kler ve validator ?zerinden ge?irir.
+	 *
+	 * @param string $manifest_path Manifest dosya yolu.
+	 * @return array
+	 */
+	function cck_load_component_manifest( $manifest_path ) {
+		if ( ! is_string( $manifest_path ) || ! file_exists( $manifest_path ) ) {
+			cck_debug_log( 'Manifest dosyas? bulunamad?.' );
+			return array();
+		}
+
+		$component_dir = dirname( $manifest_path );
+		$manifest      = require $manifest_path;
+
+		return cck_validate_component_manifest( $manifest, $component_dir );
 	}
 }
 
@@ -125,26 +88,17 @@ if ( ! function_exists( 'cck_get_component_registry' ) ) {
 			return $registry;
 		}
 
-		$registry       = array();
-		$manifest_files = glob( cck_get_component_packages_path() . '*/manifest.php' );
+		$registry = array();
 
-		if ( ! is_array( $manifest_files ) ) {
-			return $registry;
-		}
+		foreach ( cck_get_component_manifest_files() as $manifest_path ) {
+			$manifest = cck_load_component_manifest( $manifest_path );
 
-		sort( $manifest_files );
-
-		foreach ( $manifest_files as $manifest_path ) {
-			$component_dir = dirname( $manifest_path );
-			$manifest      = require $manifest_path;
-
-			if ( ! is_array( $manifest ) ) {
+			if ( empty( $manifest['id'] ) ) {
 				continue;
 			}
 
-			$manifest = cck_normalize_component_manifest( $manifest, $component_dir );
-
-			if ( empty( $manifest['id'] ) || ! file_exists( $manifest['_render'] ) ) {
+			if ( empty( $manifest['_render'] ) || ! file_exists( $manifest['_render'] ) ) {
+				cck_debug_log( 'Render dosyas? bulunamad?: ' . $manifest['id'] );
 				continue;
 			}
 
@@ -166,7 +120,7 @@ if ( ! function_exists( 'cck_get_component_manifest' ) ) {
 		$component_id = sanitize_key( $component_id );
 		$registry     = cck_get_component_registry();
 
-		return isset( $registry[ $component_id ] ) ? $registry[ $component_id ] : null;
+		return cck_array_get( $registry, $component_id, null );
 	}
 }
 
@@ -192,7 +146,7 @@ if ( ! function_exists( 'cck_get_component_settings' ) ) {
 	function cck_get_component_settings( $component_id ) {
 		$manifest = cck_get_component_manifest( $component_id );
 
-		return isset( $manifest['settings'] ) && is_array( $manifest['settings'] ) ? $manifest['settings'] : array();
+		return is_array( $manifest ) ? cck_manifest_get( $manifest, 'settings', array() ) : array();
 	}
 }
 
@@ -207,10 +161,10 @@ if ( ! function_exists( 'cck_get_component_defaults' ) ) {
 		$defaults = array();
 
 		foreach ( cck_get_component_settings( $component_id ) as $setting_id => $setting ) {
-			$defaults[ $setting_id ] = isset( $setting['default'] ) ? $setting['default'] : '';
+			$defaults[ $setting_id ] = cck_array_get( $setting, 'default', '' );
 		}
 
-		return $defaults;
+		return apply_filters( 'cck_component_defaults', $defaults, $component_id );
 	}
 }
 

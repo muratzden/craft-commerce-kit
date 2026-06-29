@@ -515,3 +515,77 @@
 		flex-direction: column;
 	}
 }
+
+
+.cck-admin-settings-row > td {
+	padding: 0 12px 18px;
+	background: #f6f7f7;
+}
+
+.cck-admin-settings-panel {
+	padding: 16px;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	background: #fff;
+}
+
+.cck-admin-settings-panel h3 {
+	margin: 0 0 6px;
+	font-size: 15px;
+	line-height: 1.4;
+}
+
+.cck-admin-settings-panel > p,
+.cck-admin-muted {
+	margin: 0 0 14px;
+	color: #646970;
+}
+
+.cck-admin-settings-preview {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px;
+}
+
+.cck-admin-setting-field {
+	display: grid;
+	gap: 6px;
+}
+
+.cck-admin-setting-field label {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.cck-admin-setting-field label em {
+	font-style: normal;
+	font-size: 11px;
+	font-weight: 600;
+	color: #8a1f11;
+}
+
+.cck-admin-setting-field input[type="text"],
+.cck-admin-setting-field input[type="url"],
+.cck-admin-setting-field input[type="number"],
+.cck-admin-setting-field textarea,
+.cck-admin-setting-field select {
+	width: 100%;
+	max-width: 100%;
+}
+
+.cck-admin-setting-field p {
+	margin: 0;
+	color: #646970;
+	font-size: 12px;
+	line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+	.cck-admin-settings-preview {
+		grid-template-columns: 1fr;
+	}
+}

@@ -4,7 +4,7 @@ Tags: woocommerce, ecommerce, components, storefront, shortcodes
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.4.0
+Stable tag: 0.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,21 @@ Component Engine shortcodes:
 The component framework currently includes Hero, USP, and Product Grid packages. Each package contains a `manifest.php` file for metadata, supports, preview data, and settings definitions, plus a `render.php` file for output. Frontend assets are loaded only when a CCK shortcode or component renders.
 
 
+
+== Architecture ==
+
+Craft Commerce Kit uses a small component framework foundation.
+
+Registry: scans component package manifests from `inc/components/components/*/manifest.php` and builds the available component list automatically.
+
+Manifest: stores component metadata, supports, preview information, and settings definitions for future admin screens, live preview, import/export, REST API, AI, and TILLA-OS workflows.
+
+Renderer: validates the manifest, reads defaults, applies shortcode overrides, loads the matching render file, and returns safe HTML output.
+
+Settings: each component can define typed settings with labels, descriptions, defaults, required flags, and sanitize callbacks. The admin Components screen can render these settings automatically as a preview-only form.
+
+Hooks: `cck_component_manifest`, `cck_component_defaults`, `cck_before_render_component`, and `cck_after_render_component` are available for future extensions and premium component packs.
+
 == Component Framework ==
 
 Components are discovered automatically from package manifests in `inc/components/components/*/manifest.php`.
@@ -69,6 +84,13 @@ Available helper functions:
 * `cck_get_component_settings()`
 * `cck_get_component_defaults()`
 * `cck_render_component()`
+
+
+== Component Settings UI ==
+
+The Components admin screen renders a preview-only settings form from each component manifest. Supported field types are text, textarea, url, number, checkbox, and select.
+
+Settings are not saved yet. Persistence will be introduced in a future sprint.
 
 == Component Examples ==
 
@@ -109,6 +131,12 @@ Craft Commerce Kit works with WooCommerce when WooCommerce is active. It does no
 Deactivating the plugin removes its shortcodes, assets, and admin page. It does not delete pages, products, settings, themes, or WooCommerce data.
 
 == Changelog ==
+
+= 0.5.0 =
+* Added preview-only Component Settings UI generated automatically from manifest settings definitions.
+
+= 0.4.1 =
+* Added foundation freeze architecture helpers, manifest validation, debug logging, component interface standard, and render hooks.
 
 = 0.4.0 =
 * Added component definition settings, manifest defaults, settings helpers, and shortcode override rendering.

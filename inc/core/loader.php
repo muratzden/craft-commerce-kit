@@ -7,13 +7,17 @@
 
 defined( 'ABSPATH' ) || exit;
 
+require_once CCK_PLUGIN_DIR . 'inc/core/helpers.php';
 require_once CCK_PLUGIN_DIR . 'inc/core/assets.php';
 require_once CCK_PLUGIN_DIR . 'inc/core/tokens.php';
 
 require_once CCK_PLUGIN_DIR . 'inc/brand-packs/tilla-leather.php';
 require_once CCK_PLUGIN_DIR . 'inc/templates/registry.php';
+require_once CCK_PLUGIN_DIR . 'inc/components/component-interface.php';
+require_once CCK_PLUGIN_DIR . 'inc/components/manifest-validator.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/registry.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/renderer.php';
+require_once CCK_PLUGIN_DIR . 'inc/components/settings-renderer.php';
 
 require_once CCK_PLUGIN_DIR . 'inc/components/hero.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/section-title.php';
@@ -26,7 +30,7 @@ require_once CCK_PLUGIN_DIR . 'inc/shortcodes/shortcodes.php';
 
 if ( ! function_exists( 'cck_is_woocommerce_active' ) ) {
 	/**
-	 * Check whether WooCommerce is active.
+	 * WooCommerce eklentisinin aktif olup olmad???n? kontrol eder.
 	 *
 	 * @return bool
 	 */
