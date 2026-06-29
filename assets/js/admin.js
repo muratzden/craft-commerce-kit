@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
 	function copyText(text, button) {
 		function markCopied() {
 			var original = button.textContent;

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Product landing template metadata.
  *
