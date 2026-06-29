@@ -4,7 +4,7 @@ Tags: woocommerce, ecommerce, components, storefront, shortcodes
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.7.0
+Stable tag: 0.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,17 @@ Available helper functions:
 
 
 
+
+== Layout Manager ==
+
+The Layout Manager makes registered layouts easier to inspect inside the admin console.
+
+It shows the Layout Registry output, the Layout Manifest metadata, the Layout Renderer shortcode, and the component sequence for each layout.
+
+Example shortcode:
+
+`[cck_layout id="homepage"]`
+
 == Sprint 07 -- Layout Engine Foundation ==
 
 Sprint 07 adds the Layout Engine foundation for rendering registered components inside layouts.
@@ -158,6 +169,13 @@ Craft Commerce Kit works with WooCommerce when WooCommerce is active. It does no
 Deactivating the plugin removes its shortcodes, assets, and admin page. It does not delete pages, products, settings, themes, or WooCommerce data.
 
 == Changelog ==
+
+= 0.8.0 =
+* Added Layout Manager section to the admin console.
+* Added registered layout listing.
+* Added layout component sequence preview.
+* Added copyable layout shortcode display.
+* Improved visibility of Layout Engine features.
 
 = 0.7.0 =
 * Added Layout Engine foundation.

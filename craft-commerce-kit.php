@@ -3,7 +3,7 @@
  * Plugin Name: Craft Commerce Kit
  * Plugin URI:  https://muratozden.com.tr/craft-commerce-kit
  * Description: A theme-independent WooCommerce UI framework for premium artisan, boutique, handmade, craft, and quiet luxury commerce brands.
- * Version:     0.7.0
+ * Version:     0.8.0
  * Author:      Craft Commerce Kit
  * License:     GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'CCK_VERSION', '0.7.0' );
+define( 'CCK_VERSION', '0.8.0' );
 define( 'CCK_PLUGIN_FILE', __FILE__ );
 define( 'CCK_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCK_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
