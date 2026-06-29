@@ -1,0 +1,50 @@
+name: Plugin Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  plugin-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check PHP syntax
+        run: |
+          find . -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      - name: Check for BOM
+        run: |
+          if grep -rIl $'^\xEF\xBB\xBF' . --include="*.php" --include="*.css" --include="*.js" --include="*.md"; then
+            echo "BOM detected."
+            exit 1
+          fi
+
+      - name: Check for CRLF
+        run: |
+          if grep -rIl $'\r' . --include="*.php" --include="*.css" --include="*.js" --include="*.md"; then
+            echo "CRLF line endings detected."
+            exit 1
+          fi
+
+      - name: Build installable ZIP
+        run: |
+          mkdir -p build
+          rsync -av \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='build' \
+            ./ build/craft-commerce-kit/
+          cd build
+          zip -r craft-commerce-kit-installable.zip craft-commerce-kit
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: craft-commerce-kit-installable
+          path: build/craft-commerce-kit-installable.zip
