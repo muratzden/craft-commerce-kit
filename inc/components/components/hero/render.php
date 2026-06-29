@@ -1,20 +1,21 @@
 <?php
 /**
- * Hero component.
+ * Hero component renderer.
  *
  * @package CraftCommerceKit
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! function_exists( 'cck_component_engine_render_hero' ) ) {
+if ( ! function_exists( 'cck_component_package_render_hero' ) ) {
 	/**
-	 * Render the component engine hero.
+	 * Render the hero component.
 	 *
-	 * @param array $atts Component attributes.
+	 * @param array $atts     Component attributes.
+	 * @param array $manifest Component manifest.
 	 * @return string
 	 */
-	function cck_component_engine_render_hero( $atts = array() ) {
+	function cck_component_package_render_hero( $atts = array(), $manifest = array() ) {
 		$atts = shortcode_atts(
 			array(
 				'eyebrow'      => __( 'Craft Commerce Kit', 'craft-commerce-kit' ),

@@ -150,6 +150,10 @@ if ( ! function_exists( 'cck_get_admin_component_label' ) ) {
 	 */
 	function cck_get_admin_component_label( $component ) {
 		if ( is_array( $component ) ) {
+			if ( ! empty( $component['name'] ) ) {
+				return $component['name'];
+			}
+
 			if ( ! empty( $component['label'] ) ) {
 				return $component['label'];
 			}
@@ -338,12 +342,21 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 					$description  = isset( $component['description'] ) ? $component['description'] : '';
 					$category     = isset( $component['category'] ) ? $component['category'] : 'ui';
 					$status       = isset( $component['status'] ) ? $component['status'] : 'active';
+					$version      = isset( $component['version'] ) ? $component['version'] : CCK_VERSION;
+					$supports     = isset( $component['supports'] ) && is_array( $component['supports'] ) ? $component['supports'] : array();
 					$shortcode    = '[cck_component id="' . $component_id . '"]';
 					?>
 					<article class="cck-admin-component-card">
 						<div class="cck-admin-card__heading"><h2><?php echo esc_html( $label ); ?></h2><span class="cck-admin-status cck-admin-status--active"><?php echo esc_html( cck_get_component_status_label( $status ) ); ?></span></div>
 						<p><?php echo esc_html( $description ); ?></p>
-						<div class="cck-admin-template-meta"><span><?php echo esc_html( cck_get_component_category_label( $category ) ); ?></span><span><?php esc_html_e( 'Shortcode Ready', 'craft-commerce-kit' ); ?></span></div>
+						<div class="cck-admin-template-meta"><span><?php echo esc_html( cck_get_component_category_label( $category ) ); ?></span><span><?php echo esc_html( sprintf( __( 'Version %s', 'craft-commerce-kit' ), $version ) ); ?></span><span><?php esc_html_e( 'Shortcode Ready', 'craft-commerce-kit' ); ?></span></div>
+						<?php if ( ! empty( $supports ) ) : ?>
+							<div class="cck-admin-component-tags">
+								<?php foreach ( $supports as $support ) : ?>
+									<span><?php echo esc_html( $support ); ?></span>
+								<?php endforeach; ?>
+							</div>
+						<?php endif; ?>
 						<div class="cck-admin-shortcode-example"><code><?php echo esc_html( $shortcode ); ?></code><button type="button" class="button cck-admin-copy" data-cck-copy="<?php echo esc_attr( $shortcode ); ?>"><?php esc_html_e( 'Copy', 'craft-commerce-kit' ); ?></button></div>
 					</article>
 				<?php endforeach; ?>

@@ -1,20 +1,21 @@
 <?php
 /**
- * Product grid component.
+ * Product Grid component renderer.
  *
  * @package CraftCommerceKit
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! function_exists( 'cck_component_engine_render_product_grid' ) ) {
+if ( ! function_exists( 'cck_component_package_render_product_grid' ) ) {
 	/**
 	 * Render the product grid component.
 	 *
-	 * @param array $atts Component attributes.
+	 * @param array $atts     Component attributes.
+	 * @param array $manifest Component manifest.
 	 * @return string
 	 */
-	function cck_component_engine_render_product_grid( $atts = array() ) {
+	function cck_component_package_render_product_grid( $atts = array(), $manifest = array() ) {
 		if ( ! function_exists( 'wc_get_product' ) ) {
 			return '<section class="cck-component cck-product-grid"><div class="cck-container"><p>' . esc_html__( 'WooCommerce is required to display products.', 'craft-commerce-kit' ) . '</p></div></section>';
 		}

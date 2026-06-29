@@ -21,9 +21,6 @@ require_once CCK_PLUGIN_DIR . 'inc/components/trust-block.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/image-text.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/cta.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/collection-grid.php';
-require_once CCK_PLUGIN_DIR . 'inc/components/components/hero.php';
-require_once CCK_PLUGIN_DIR . 'inc/components/components/usp.php';
-require_once CCK_PLUGIN_DIR . 'inc/components/components/product-grid.php';
 
 require_once CCK_PLUGIN_DIR . 'inc/shortcodes/shortcodes.php';
 

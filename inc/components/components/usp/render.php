@@ -1,20 +1,21 @@
 <?php
 /**
- * USP component.
+ * USP component renderer.
  *
  * @package CraftCommerceKit
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! function_exists( 'cck_component_engine_render_usp' ) ) {
+if ( ! function_exists( 'cck_component_package_render_usp' ) ) {
 	/**
 	 * Render the USP component.
 	 *
-	 * @param array $atts Component attributes.
+	 * @param array $atts     Component attributes.
+	 * @param array $manifest Component manifest.
 	 * @return string
 	 */
-	function cck_component_engine_render_usp( $atts = array() ) {
+	function cck_component_package_render_usp( $atts = array(), $manifest = array() ) {
 		$items = array(
 			array(
 				'title' => __( 'Handmade Quality', 'craft-commerce-kit' ),
