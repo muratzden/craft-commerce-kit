@@ -1,6 +1,6 @@
 <?php
 /**
- * Component ayar formu ?nizleme renderer'?.
+ * Component ayar formu önizleme rendererı..
  *
  * @package CraftCommerceKit
  */
@@ -9,10 +9,10 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_get_component_setting_input_name' ) ) {
 	/**
-	 * Ayar alan? i?in g?venli input name de?eri ?retir.
+	 * Ayar alanı için güvenli input name değeri üretir.
 	 *
-	 * @param string $component_id Component kimli?i.
-	 * @param string $setting_id   Ayar kimli?i.
+	 * @param string $component_id Component kimliği.
+	 * @param string $setting_id   Ayar kimliği.
 	 * @return string
 	 */
 	function cck_get_component_setting_input_name( $component_id, $setting_id ) {
@@ -22,7 +22,7 @@ if ( ! function_exists( 'cck_get_component_setting_input_name' ) ) {
 
 if ( ! function_exists( 'cck_render_component_settings_preview' ) ) {
 	/**
-	 * Manifest settings verisinden kaydetmesiz admin form ?nizlemesi ?retir.
+	 * Manifest settings verisinden kaydetmesiz admin form önizlemesi üretir.
 	 *
 	 * @param array $manifest Component manifest verisi.
 	 * @return string
@@ -39,7 +39,7 @@ if ( ! function_exists( 'cck_render_component_settings_preview' ) ) {
 		?>
 		<div class="cck-admin-settings-preview" aria-label="<?php echo esc_attr( sprintf( __( '%s settings preview', 'craft-commerce-kit' ), cck_manifest_get( $manifest, 'name', $component_id ) ) ); ?>">
 			<?php foreach ( $settings as $setting_id => $setting ) : ?>
-				<?php echo cck_render_component_setting_field( $component_id, $setting_id, $setting ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Alan renderer t?m ??kt?lar? escape eder. ?>
+				<?php echo cck_render_component_setting_field( $component_id, $setting_id, $setting ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Alan renderer tüm çıktıları escape eder. ?>
 			<?php endforeach; ?>
 		</div>
 		<?php
@@ -49,11 +49,11 @@ if ( ! function_exists( 'cck_render_component_settings_preview' ) ) {
 
 if ( ! function_exists( 'cck_render_component_setting_field' ) ) {
 	/**
-	 * Tek bir ayar alan? i?in admin field HTML'i ?retir.
+	 * Tek bir ayar alanı için admin field HTML'i üretir.
 	 *
-	 * @param string $component_id Component kimli?i.
-	 * @param string $setting_id   Ayar kimli?i.
-	 * @param array  $setting      Ayar tan?m?.
+	 * @param string $component_id Component kimliği.
+	 * @param string $setting_id   Ayar kimliği.
+	 * @param array  $setting      Ayar tanımı.
 	 * @return string
 	 */
 	function cck_render_component_setting_field( $component_id, $setting_id, $setting ) {
@@ -75,7 +75,7 @@ if ( ! function_exists( 'cck_render_component_setting_field' ) ) {
 					<em><?php esc_html_e( 'Required', 'craft-commerce-kit' ); ?></em>
 				<?php endif; ?>
 			</label>
-			<?php echo cck_render_component_setting_control( $type, $field_id, $name, $value, $setting ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Control renderer t?m ??kt?lar? escape eder. ?>
+			<?php echo cck_render_component_setting_control( $type, $field_id, $name, $value, $setting ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Control renderer tüm çıktıları escape eder. ?>
 			<?php if ( '' !== $description ) : ?>
 				<p><?php echo esc_html( $description ); ?></p>
 			<?php endif; ?>
@@ -87,13 +87,13 @@ if ( ! function_exists( 'cck_render_component_setting_field' ) ) {
 
 if ( ! function_exists( 'cck_render_component_setting_control' ) ) {
 	/**
-	 * Desteklenen field type i?in input kontrol? ?retir.
+	 * Desteklenen field type için input kontrolü üretir.
 	 *
 	 * @param string $type    Field type.
-	 * @param string $field_id Field id de?eri.
-	 * @param string $name    Input name de?eri.
-	 * @param mixed  $value   Varsay?lan de?er.
-	 * @param array  $setting Ayar tan?m?.
+	 * @param string $field_id Field id değeri.
+	 * @param string $name    Input name değeri.
+	 * @param mixed  $value   Varsayılan değer.
+	 * @param array  $setting Ayar tanımı.
 	 * @return string
 	 */
 	function cck_render_component_setting_control( $type, $field_id, $name, $value, $setting ) {
@@ -137,12 +137,12 @@ if ( ! function_exists( 'cck_render_component_setting_control' ) ) {
 
 if ( ! function_exists( 'cck_render_component_setting_select' ) ) {
 	/**
-	 * Select field kontrol?n? ?retir.
+	 * Select field kontrolünü üretir.
 	 *
-	 * @param string $field_id Field id de?eri.
-	 * @param string $name     Input name de?eri.
-	 * @param mixed  $value    Varsay?lan de?er.
-	 * @param array  $options  Select se?enekleri.
+	 * @param string $field_id Field id değeri.
+	 * @param string $name     Input name değeri.
+	 * @param mixed  $value    Varsayılan değer.
+	 * @param array  $options  Select seçenekleri.
 	 * @return string
 	 */
 	function cck_render_component_setting_select( $field_id, $name, $value, $options ) {

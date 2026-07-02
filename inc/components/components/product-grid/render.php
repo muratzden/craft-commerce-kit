@@ -1,6 +1,6 @@
 <?php
 /**
- * Product Grid component render dosyas?.
+ * Product Grid component render dosyası.
  *
  * @package CraftCommerceKit
  */
@@ -9,9 +9,9 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_component_package_render_product_grid' ) ) {
 	/**
-	 * Product Grid component ??kt?s?n? olu?turur.
+	 * Product Grid component çıktısını oluşturur.
 	 *
-	 * @param array $atts     Temizlenmi? component de?erleri.
+	 * @param array $atts     Temizlenmiş component değerleri.
 	 * @param array $manifest Component manifest verisi.
 	 * @return string
 	 */

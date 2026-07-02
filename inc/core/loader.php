@@ -33,7 +33,7 @@ require_once CCK_PLUGIN_DIR . 'inc/shortcodes/shortcodes.php';
 
 if ( ! function_exists( 'cck_is_woocommerce_active' ) ) {
 	/**
-	 * WooCommerce eklentisinin aktif olup olmad???n? kontrol eder.
+	 * WooCommerce eklentisinin aktif olup olmadığını kontrol eder.
 	 *
 	 * @return bool
 	 */

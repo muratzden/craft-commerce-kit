@@ -1,6 +1,6 @@
 <?php
 /**
- * Component interface standard?.
+ * Component interface standardı.
  *
  * @package CraftCommerceKit
  */
@@ -9,27 +9,27 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! interface_exists( 'CCK_Component_Interface' ) ) {
 	/**
-	 * Gelecekte class tabanl? component paketleri i?in ortak s?zle?me sa?lar.
+	 * Gelecekte class tabanlı component paketleri için ortak sözleşme sağlar.
 	 */
 	interface CCK_Component_Interface {
 		/**
-		 * Component manifest verisini d?nd?r?r.
+		 * Component manifest verisini döndürür.
 		 *
 		 * @return array
 		 */
 		public function get_manifest();
 
 		/**
-		 * Component varsay?lan de?erlerini d?nd?r?r.
+		 * Component varsayılan değerlerini döndürür.
 		 *
 		 * @return array
 		 */
 		public function get_defaults();
 
 		/**
-		 * Component HTML ??kt?s?n? ?retir.
+		 * Component HTML çıktısını üretir.
 		 *
-		 * @param array $atts Render de?erleri.
+		 * @param array $atts Render değerleri.
 		 * @return string
 		 */
 		public function render( $atts = array() );

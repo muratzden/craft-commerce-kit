@@ -1,6 +1,6 @@
 <?php
 /**
- * USP component manifest dosyas?.
+ * USP component manifest dosyası.
  *
  * @package CraftCommerceKit
  */

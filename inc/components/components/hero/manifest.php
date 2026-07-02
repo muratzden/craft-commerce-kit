@@ -1,6 +1,6 @@
 <?php
 /**
- * Hero component manifest dosyas?.
+ * Hero component manifest dosyası.
  *
  * @package CraftCommerceKit
  */

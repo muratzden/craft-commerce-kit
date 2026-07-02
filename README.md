@@ -198,6 +198,31 @@ Craft Commerce Kit works with WooCommerce when WooCommerce is active. It does no
 
 Deactivating the plugin removes its shortcodes, assets, and admin page. It does not delete pages, products, settings, themes, or WooCommerce data.
 
+== Frequently Asked Questions ==
+
+= Does this plugin require WooCommerce? =
+
+WooCommerce is recommended for commerce-focused components. Non-product UI components can render without WooCommerce.
+
+= Does this plugin change WooCommerce add-to-cart behavior? =
+
+No. Craft Commerce Kit does not bind JavaScript to WooCommerce native add-to-cart selectors and does not modify cart, checkout, product, or archive behavior automatically.
+
+= Does this plugin require a specific theme? =
+
+No. Craft Commerce Kit is theme-independent and uses scoped `.cck-*` CSS classes.
+
+= Are settings saved from the Components screen? =
+
+No. Component settings forms are preview-only in this release.
+
+== Screenshots ==
+
+1. Craft Commerce Kit admin dashboard.
+2. Components registry screen.
+3. Layout Manager screen.
+4. Template override file structure.
+
 == Changelog ==
 
 = 0.9.0 =

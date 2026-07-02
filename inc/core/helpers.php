@@ -1,6 +1,6 @@
 <?php
 /**
- * Genel yard?mc? fonksiyonlar.
+ * Genel yardımcı fonksiyonlar.
  *
  * @package CraftCommerceKit
  */
@@ -9,9 +9,9 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_debug_log' ) ) {
 	/**
-	 * Debug a??kken standart prefix ile log yazar.
+	 * Debug açıkken standart prefix ile log yazar.
 	 *
-	 * @param string $message Log mesaj?.
+	 * @param string $message Log mesajı.
 	 * @return void
 	 */
 	function cck_debug_log( $message ) {
@@ -29,11 +29,11 @@ if ( ! function_exists( 'cck_debug_log' ) ) {
 
 if ( ! function_exists( 'cck_array_get' ) ) {
 	/**
-	 * Array i?inden g?venli de?er okur.
+	 * Array içinden güvenli değer okur.
 	 *
 	 * @param array  $array   Kaynak array.
 	 * @param string $key     Okunacak anahtar.
-	 * @param mixed  $default Varsay?lan de?er.
+	 * @param mixed  $default Varsayılan değer.
 	 * @return mixed
 	 */
 	function cck_array_get( $array, $key, $default = null ) {
@@ -43,11 +43,11 @@ if ( ! function_exists( 'cck_array_get' ) ) {
 
 if ( ! function_exists( 'cck_manifest_get' ) ) {
 	/**
-	 * Manifest i?inden g?venli alan okur.
+	 * Manifest içinden güvenli alan okur.
 	 *
 	 * @param array  $manifest Manifest verisi.
-	 * @param string $key      Alan ad?.
-	 * @param mixed  $default  Varsay?lan de?er.
+	 * @param string $key      Alan adı.
+	 * @param mixed  $default  Varsayılan değer.
 	 * @return mixed
 	 */
 	function cck_manifest_get( $manifest, $key, $default = null ) {
@@ -57,9 +57,9 @@ if ( ! function_exists( 'cck_manifest_get' ) ) {
 
 if ( ! function_exists( 'cck_to_bool' ) ) {
 	/**
-	 * Gelen de?eri boolean tipe d?n??t?r?r.
+	 * Gelen değeri boolean tipe dönüştürür.
 	 *
-	 * @param mixed $value De?er.
+	 * @param mixed $value Değer.
 	 * @return bool
 	 */
 	function cck_to_bool( $value ) {
@@ -69,9 +69,9 @@ if ( ! function_exists( 'cck_to_bool' ) ) {
 
 if ( ! function_exists( 'cck_to_string' ) ) {
 	/**
-	 * Gelen de?eri g?venli string de?ere d?n??t?r?r.
+	 * Gelen değeri güvenli string değere dönüştürür.
 	 *
-	 * @param mixed $value De?er.
+	 * @param mixed $value Değer.
 	 * @return string
 	 */
 	function cck_to_string( $value ) {
@@ -85,7 +85,7 @@ if ( ! function_exists( 'cck_to_string' ) ) {
 
 if ( ! function_exists( 'cck_sanitize_key_list' ) ) {
 	/**
-	 * Liste elemanlar?n? sanitize_key ile temizler.
+	 * Liste elemanlarını sanitize_key ile temizler.
 	 *
 	 * @param array $items Liste.
 	 * @return array
@@ -101,9 +101,9 @@ if ( ! function_exists( 'cck_sanitize_key_list' ) ) {
 
 if ( ! function_exists( 'cck_sanitize_callback_name' ) ) {
 	/**
-	 * Kullan?labilir sanitize callback de?erini d?nd?r?r.
+	 * Kullanılabilir sanitize callback değerini döndürür.
 	 *
-	 * @param mixed $callback Callback de?eri.
+	 * @param mixed $callback Callback değeri.
 	 * @return callable|string
 	 */
 	function cck_sanitize_callback_name( $callback ) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Hero component render dosyas?.
+ * Hero component render dosyası.
  *
  * @package CraftCommerceKit
  */
@@ -9,9 +9,9 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_component_package_render_hero' ) ) {
 	/**
-	 * Hero component ??kt?s?n? olu?turur.
+	 * Hero component çıktısını oluşturur.
 	 *
-	 * @param array $atts     Temizlenmi? component de?erleri.
+	 * @param array $atts     Temizlenmiş component değerleri.
 	 * @param array $manifest Component manifest verisi.
 	 * @return string
 	 */

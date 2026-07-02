@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_get_component_packages_path' ) ) {
 	/**
-	 * Component paketlerinin bulundu?u dizini d?nd?r?r.
+	 * Component paketlerinin bulunduğu dizini döndürür.
 	 *
 	 * @return string
 	 */
@@ -20,7 +20,7 @@ if ( ! function_exists( 'cck_get_component_packages_path' ) ) {
 
 if ( ! function_exists( 'cck_get_component_supported_features' ) ) {
 	/**
-	 * Manifest i?inde izin verilen supports de?erlerini d?nd?r?r.
+	 * Manifest içinde izin verilen supports değerlerini döndürür.
 	 *
 	 * @return array
 	 */
@@ -38,7 +38,7 @@ if ( ! function_exists( 'cck_get_component_supported_features' ) ) {
 
 if ( ! function_exists( 'cck_get_component_manifest_files' ) ) {
 	/**
-	 * Component manifest dosyalar?n? tek noktadan okur.
+	 * Component manifest dosyalarını tek noktadan okur.
 	 *
 	 * @return array
 	 */
@@ -57,14 +57,14 @@ if ( ! function_exists( 'cck_get_component_manifest_files' ) ) {
 
 if ( ! function_exists( 'cck_load_component_manifest' ) ) {
 	/**
-	 * Manifest dosyas?n? y?kler ve validator ?zerinden ge?irir.
+	 * Manifest dosyasını yükler ve validator üzerinden geçirir.
 	 *
 	 * @param string $manifest_path Manifest dosya yolu.
 	 * @return array
 	 */
 	function cck_load_component_manifest( $manifest_path ) {
 		if ( ! is_string( $manifest_path ) || ! file_exists( $manifest_path ) ) {
-			cck_debug_log( 'Manifest dosyas? bulunamad?.' );
+			cck_debug_log( 'Manifest dosyası bulunamadı.' );
 			return array();
 		}
 
@@ -77,7 +77,7 @@ if ( ! function_exists( 'cck_load_component_manifest' ) ) {
 
 if ( ! function_exists( 'cck_get_component_registry' ) ) {
 	/**
-	 * Component manifest dosyalar?n? otomatik tarar ve registry verisini d?nd?r?r.
+	 * Component manifest dosyalarını otomatik tarar ve registry verisini döndürür.
 	 *
 	 * @return array
 	 */
@@ -98,7 +98,7 @@ if ( ! function_exists( 'cck_get_component_registry' ) ) {
 			}
 
 			if ( empty( $manifest['_render'] ) || ! file_exists( $manifest['_render'] ) ) {
-				cck_debug_log( 'Render dosyas? bulunamad?: ' . $manifest['id'] );
+				cck_debug_log( 'Render dosyası bulunamadı: ' . $manifest['id'] );
 				continue;
 			}
 
@@ -111,9 +111,9 @@ if ( ! function_exists( 'cck_get_component_registry' ) ) {
 
 if ( ! function_exists( 'cck_get_component_manifest' ) ) {
 	/**
-	 * Belirli bir component manifest verisini d?nd?r?r.
+	 * Belirli bir component manifest verisini döndürür.
 	 *
-	 * @param string $component_id Component kimli?i.
+	 * @param string $component_id Component kimliği.
 	 * @return array|null
 	 */
 	function cck_get_component_manifest( $component_id ) {
@@ -126,9 +126,9 @@ if ( ! function_exists( 'cck_get_component_manifest' ) ) {
 
 if ( ! function_exists( 'cck_get_component' ) ) {
 	/**
-	 * Component paket verisini d?nd?r?r.
+	 * Component paket verisini döndürür.
 	 *
-	 * @param string $component_id Component kimli?i.
+	 * @param string $component_id Component kimliği.
 	 * @return array|null
 	 */
 	function cck_get_component( $component_id ) {
@@ -138,9 +138,9 @@ if ( ! function_exists( 'cck_get_component' ) ) {
 
 if ( ! function_exists( 'cck_get_component_settings' ) ) {
 	/**
-	 * Component ayar tan?mlar?n? d?nd?r?r.
+	 * Component ayar tanımlarını döndürür.
 	 *
-	 * @param string $component_id Component kimli?i.
+	 * @param string $component_id Component kimliği.
 	 * @return array
 	 */
 	function cck_get_component_settings( $component_id ) {
@@ -152,9 +152,9 @@ if ( ! function_exists( 'cck_get_component_settings' ) ) {
 
 if ( ! function_exists( 'cck_get_component_defaults' ) ) {
 	/**
-	 * Component ayarlar?n?n varsay?lan de?erlerini d?nd?r?r.
+	 * Component ayarların?n varsayılan değerlerini döndürür.
 	 *
-	 * @param string $component_id Component kimli?i.
+	 * @param string $component_id Component kimliği.
 	 * @return array
 	 */
 	function cck_get_component_defaults( $component_id ) {
@@ -170,7 +170,7 @@ if ( ! function_exists( 'cck_get_component_defaults' ) ) {
 
 if ( ! function_exists( 'cck_get_components' ) ) {
 	/**
-	 * Mevcut admin entegrasyonlar? i?in component registry verisini d?nd?r?r.
+	 * Mevcut admin entegrasyonları için component registry verisini döndürür.
 	 *
 	 * @return array
 	 */

@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_get_layout_packages_path' ) ) {
 	/**
-	 * Layout tan?mlar?n?n bulundu?u dizini d?nd?r?r.
+	 * Layout tanımlarının bulunduğu dizini döndürür.
 	 *
 	 * @return string
 	 */
@@ -20,7 +20,7 @@ if ( ! function_exists( 'cck_get_layout_packages_path' ) ) {
 
 if ( ! function_exists( 'cck_get_layout_manifest_files' ) ) {
 	/**
-	 * Layout manifest dosyalar?n? tek noktadan okur.
+	 * Layout manifest dosyalarını tek noktadan okur.
 	 *
 	 * @return array
 	 */
@@ -39,7 +39,7 @@ if ( ! function_exists( 'cck_get_layout_manifest_files' ) ) {
 
 if ( ! function_exists( 'cck_validate_layout_manifest' ) ) {
 	/**
-	 * Layout manifest verisini g?venli varsay?lanlarla normalize eder.
+	 * Layout manifest verisini güvenli varsayılanlarla normalize eder.
 	 *
 	 * @param array  $manifest    Layout manifest verisi.
 	 * @param string $layout_path Layout dosya yolu.
@@ -47,14 +47,14 @@ if ( ! function_exists( 'cck_validate_layout_manifest' ) ) {
 	 */
 	function cck_validate_layout_manifest( $manifest, $layout_path, $fallback_id = '' ) {
 		if ( ! is_array( $manifest ) ) {
-			cck_debug_log( 'Layout manifest array de?il: ' . $layout_path );
+			cck_debug_log( 'Layout manifest array değil: ' . $layout_path );
 			return array();
 		}
 
 		$layout_id = sanitize_key( cck_manifest_get( $manifest, 'id', $fallback_id ? $fallback_id : basename( $layout_path, '.php' ) ) );
 
 		if ( empty( $layout_id ) ) {
-			cck_debug_log( 'Layout id bo?: ' . $layout_path );
+			cck_debug_log( 'Layout id boş: ' . $layout_path );
 			return array();
 		}
 
@@ -73,14 +73,14 @@ if ( ! function_exists( 'cck_validate_layout_manifest' ) ) {
 
 if ( ! function_exists( 'cck_load_layout_manifest' ) ) {
 	/**
-	 * Layout manifest dosyas?n? y?kler.
+	 * Layout manifest dosyasını yükler.
 	 *
 	 * @param string $layout_path Layout dosya yolu.
 	 * @return array
 	 */
 	function cck_load_layout_manifest( $layout_path, $layout_id = '' ) {
 		if ( ! is_string( $layout_path ) || ! file_exists( $layout_path ) ) {
-			cck_debug_log( 'Layout dosyas? bulunamad?.' );
+			cck_debug_log( 'Layout dosyası bulunamadı.' );
 			return array();
 		}
 
@@ -88,7 +88,7 @@ if ( ! function_exists( 'cck_load_layout_manifest' ) ) {
 		$located_path = cck_locate_layout_manifest( $layout_id, $layout_path );
 
 		if ( empty( $located_path ) || ! file_exists( $located_path ) ) {
-			cck_debug_log( 'Layout manifest bulunamad?: ' . $layout_id );
+			cck_debug_log( 'Layout manifest bulunamadı: ' . $layout_id );
 			return array();
 		}
 
@@ -100,7 +100,7 @@ if ( ! function_exists( 'cck_load_layout_manifest' ) ) {
 
 if ( ! function_exists( 'cck_get_layout_registry' ) ) {
 	/**
-	 * Layout manifest dosyalar?n? otomatik tarar ve registry verisini d?nd?r?r.
+	 * Layout manifest dosyalarını otomatik tarar ve registry verisini döndürür.
 	 *
 	 * @return array
 	 */
@@ -129,9 +129,9 @@ if ( ! function_exists( 'cck_get_layout_registry' ) ) {
 
 if ( ! function_exists( 'cck_get_layout' ) ) {
 	/**
-	 * Belirli bir layout manifest verisini d?nd?r?r.
+	 * Belirli bir layout manifest verisini döndürür.
 	 *
-	 * @param string $layout_id Layout kimli?i.
+	 * @param string $layout_id Layout kimliği.
 	 * @return array|null
 	 */
 	function cck_get_layout( $layout_id ) {

@@ -9,9 +9,9 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_normalize_layout_component' ) ) {
 	/**
-	 * Layout component tan?m?n? ileride JSON yap?s?na uyumlu olacak ?ekilde normalize eder.
+	 * Layout component tanımını ileride JSON yapısına uyumlu olacak şekilde normalize eder.
 	 *
-	 * @param mixed $component Layout component tan?m?.
+	 * @param mixed $component Layout component tanımı.
 	 * @return array
 	 */
 	function cck_normalize_layout_component( $component ) {
@@ -41,10 +41,10 @@ if ( ! function_exists( 'cck_normalize_layout_component' ) ) {
 
 if ( ! function_exists( 'cck_render_layout' ) ) {
 	/**
-	 * Kay?tl? bir layout i?indeki componentleri s?rayla render eder.
+	 * Kayıtlı bir layout içindeki componentleri sırayla render eder.
 	 *
-	 * @param string $layout_id Layout kimli?i.
-	 * @param array  $data      ?leride JSON/veri tabanl? render i?in ayr?lan veri.
+	 * @param string $layout_id Layout kimliği.
+	 * @param array  $data      İleride JSON/veri tabanlı render için ayrılan veri.
 	 * @return string
 	 */
 	function cck_render_layout( $layout_id, $data = array() ) {
@@ -52,7 +52,7 @@ if ( ! function_exists( 'cck_render_layout' ) ) {
 		$layout    = cck_get_layout( $layout_id );
 
 		if ( empty( $layout ) ) {
-			cck_debug_log( 'Layout bulunamad?: ' . $layout_id );
+			cck_debug_log( 'Layout bulunamadı: ' . $layout_id );
 			return '';
 		}
 
@@ -82,9 +82,9 @@ if ( ! function_exists( 'cck_render_layout' ) ) {
 
 if ( ! function_exists( 'cck_layout_shortcode' ) ) {
 	/**
-	 * Shortcode ?zerinden layout render eder.
+	 * Shortcode üzerinden layout render eder.
 	 *
-	 * @param array $atts Shortcode de?erleri.
+	 * @param array $atts Shortcode değerleri.
 	 * @return string
 	 */
 	function cck_layout_shortcode( $atts ) {

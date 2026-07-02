@@ -1,6 +1,6 @@
 <?php
 /**
- * Component manifest do?rulay?c?.
+ * Component manifest doğrulayıcı.
  *
  * @package CraftCommerceKit
  */
@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_get_component_required_manifest_fields' ) ) {
 	/**
-	 * Manifest i?in beklenen temel alanlar? d?nd?r?r.
+	 * Manifest için beklenen temel alanları döndürür.
 	 *
 	 * @return array
 	 */
@@ -28,7 +28,7 @@ if ( ! function_exists( 'cck_get_component_required_manifest_fields' ) ) {
 
 if ( ! function_exists( 'cck_validate_component_manifest' ) ) {
 	/**
-	 * Manifest alanlar?n? do?rular ve eksikleri g?venli varsay?lanlarla tamamlar.
+	 * Manifest alanlarını doğrular ve eksikleri güvenli varsayılanlarla tamamlar.
 	 *
 	 * @param array  $manifest      Manifest verisi.
 	 * @param string $component_dir Component dizini.
@@ -36,20 +36,20 @@ if ( ! function_exists( 'cck_validate_component_manifest' ) ) {
 	 */
 	function cck_validate_component_manifest( $manifest, $component_dir ) {
 		if ( ! is_array( $manifest ) ) {
-			cck_debug_log( 'Manifest array de?il: ' . $component_dir );
+			cck_debug_log( 'Manifest array değil: ' . $component_dir );
 			return array();
 		}
 
 		foreach ( cck_get_component_required_manifest_fields() as $field ) {
 			if ( ! array_key_exists( $field, $manifest ) ) {
-				cck_debug_log( 'Manifest alan? eksik: ' . $field . ' (' . $component_dir . ')' );
+				cck_debug_log( 'Manifest alanı eksik: ' . $field . ' (' . $component_dir . ')' );
 			}
 		}
 
 		$component_id = sanitize_key( cck_manifest_get( $manifest, 'id', basename( $component_dir ) ) );
 
 		if ( empty( $component_id ) ) {
-			cck_debug_log( 'Manifest id bo?: ' . $component_dir );
+			cck_debug_log( 'Manifest id boş: ' . $component_dir );
 			return array();
 		}
 
@@ -72,7 +72,7 @@ if ( ! function_exists( 'cck_validate_component_manifest' ) ) {
 
 if ( ! function_exists( 'cck_validate_component_supports' ) ) {
 	/**
-	 * Supports listesini izin verilen de?erlerle s?n?rlar.
+	 * Supports listesini izin verilen değerlerle sınırlar.
 	 *
 	 * @param array $supports Supports listesi.
 	 * @return array
@@ -87,9 +87,9 @@ if ( ! function_exists( 'cck_validate_component_supports' ) ) {
 
 if ( ! function_exists( 'cck_validate_component_settings' ) ) {
 	/**
-	 * Settings tan?mlar?n? standart yap?ya d?n??t?r?r.
+	 * Settings tanımlarını standart yapıya dönüştürür.
 	 *
-	 * @param array $settings Settings tan?mlar?.
+	 * @param array $settings Settings tanımları.
 	 * @return array
 	 */
 	function cck_validate_component_settings( $settings ) {
@@ -103,7 +103,7 @@ if ( ! function_exists( 'cck_validate_component_settings' ) ) {
 			$setting_id = sanitize_key( $setting_id );
 
 			if ( empty( $setting_id ) || ! is_array( $setting ) ) {
-				cck_debug_log( 'Ge?ersiz setting atland?: ' . $setting_id );
+				cck_debug_log( 'Geçersiz setting atlandı: ' . $setting_id );
 				continue;
 			}
 

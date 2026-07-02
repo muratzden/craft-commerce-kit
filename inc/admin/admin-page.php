@@ -364,7 +364,7 @@ if ( ! function_exists( 'cck_render_admin_page' ) ) {
 
 if ( ! function_exists( 'cck_render_components_page' ) ) {
 	/**
-	 * Components admin sayfas?n? render eder.
+	 * Components admin sayfasını render eder.
 	 *
 	 * @return void
 	 */
@@ -412,7 +412,7 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 								<div class="cck-admin-settings-panel">
 									<h3><?php esc_html_e( 'Settings Form Preview', 'craft-commerce-kit' ); ?></h3>
 									<p><?php esc_html_e( 'Preview only. Saving will be available in a future sprint.', 'craft-commerce-kit' ); ?></p>
-									<?php echo cck_render_component_settings_preview( $component ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Settings renderer t?m ??kt?lar? escape eder. ?>
+									<?php echo cck_render_component_settings_preview( $component ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Settings renderer tüm çıktıları escape eder. ?>
 								</div>
 							</td>
 						</tr>

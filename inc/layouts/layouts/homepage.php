@@ -1,6 +1,6 @@
 <?php
 /**
- * Homepage layout manifest dosyas?.
+ * Homepage layout manifest dosyası.
  *
  * @package CraftCommerceKit
  */

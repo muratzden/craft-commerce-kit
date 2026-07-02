@@ -1,6 +1,6 @@
 <?php
 /**
- * Product Grid component manifest dosyas?.
+ * Product Grid component manifest dosyası.
  *
  * @package CraftCommerceKit
  */

@@ -1,6 +1,6 @@
 <?php
 /**
- * USP component render dosyas?.
+ * USP component render dosyası.
  *
  * @package CraftCommerceKit
  */
@@ -9,9 +9,9 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_component_package_render_usp' ) ) {
 	/**
-	 * USP component ??kt?s?n? olu?turur.
+	 * USP component çıktısını oluşturur.
 	 *
-	 * @param array $atts     Temizlenmi? component de?erleri.
+	 * @param array $atts     Temizlenmiş component değerleri.
 	 * @param array $manifest Component manifest verisi.
 	 * @return string
 	 */

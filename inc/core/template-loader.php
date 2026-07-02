@@ -1,6 +1,6 @@
 <?php
 /**
- * Tema override dosyalar?n? bulmak i?in yard?mc? fonksiyonlar.
+ * Tema override dosyalarını bulmak için yardımcı fonksiyonlar.
  *
  * @package CraftCommerceKit
  */
@@ -9,10 +9,10 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_locate_component_template' ) ) {
 	/**
-	 * Component render dosyas?n? child theme, parent theme ve plugin s?ras?yla bulur.
+	 * Component render dosyasını child theme, parent theme ve plugin sırasıyla bulur.
 	 *
-	 * @param string $component_id     Component kimli?i.
-	 * @param string $default_template Plugin i?indeki varsay?lan render dosyas?.
+	 * @param string $component_id     Component kimliği.
+	 * @param string $default_template Plugin içindeki varsayılan render dosyası.
 	 * @return string
 	 */
 	function cck_locate_component_template( $component_id, $default_template = '' ) {
@@ -46,10 +46,10 @@ if ( ! function_exists( 'cck_locate_component_template' ) ) {
 
 if ( ! function_exists( 'cck_locate_layout_manifest' ) ) {
 	/**
-	 * Layout manifest dosyas?n? aktif tema ve plugin s?ras?yla bulur.
+	 * Layout manifest dosyasını aktif tema ve plugin sırasıyla bulur.
 	 *
-	 * @param string $layout_id        Layout kimli?i.
-	 * @param string $default_manifest Plugin i?indeki varsay?lan manifest dosyas?.
+	 * @param string $layout_id        Layout kimliği.
+	 * @param string $default_manifest Plugin içindeki varsayılan manifest dosyası.
 	 * @return string
 	 */
 	function cck_locate_layout_manifest( $layout_id, $default_manifest = '' ) {
