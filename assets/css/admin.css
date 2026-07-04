@@ -42,6 +42,10 @@
 	margin-bottom: 24px;
 }
 
+.cck-admin-page > .cck-admin-card:last-child {
+	margin-bottom: 0;
+}
+
 .cck-admin-card {
 	padding: 22px;
 	border: 1px solid #dcdcde;
@@ -186,7 +190,7 @@
 
 .cck-admin-table th,
 .cck-admin-table td {
-	padding: 12px 14px;
+	padding: 14px 16px;
 	border-bottom: 1px solid #dcdcde;
 	text-align: left;
 	vertical-align: middle;
@@ -588,4 +592,39 @@
 	.cck-admin-settings-preview {
 		grid-template-columns: 1fr;
 	}
+}
+
+.cck-admin-layout-summary {
+	padding: 14px 0;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.cck-admin-layout-summary:first-of-type {
+	padding-top: 0;
+}
+
+.cck-admin-layout-summary:last-of-type {
+	border-bottom: 0;
+}
+
+.cck-admin-layout-summary h3 {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+	margin: 0 0 8px;
+	font-size: 15px;
+	line-height: 1.4;
+}
+
+.cck-admin-layout-summary h3 span {
+	color: #646970;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.cck-admin-table td > span,
+.cck-admin-template-card p,
+.cck-admin-layout-summary p {
+	color: #646970;
 }

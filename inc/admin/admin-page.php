@@ -202,6 +202,40 @@ if ( ! function_exists( 'cck_get_component_status_label' ) ) {
 	}
 }
 
+
+if ( ! function_exists( 'cck_get_admin_layout_display_data' ) ) {
+	/**
+	 * Admin ekranları için layout görünüm verisini hazırlar.
+	 *
+	 * @param array $layout Layout manifest verisi.
+	 * @return array
+	 */
+	function cck_get_admin_layout_display_data( $layout ) {
+		$layout_id     = isset( $layout['id'] ) ? sanitize_key( $layout['id'] ) : '';
+		$name          = isset( $layout['label'] ) ? $layout['label'] : ( isset( $layout['name'] ) ? $layout['name'] : $layout_id );
+		$description   = isset( $layout['description'] ) ? $layout['description'] : '';
+		$version       = isset( $layout['version'] ) ? $layout['version'] : CCK_VERSION;
+		$components    = isset( $layout['components'] ) && is_array( $layout['components'] ) ? $layout['components'] : array();
+		$component_ids = array();
+
+		foreach ( $components as $component ) {
+			$normalized = cck_normalize_layout_component( $component );
+
+			if ( ! empty( $normalized['id'] ) ) {
+				$component_ids[] = $normalized['id'];
+			}
+		}
+
+		return array(
+			'id'            => $layout_id,
+			'name'          => $name,
+			'description'   => $description,
+			'version'       => $version,
+			'component_ids' => $component_ids,
+			'shortcode'     => '[cck_layout id="' . $layout_id . '"]',
+		);
+	}
+}
 if ( ! function_exists( 'cck_get_admin_shortcodes' ) ) {
 	/**
 	 * Get admin shortcode registry.
@@ -301,33 +335,18 @@ if ( ! function_exists( 'cck_render_admin_page' ) ) {
 					<p><?php esc_html_e( 'No layouts registered.', 'craft-commerce-kit' ); ?></p>
 				<?php else : ?>
 					<?php foreach ( $layouts as $layout ) : ?>
-						<?php
-						$layout_id      = isset( $layout['id'] ) ? sanitize_key( $layout['id'] ) : '';
-						$layout_name    = isset( $layout['label'] ) ? $layout['label'] : ( isset( $layout['name'] ) ? $layout['name'] : $layout_id );
-						$description    = isset( $layout['description'] ) ? $layout['description'] : '';
-						$components     = isset( $layout['components'] ) && is_array( $layout['components'] ) ? $layout['components'] : array();
-						$component_ids  = array();
-						$shortcode      = '[cck_layout id="' . $layout_id . '"]';
-
-						foreach ( $components as $component ) {
-							$normalized = cck_normalize_layout_component( $component );
-
-							if ( ! empty( $normalized['id'] ) ) {
-								$component_ids[] = $normalized['id'];
-							}
-						}
-						?>
+						<?php $layout_data = cck_get_admin_layout_display_data( $layout ); ?>
 						<div class="cck-admin-layout-summary">
-							<h3><?php echo esc_html( $layout_name ); ?> <span><?php echo esc_html( $layout_id ); ?></span></h3>
-							<?php if ( ! empty( $description ) ) : ?>
-								<p><?php echo esc_html( $description ); ?></p>
+							<h3><?php echo esc_html( $layout_data['name'] ); ?> <span><?php echo esc_html( $layout_data['id'] ); ?></span></h3>
+							<?php if ( '' !== $layout_data['description'] ) : ?>
+								<p><?php echo esc_html( $layout_data['description'] ); ?></p>
 							<?php endif; ?>
 							<div class="cck-admin-component-tags" aria-label="<?php esc_attr_e( 'Component sequence', 'craft-commerce-kit' ); ?>">
-								<?php foreach ( $component_ids as $component_id ) : ?>
+								<?php foreach ( $layout_data['component_ids'] as $component_id ) : ?>
 									<span><?php echo esc_html( $component_id ); ?></span>
 								<?php endforeach; ?>
 							</div>
-							<div class="cck-admin-shortcode-example"><code><?php echo esc_html( $shortcode ); ?></code><button type="button" class="button cck-admin-copy" data-cck-copy="<?php echo esc_attr( $shortcode ); ?>"><?php esc_html_e( 'Copy', 'craft-commerce-kit' ); ?></button></div>
+							<div class="cck-admin-shortcode-example"><code><?php echo esc_html( $layout_data['shortcode'] ); ?></code><button type="button" class="button cck-admin-copy" data-cck-copy="<?php echo esc_attr( $layout_data['shortcode'] ); ?>"><?php esc_html_e( 'Copy', 'craft-commerce-kit' ); ?></button></div>
 						</div>
 					<?php endforeach; ?>
 					<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=craft-commerce-kit-layouts' ) ); ?>"><?php esc_html_e( 'View Layouts', 'craft-commerce-kit' ); ?></a>
@@ -486,29 +505,13 @@ if ( ! function_exists( 'cck_render_layouts_page' ) ) {
 					</thead>
 					<tbody>
 						<?php foreach ( $layouts as $layout ) : ?>
-							<?php
-							$layout_id     = isset( $layout['id'] ) ? sanitize_key( $layout['id'] ) : '';
-							$name          = isset( $layout['label'] ) ? $layout['label'] : ( isset( $layout['name'] ) ? $layout['name'] : $layout_id );
-							$description   = isset( $layout['description'] ) ? $layout['description'] : '';
-							$version       = isset( $layout['version'] ) ? $layout['version'] : CCK_VERSION;
-							$components    = isset( $layout['components'] ) && is_array( $layout['components'] ) ? $layout['components'] : array();
-							$component_ids = array();
-							$shortcode     = '[cck_layout id="' . $layout_id . '"]';
-
-							foreach ( $components as $component ) {
-								$normalized = cck_normalize_layout_component( $component );
-
-								if ( ! empty( $normalized['id'] ) ) {
-									$component_ids[] = $normalized['id'];
-								}
-							}
-							?>
+							<?php $layout_data = cck_get_admin_layout_display_data( $layout ); ?>
 							<tr>
-								<td><strong><?php echo esc_html( $name ); ?></strong><?php if ( ! empty( $description ) ) : ?><br><span><?php echo esc_html( $description ); ?></span><?php endif; ?></td>
-								<td><code><?php echo esc_html( $layout_id ); ?></code></td>
-								<td><?php echo esc_html( $version ); ?></td>
-								<td><div class="cck-admin-component-tags"><?php foreach ( $component_ids as $component_id ) : ?><span><?php echo esc_html( $component_id ); ?></span><?php endforeach; ?></div></td>
-								<td><div class="cck-admin-shortcode-example"><code><?php echo esc_html( $shortcode ); ?></code><button type="button" class="button cck-admin-copy" data-cck-copy="<?php echo esc_attr( $shortcode ); ?>"><?php esc_html_e( 'Copy', 'craft-commerce-kit' ); ?></button></div></td>
+								<td><strong><?php echo esc_html( $layout_data['name'] ); ?></strong><?php if ( '' !== $layout_data['description'] ) : ?><br><span><?php echo esc_html( $layout_data['description'] ); ?></span><?php endif; ?></td>
+								<td><code><?php echo esc_html( $layout_data['id'] ); ?></code></td>
+								<td><?php echo esc_html( $layout_data['version'] ); ?></td>
+								<td><div class="cck-admin-component-tags"><?php foreach ( $layout_data['component_ids'] as $component_id ) : ?><span><?php echo esc_html( $component_id ); ?></span><?php endforeach; ?></div></td>
+								<td><div class="cck-admin-shortcode-example"><code><?php echo esc_html( $layout_data['shortcode'] ); ?></code><button type="button" class="button cck-admin-copy" data-cck-copy="<?php echo esc_attr( $layout_data['shortcode'] ); ?>"><?php esc_html_e( 'Copy', 'craft-commerce-kit' ); ?></button></div></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>

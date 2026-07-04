@@ -59,7 +59,7 @@ Craft Commerce Kit uses a small component framework foundation.
 
 Registry: scans component package manifests from `inc/components/components/*/manifest.php` and builds the available component list automatically.
 
-Manifest: stores component metadata, supports, preview information, and settings definitions for future admin screens, live preview, import/export, REST API, AI, and TILLA-OS workflows.
+Manifest: stores component metadata, supports, preview information, and settings definitions for future admin screens and import/export workflows.
 
 Renderer: validates the manifest, reads defaults, applies shortcode overrides, loads the matching render file, and returns safe HTML output.
 
