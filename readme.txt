@@ -8,13 +8,13 @@ Stable tag: 0.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Theme-independent WooCommerce UI components for premium storefront experiences.
+Theme-independent premium craft website templates for WooCommerce.
 
 == Description ==
 
-Craft Commerce Kit is a theme-independent WooCommerce UI framework for artisan, boutique, handmade, craft, and quiet luxury commerce brands.
+Craft Commerce Kit is a standalone, theme-independent WooCommerce plugin for premium craft and artisan website templates.
 
-The plugin provides reusable shortcodes, component manifests, layout manifests, an admin workspace, and WordPress-native template override support. It does not automatically modify themes, WooCommerce templates, products, carts, checkout pages, or existing site content.
+The plugin provides reusable shortcodes, component manifests, layout manifests, an admin workspace, and WordPress-native template override support for craft-focused WooCommerce presentation. It does not automatically modify themes, WooCommerce templates, products, carts, checkout pages, or existing site content.
 
 Frontend assets are loaded only when a Craft Commerce Kit shortcode, component, or layout renders.
 

@@ -8,13 +8,13 @@ Stable tag: 0.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Theme-independent WooCommerce UI components for premium storefront experiences.
+Theme-independent premium craft website templates for WooCommerce.
 
 == Description ==
 
-Craft Commerce Kit is a theme-independent WooCommerce UI framework for premium artisan, boutique, handmade, craft, and quiet luxury commerce brands.
+Craft Commerce Kit is a standalone, theme-independent WooCommerce plugin for building premium craft and artisan website templates.
 
-The first implementation brand pack is Tilla Leather. The plugin does not depend on Flatsome and does not modify any parent theme, child theme, page, product, checkout, cart, or WooCommerce template automatically.
+The first static Brand Pack is Tilla Leather. The plugin does not depend on Flatsome and does not modify any parent theme, child theme, page, product, checkout, cart, or WooCommerce template automatically.
 
 == Installation ==
 
@@ -76,7 +76,7 @@ Each component package contains:
 * `manifest.php` for id, name, description, category, version, and supports metadata.
 * `render.php` for the component renderer.
 
-The framework API prepares the plugin for future settings, live preview, import/export, and premium component packs without implementing those features yet.
+The framework API prepares the plugin for future settings, live preview, and import/export workflows without implementing those features yet.
 
 Available helper functions:
 
@@ -122,9 +122,9 @@ Users should override templates in a theme instead of editing plugin files.
 
 == Layout Manager ==
 
-The Layout Manager makes registered layouts easier to inspect inside the admin console.
+The Layout Manager makes renderable component sequences easier to inspect inside the admin console.
 
-It shows the Layout Registry output, the Layout Manifest metadata, the Layout Renderer shortcode, and the component sequence for each layout.
+It shows the Layout Registry output, Layout Manifest metadata, shortcode usage, and component sequence for each layout.
 
 Example shortcode:
 

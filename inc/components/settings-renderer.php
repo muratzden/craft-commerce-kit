@@ -1,6 +1,6 @@
 <?php
 /**
- * Component ayar formu önizleme rendererı..
+ * Component ayar formu önizleme rendererı.
  *
  * @package CraftCommerceKit
  */
@@ -37,7 +37,7 @@ if ( ! function_exists( 'cck_render_component_settings_preview' ) ) {
 
 		ob_start();
 		?>
-		<div class="cck-admin-settings-preview" aria-label="<?php echo esc_attr( sprintf( __( '%s settings preview', 'craft-commerce-kit' ), cck_manifest_get( $manifest, 'name', $component_id ) ) ); ?>">
+		<div class="cck-admin-settings-preview" aria-label="<?php /* translators: %s: Component name. */ echo esc_attr( sprintf( __( '%s settings preview', 'craft-commerce-kit' ), cck_manifest_get( $manifest, 'name', $component_id ) ) ); ?>">
 			<?php foreach ( $settings as $setting_id => $setting ) : ?>
 				<?php echo cck_render_component_setting_field( $component_id, $setting_id, $setting ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Alan renderer tüm çıktıları escape eder. ?>
 			<?php endforeach; ?>

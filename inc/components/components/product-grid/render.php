@@ -55,7 +55,7 @@ if ( ! function_exists( 'cck_component_package_render_product_grid' ) ) {
 							}
 							?>
 							<article class="cck-product-card">
-								<a class="cck-product-card__link" href="<?php the_permalink(); ?>">
+								<a class="cck-product-card__link" href="<?php echo esc_url( get_permalink() ); ?>">
 									<div class="cck-product-card__image"><?php echo wp_kses_post( $product->get_image( 'woocommerce_thumbnail' ) ); ?></div>
 									<h3><?php echo esc_html( get_the_title() ); ?></h3>
 									<p class="cck-product-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></p>

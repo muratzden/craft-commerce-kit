@@ -152,7 +152,7 @@ if ( ! function_exists( 'cck_get_component_settings' ) ) {
 
 if ( ! function_exists( 'cck_get_component_defaults' ) ) {
 	/**
-	 * Component ayarların?n varsayılan değerlerini döndürür.
+	 * Component ayarlarının varsayılan değerlerini döndürür.
 	 *
 	 * @param string $component_id Component kimliği.
 	 * @return array

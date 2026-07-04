@@ -34,6 +34,33 @@ if ( ! function_exists( 'cck_register_admin_page' ) ) {
 	}
 }
 
+
+if ( ! function_exists( 'cck_user_can_manage_admin' ) ) {
+	/**
+	 * Admin ekranlarına erişim yetkisini kontrol eder.
+	 *
+	 * @return bool
+	 */
+	function cck_user_can_manage_admin() {
+		return current_user_can( 'manage_options' );
+	}
+}
+
+if ( ! function_exists( 'cck_require_admin_capability' ) ) {
+	/**
+	 * Admin ekranı render edilmeden önce yetki kontrolü yapar.
+	 *
+	 * @return void
+	 */
+	function cck_require_admin_capability() {
+		if ( cck_user_can_manage_admin() ) {
+			return;
+		}
+
+		wp_die( esc_html__( 'Sorry, you are not allowed to access this page.', 'craft-commerce-kit' ) );
+	}
+}
+
 if ( ! function_exists( 'cck_get_admin_nav_items' ) ) {
 	/**
 	 * Get workspace navigation items.
@@ -87,10 +114,10 @@ if ( ! function_exists( 'cck_render_admin_workspace_open' ) ) {
 			<div class="cck-admin-header">
 				<div>
 					<h1><?php esc_html_e( 'Craft Commerce Kit', 'craft-commerce-kit' ); ?></h1>
-					<p><?php esc_html_e( 'Theme-independent Commerce Experience Framework', 'craft-commerce-kit' ); ?></p>
+					<p><?php esc_html_e( 'Theme-independent premium craft website templates for WooCommerce.', 'craft-commerce-kit' ); ?></p>
 				</div>
 				<div class="cck-admin-header__meta" aria-label="<?php esc_attr_e( 'Plugin summary', 'craft-commerce-kit' ); ?>">
-					<span class="cck-admin-badge"><?php echo esc_html( sprintf( __( 'Version %s', 'craft-commerce-kit' ), CCK_VERSION ) ); ?></span>
+					<span class="cck-admin-badge"><?php /* translators: %s: Plugin version. */ echo esc_html( sprintf( __( 'Version %s', 'craft-commerce-kit' ), CCK_VERSION ) ); ?></span>
 					<span class="cck-admin-status cck-admin-status--active"><?php esc_html_e( 'Plugin Active', 'craft-commerce-kit' ); ?></span>
 				</div>
 			</div>
@@ -244,7 +271,7 @@ if ( ! function_exists( 'cck_get_admin_shortcodes' ) ) {
 	 */
 	function cck_get_admin_shortcodes() {
 		$shortcodes = array(
-			array( 'code' => '[cck_hero]', 'description' => __( 'Displays a premium hero section with eyebrow, headline, text, actions, and optional image.', 'craft-commerce-kit' ) ),
+			array( 'code' => '[cck_hero]', 'description' => __( 'Displays a premium craft hero section with eyebrow, headline, text, actions, and optional image.', 'craft-commerce-kit' ) ),
 			array( 'code' => '[cck_section_title]', 'description' => __( 'Displays a reusable section heading with optional eyebrow, text, and alignment.', 'craft-commerce-kit' ) ),
 			array( 'code' => '[cck_trust_block]', 'description' => __( 'Displays a grid of trust notes for craft and commerce pages.', 'craft-commerce-kit' ) ),
 			array( 'code' => '[cck_image_text]', 'description' => __( 'Displays a responsive image and text storytelling section.', 'craft-commerce-kit' ) ),
@@ -270,6 +297,7 @@ if ( ! function_exists( 'cck_render_admin_page' ) ) {
 	 * @return void
 	 */
 	function cck_render_admin_page() {
+		cck_require_admin_capability();
 		$components         = cck_get_admin_components();
 		$shortcodes         = cck_get_admin_shortcodes();
 		$templates          = function_exists( 'cck_get_templates' ) ? cck_get_templates() : array();
@@ -295,7 +323,7 @@ if ( ! function_exists( 'cck_render_admin_page' ) ) {
 			'v1.0' => __( 'Stable Release', 'craft-commerce-kit' ),
 		);
 
-		cck_render_admin_workspace_open( __( 'Dashboard', 'craft-commerce-kit' ), __( 'Workspace overview for Craft Commerce Kit.', 'craft-commerce-kit' ) );
+		cck_render_admin_workspace_open( __( 'Dashboard', 'craft-commerce-kit' ), __( 'Theme-independent premium craft website templates for WooCommerce.', 'craft-commerce-kit' ) );
 		?>
 		<div class="cck-admin-card cck-admin-card--wide">
 			<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'System Overview', 'craft-commerce-kit' ); ?></h2></div>
@@ -314,11 +342,11 @@ if ( ! function_exists( 'cck_render_admin_page' ) ) {
 				<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'Brand Pack', 'craft-commerce-kit' ); ?></h2></div>
 				<p class="cck-admin-kicker"><?php esc_html_e( 'Active Brand Pack', 'craft-commerce-kit' ); ?></p>
 				<p class="cck-admin-feature-name"><?php esc_html_e( 'Tilla Leather', 'craft-commerce-kit' ); ?></p>
-				<p><?php esc_html_e( 'Future versions will support multiple Brand Packs.', 'craft-commerce-kit' ); ?></p>
+				<p><?php esc_html_e( 'This release uses a standalone static Brand Pack for template presentation.', 'craft-commerce-kit' ); ?></p>
 			</div>
 			<div class="cck-admin-card">
 				<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'Templates', 'craft-commerce-kit' ); ?></h2><span class="cck-admin-badge"><?php echo esc_html( count( $templates ) ); ?></span></div>
-				<p><?php esc_html_e( 'Template registry is available for future import workflows.', 'craft-commerce-kit' ); ?></p>
+				<p><?php esc_html_e( 'Premium craft website structures for homepage, brand story, workshop, contact, and collection pages.', 'craft-commerce-kit' ); ?></p>
 				<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=craft-commerce-kit-templates' ) ); ?>"><?php esc_html_e( 'View Templates', 'craft-commerce-kit' ); ?></a>
 			</div>
 			<div class="cck-admin-card">
@@ -388,9 +416,10 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 	 * @return void
 	 */
 	function cck_render_components_page() {
+		cck_require_admin_capability();
 		$components = cck_get_admin_components();
 
-		cck_render_admin_workspace_open( __( 'Components', 'craft-commerce-kit' ), __( 'Reusable storefront components registered in Craft Commerce Kit.', 'craft-commerce-kit' ) );
+		cck_render_admin_workspace_open( __( 'Components', 'craft-commerce-kit' ), __( 'Reusable presentation components for premium craft WooCommerce templates.', 'craft-commerce-kit' ) );
 		?>
 		<div class="cck-admin-card cck-admin-card--wide">
 			<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'Registered Components', 'craft-commerce-kit' ); ?></h2><span class="cck-admin-badge"><?php echo esc_html( count( $components ) ); ?></span></div>
@@ -451,9 +480,10 @@ if ( ! function_exists( 'cck_render_templates_page' ) ) {
 	 * @return void
 	 */
 	function cck_render_templates_page() {
+		cck_require_admin_capability();
 		$templates = function_exists( 'cck_get_templates' ) ? cck_get_templates() : array();
 
-		cck_render_admin_workspace_open( __( 'Templates', 'craft-commerce-kit' ), __( 'Template registry for future import workflows.', 'craft-commerce-kit' ) );
+		cck_render_admin_workspace_open( __( 'Templates', 'craft-commerce-kit' ), __( 'Premium craft website structures such as Homepage, About / Brand Story, Workshop / Process, Contact, and Collection pages.', 'craft-commerce-kit' ) );
 		?>
 		<div class="cck-admin-template-grid">
 			<?php foreach ( $templates as $template ) : ?>
@@ -461,7 +491,7 @@ if ( ! function_exists( 'cck_render_templates_page' ) ) {
 				<div class="cck-admin-card cck-admin-template-card">
 					<div class="cck-admin-card__heading"><h2><?php echo esc_html( isset( $template['name'] ) ? $template['name'] : $template['id'] ); ?></h2><span class="cck-admin-status cck-admin-status--active"><?php esc_html_e( 'Available', 'craft-commerce-kit' ); ?></span></div>
 					<p><?php echo esc_html( isset( $template['description'] ) ? $template['description'] : '' ); ?></p>
-					<div class="cck-admin-template-meta"><span><?php echo esc_html( sprintf( __( 'Version %s', 'craft-commerce-kit' ), isset( $template['version'] ) ? $template['version'] : '0.1.0' ) ); ?></span><span><?php echo esc_html( sprintf( __( '%d Components', 'craft-commerce-kit' ), count( $components ) ) ); ?></span></div>
+					<div class="cck-admin-template-meta"><span><?php /* translators: %s: Template version. */ echo esc_html( sprintf( __( 'Version %s', 'craft-commerce-kit' ), isset( $template['version'] ) ? $template['version'] : '0.1.0' ) ); ?></span><span><?php /* translators: %d: Number of components. */ echo esc_html( sprintf( __( '%d Components', 'craft-commerce-kit' ), count( $components ) ) ); ?></span></div>
 					<div class="cck-admin-component-tags">
 						<?php foreach ( $components as $component ) : ?>
 							<span><?php echo esc_html( $component ); ?></span>
@@ -479,14 +509,15 @@ if ( ! function_exists( 'cck_render_templates_page' ) ) {
 
 if ( ! function_exists( 'cck_render_layouts_page' ) ) {
 	/**
-	 * Layouts admin sayfasini render eder.
+	 * Layouts admin sayfasını render eder.
 	 *
 	 * @return void
 	 */
 	function cck_render_layouts_page() {
+		cck_require_admin_capability();
 		$layouts = function_exists( 'cck_get_layout_registry' ) ? cck_get_layout_registry() : array();
 
-		cck_render_admin_workspace_open( __( 'Layouts', 'craft-commerce-kit' ), __( 'Component-based layouts available for shortcode rendering.', 'craft-commerce-kit' ) );
+		cck_render_admin_workspace_open( __( 'Layouts', 'craft-commerce-kit' ), __( 'Renderable component sequences that can be used through Craft Commerce Kit shortcodes.', 'craft-commerce-kit' ) );
 		?>
 		<div class="cck-admin-card cck-admin-card--wide">
 			<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'Registered Layouts', 'craft-commerce-kit' ); ?></h2><span class="cck-admin-badge"><?php echo esc_html( count( $layouts ) ); ?></span></div>
@@ -530,7 +561,8 @@ if ( ! function_exists( 'cck_render_brand_page' ) ) {
 	 * @return void
 	 */
 	function cck_render_brand_page() {
-		cck_render_admin_workspace_open( __( 'Brand', 'craft-commerce-kit' ), __( 'Brand Pack information and future brand runtime foundation.', 'craft-commerce-kit' ) );
+		cck_require_admin_capability();
+		cck_render_admin_workspace_open( __( 'Brand', 'craft-commerce-kit' ), __( 'Standalone static Brand Pack information for premium craft template presentation.', 'craft-commerce-kit' ) );
 		?>
 		<div class="cck-admin-grid">
 			<div class="cck-admin-card">
@@ -540,7 +572,7 @@ if ( ! function_exists( 'cck_render_brand_page' ) ) {
 			</div>
 			<div class="cck-admin-card">
 				<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'Future', 'craft-commerce-kit' ); ?></h2></div>
-				<ul class="cck-admin-list"><li><?php esc_html_e( 'Multiple Brand Packs', 'craft-commerce-kit' ); ?></li><li><?php esc_html_e( 'Brand Runtime', 'craft-commerce-kit' ); ?></li><li><?php esc_html_e( 'TILLA-OS Integration', 'craft-commerce-kit' ); ?></li></ul>
+				<ul class="cck-admin-list"><li><?php esc_html_e( 'Multiple static Brand Packs', 'craft-commerce-kit' ); ?></li><li><?php esc_html_e( 'External brand intelligence readiness', 'craft-commerce-kit' ); ?></li><li><?php esc_html_e( 'Brand-aware presentation enhancements', 'craft-commerce-kit' ); ?></li></ul>
 			</div>
 		</div>
 		<?php
@@ -555,11 +587,12 @@ if ( ! function_exists( 'cck_render_commerce_page' ) ) {
 	 * @return void
 	 */
 	function cck_render_commerce_page() {
-		cck_render_admin_workspace_open( __( 'Commerce', 'craft-commerce-kit' ), __( 'Commerce Experience placeholders for future WooCommerce UI layers.', 'craft-commerce-kit' ) );
+		cck_require_admin_capability();
+		cck_render_admin_workspace_open( __( 'Commerce', 'craft-commerce-kit' ), __( 'WooCommerce product data connected to premium craft presentation layers.', 'craft-commerce-kit' ) );
 		?>
 		<div class="cck-admin-card cck-admin-card--wide">
-			<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'Commerce Experience', 'craft-commerce-kit' ); ?></h2><span class="cck-admin-status cck-admin-status--muted"><?php esc_html_e( 'Coming in Sprint 06', 'craft-commerce-kit' ); ?></span></div>
-			<ul class="cck-admin-list"><li><?php esc_html_e( 'Product Components', 'craft-commerce-kit' ); ?></li><li><?php esc_html_e( 'Archive Components', 'craft-commerce-kit' ); ?></li><li><?php esc_html_e( 'Checkout Components', 'craft-commerce-kit' ); ?></li></ul>
+			<div class="cck-admin-card__heading"><h2><?php esc_html_e( 'Commerce Experience', 'craft-commerce-kit' ); ?></h2><span class="cck-admin-status cck-admin-status--muted"><?php esc_html_e( 'Presentation Layer', 'craft-commerce-kit' ); ?></span></div>
+			<ul class="cck-admin-list"><li><?php esc_html_e( 'Product data presentation', 'craft-commerce-kit' ); ?></li><li><?php esc_html_e( 'Archive presentation', 'craft-commerce-kit' ); ?></li><li><?php esc_html_e( 'Checkout reassurance content', 'craft-commerce-kit' ); ?></li></ul>
 		</div>
 		<?php
 		cck_render_admin_workspace_close();
@@ -573,6 +606,7 @@ if ( ! function_exists( 'cck_render_system_page' ) ) {
 	 * @return void
 	 */
 	function cck_render_system_page() {
+		cck_require_admin_capability();
 		$theme              = wp_get_theme();
 		$templates          = function_exists( 'cck_get_templates' ) ? cck_get_templates() : array();
 		$woocommerce_active = cck_is_woocommerce_active();
@@ -586,7 +620,7 @@ if ( ! function_exists( 'cck_render_system_page' ) ) {
 			array( 'label' => __( 'Loaded Templates', 'craft-commerce-kit' ), 'value' => count( $templates ) ),
 		);
 
-		cck_render_admin_workspace_open( __( 'System', 'craft-commerce-kit' ), __( 'Runtime overview for the current WordPress environment.', 'craft-commerce-kit' ) );
+		cck_render_admin_workspace_open( __( 'System', 'craft-commerce-kit' ), __( 'Compatibility and readiness checks for Craft Commerce Kit rendering.', 'craft-commerce-kit' ) );
 		?>
 		<div class="cck-admin-card cck-admin-card--wide">
 			<div class="cck-admin-overview">
