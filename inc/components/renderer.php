@@ -7,6 +7,86 @@
 
 defined( 'ABSPATH' ) || exit;
 
+if ( ! function_exists( 'cck_component_registry' ) ) {
+	/**
+	 * Return the central component renderer registry.
+	 *
+	 * @return array
+	 */
+	function &cck_component_registry() {
+		if ( ! isset( $GLOBALS['cck_component_renderers'] ) || ! is_array( $GLOBALS['cck_component_renderers'] ) ) {
+			$GLOBALS['cck_component_renderers'] = array();
+		}
+
+		return $GLOBALS['cck_component_renderers'];
+	}
+}
+
+if ( ! function_exists( 'cck_register_component_renderer' ) ) {
+	/**
+	 * Register a component renderer callback.
+	 *
+	 * @param string          $id       Component ID.
+	 * @param callable|string $callback Renderer callback.
+	 * @return bool
+	 */
+	function cck_register_component_renderer( $id, $callback ) {
+		$id = sanitize_key( $id );
+
+		if ( '' === $id || ! is_callable( $callback ) ) {
+			return false;
+		}
+
+		$registry        = &cck_component_registry();
+		$registry[ $id ] = $callback;
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'cck_get_component_renderer' ) ) {
+	/**
+	 * Get a registered component renderer callback.
+	 *
+	 * @param string $id Component ID.
+	 * @return callable|string|false
+	 */
+	function cck_get_component_renderer( $id ) {
+		$id = sanitize_key( $id );
+
+		if ( '' === $id ) {
+			return false;
+		}
+
+		$registry = &cck_component_registry();
+
+		return isset( $registry[ $id ] ) && is_callable( $registry[ $id ] ) ? $registry[ $id ] : false;
+	}
+}
+
+if ( ! function_exists( 'cck_register_core_component_renderers' ) ) {
+	/**
+	 * Register bundled component renderers.
+	 *
+	 * @return void
+	 */
+	function cck_register_core_component_renderers() {
+		$renderers = array(
+			'hero'            => 'cck_component_hero',
+			'collection-grid' => 'cck_component_collection_grid',
+			'cta'             => 'cck_component_cta',
+			'image-text'      => 'cck_component_image_text',
+			'section-title'   => 'cck_component_section_title',
+			'trust-block'     => 'cck_component_trust_block',
+			'trust'           => 'cck_component_trust_block',
+		);
+
+		foreach ( $renderers as $component_id => $callback ) {
+			cck_register_component_renderer( $component_id, $callback );
+		}
+	}
+}
+
 if ( ! function_exists( 'cck_get_component_render_callback' ) ) {
 	/**
 	 * Component render callback adını döndürür.
@@ -91,7 +171,52 @@ if ( ! function_exists( 'cck_render_component' ) ) {
 	 * @return string
 	 */
 	function cck_render_component( $component_id, $atts = array() ) {
+		if ( ! is_array( $atts ) ) {
+			$atts = array();
+		}
+
+		$definition = is_array( $component_id ) ? $component_id : array();
+
+		if ( is_array( $component_id ) ) {
+			if ( ! empty( $component_id['component'] ) ) {
+				$component_id = $component_id['component'];
+			} elseif ( ! empty( $component_id['type'] ) ) {
+				$component_id = $component_id['type'];
+			} elseif ( ! empty( $component_id['name'] ) ) {
+				$component_id = $component_id['name'];
+			} elseif ( ! empty( $component_id['id'] ) ) {
+				$component_id = $component_id['id'];
+			} else {
+				return '';
+			}
+
+			$atts = function_exists( 'cck_merge_attributes' ) ? cck_merge_attributes( $definition, $atts ) : array();
+		}
+
+		if ( ! is_string( $component_id ) ) {
+			return '';
+		}
+
 		$component_id = sanitize_key( $component_id );
+
+		if ( '' === $component_id ) {
+			return '';
+		}
+
+		$registered_callback = cck_get_component_renderer( $component_id );
+
+		if ( $registered_callback ) {
+			ob_start();
+			$html   = call_user_func( $registered_callback, $atts );
+			$output = ob_get_clean();
+
+			if ( is_string( $html ) ) {
+				$output .= $html;
+			}
+
+			return (string) $output;
+		}
+
 		$manifest     = cck_get_component_manifest( $component_id );
 
 		if ( empty( $manifest ) ) {
