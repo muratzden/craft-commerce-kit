@@ -16,6 +16,8 @@ if ( ! function_exists( 'cck_get_frontend_shortcodes' ) ) {
 	function cck_get_frontend_shortcodes() {
 		return array(
 			'cck_tilla_home',
+			'cck_tilla_hero',
+			'cck_tilla_cta',
 			'cck_hero',
 			'cck_section_title',
 			'cck_trust_block',
@@ -25,6 +27,7 @@ if ( ! function_exists( 'cck_get_frontend_shortcodes' ) ) {
 			'cck_product_trust_notes',
 			'cck_component',
 			'cck_layout',
+			'cck_experience',
 		);
 	}
 }

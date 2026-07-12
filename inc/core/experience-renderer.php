@@ -92,7 +92,8 @@ if ( ! function_exists( 'cck_render_experience_section' ) ) {
 }
 
 if ( ! function_exists( 'cck_shortcode_experience' ) ) {
-	function cck_shortcode_experience( $atts ) {
+	function cck_shortcode_experience( $atts = array() ) {
+		$atts = is_array( $atts ) ? $atts : array();
 		$atts = shortcode_atts(
 			array(
 				'id' => 'atelier',
@@ -101,6 +102,6 @@ if ( ! function_exists( 'cck_shortcode_experience' ) ) {
 			'cck_experience'
 		);
 
-		return cck_render_experience( $atts['id'] );
+		return (string) cck_render_experience( sanitize_key( $atts['id'] ) );
 	}
 }

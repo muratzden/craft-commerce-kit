@@ -22,6 +22,7 @@ if ( ! function_exists( 'cck_register_shortcodes' ) ) {
 		add_shortcode( 'cck_collection_grid', 'cck_component_collection_grid' );
 		add_shortcode( 'cck_component', 'cck_component_shortcode' );
 		add_shortcode( 'cck_layout', 'cck_layout_shortcode' );
+		add_shortcode( 'cck_experience', 'cck_shortcode_experience' );
 
 		add_shortcode( 'cck_tilla_hero', 'cck_shortcode_tilla_hero' );
 		add_shortcode( 'cck_tilla_cta', 'cck_shortcode_tilla_cta' );

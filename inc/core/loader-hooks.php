@@ -19,10 +19,6 @@ if ( function_exists( 'cck_print_design_tokens' ) ) {
 	add_action( 'wp_head', 'cck_print_design_tokens', 5 );
 }
 
-if ( function_exists( 'cck_register_shortcodes' ) ) {
-	add_action( 'init', 'cck_register_shortcodes' );
-}
-
 if (
 	function_exists( 'cck_is_woocommerce_active' )
 	&& cck_is_woocommerce_active()
