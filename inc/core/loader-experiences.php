@@ -7,5 +7,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
+require_once CCK_PLUGIN_DIR . 'inc/core/experience-registry.php';
 require_once CCK_PLUGIN_DIR . 'packs/atelier/loader.php';
 require_once CCK_PLUGIN_DIR . 'inc/core/experience-renderer.php';
