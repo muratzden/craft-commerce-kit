@@ -15,7 +15,7 @@ if ( ! function_exists( 'cck_runtime_provider_brand' ) ) {
 			return $fallback;
 		}
 
-		$brand = function_exists( 'cck_get_active_brand' ) ? cck_get_active_brand() : array();
+		$brand = function_exists( 'cck_get_active_brand' ) ? cck_get_active_brand( $context ) : array();
 
 		if ( is_array( $brand ) && array_key_exists( $key, $brand ) ) {
 			return $brand[ $key ];

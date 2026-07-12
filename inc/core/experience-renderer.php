@@ -82,7 +82,12 @@ if ( ! function_exists( 'cck_render_experience_section' ) ) {
 			return '';
 		}
 
-		return cck_render_component( $definition );
+		return cck_render_component(
+			$definition,
+			array(
+				'experience' => $experience_id,
+			)
+		);
 	}
 }
 
