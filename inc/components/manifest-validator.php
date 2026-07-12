@@ -63,6 +63,15 @@ if ( ! function_exists( 'cck_validate_component_manifest' ) ) {
 		$manifest['preview']     = esc_url_raw( cck_manifest_get( $manifest, 'preview', '' ) );
 		$manifest['supports']    = cck_validate_component_supports( cck_manifest_get( $manifest, 'supports', array() ) );
 		$manifest['settings']    = cck_validate_component_settings( cck_manifest_get( $manifest, 'settings', array() ) );
+		$manifest['callback']    = cck_manifest_get( $manifest, 'callback', '' );
+		$manifest['callback']    = is_string( $manifest['callback'] ) ? sanitize_text_field( $manifest['callback'] ) : '';
+		$manifest['defaults']    = array();
+
+		foreach ( $manifest['settings'] as $setting_id => $setting ) {
+			$manifest['defaults'][ $setting_id ] = cck_array_get( $setting, 'default', '' );
+		}
+
+		$manifest['schema']      = $manifest['settings'];
 		$manifest['_path']       = trailingslashit( $component_dir );
 		$manifest['_render']     = trailingslashit( $component_dir ) . 'render.php';
 

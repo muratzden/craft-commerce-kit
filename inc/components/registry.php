@@ -43,13 +43,26 @@ if ( ! function_exists( 'cck_get_component_manifest_files' ) ) {
 	 * @return array
 	 */
 	function cck_get_component_manifest_files() {
-		$manifest_files = glob( cck_get_component_packages_path() . '*/manifest.php' );
+		$packages = array(
+			'collection-grid',
+			'cta',
+			'hero',
+			'image-text',
+			'product-grid',
+			'section-title',
+			'trust',
+			'usp',
+		);
 
-		if ( ! is_array( $manifest_files ) ) {
-			return array();
+		$manifest_files = array();
+
+		foreach ( $packages as $package ) {
+			$manifest_path = cck_get_component_packages_path() . $package . '/manifest.php';
+
+			if ( file_exists( $manifest_path ) ) {
+				$manifest_files[] = $manifest_path;
+			}
 		}
-
-		sort( $manifest_files );
 
 		return $manifest_files;
 	}
@@ -118,6 +131,7 @@ if ( ! function_exists( 'cck_get_component_manifest' ) ) {
 	 */
 	function cck_get_component_manifest( $component_id ) {
 		$component_id = sanitize_key( $component_id );
+		$component_id = 'trust' === $component_id ? 'trust-block' : $component_id;
 		$registry     = cck_get_component_registry();
 
 		return cck_array_get( $registry, $component_id, null );
