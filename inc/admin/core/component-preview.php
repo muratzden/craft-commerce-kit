@@ -267,6 +267,7 @@ if ( ! function_exists( 'cck_get_component_preview_data' ) ) {
 			'component_name'   => cck_manifest_get( $manifest, 'name', $component_id ),
 			'component_id_label' => $component_id,
 			'description'      => cck_manifest_get( $manifest, 'description', '' ),
+			'version'          => cck_manifest_get( $manifest, 'version', '' ),
 			'callback'         => $callback,
 			'callback_callable' => is_callable( $callback ),
 			'supports'         => cck_manifest_get( $manifest, 'supports', array() ),

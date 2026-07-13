@@ -108,6 +108,8 @@ if ( ! function_exists( 'cck_get_admin_component_rows' ) ) {
 				'id'                  => $component_id,
 				'label'               => $component_name,
 				'callback'            => $callback,
+				'version'             => isset( $component['version'] ) ? sanitize_text_field( cck_to_string( $component['version'] ) ) : '',
+				'used_by'             => function_exists( 'cck_get_component_preview_experience_usage' ) ? cck_get_component_preview_experience_usage( $component_id ) : array(),
 				'preview_url'         => function_exists( 'cck_get_component_preview_url' ) ? cck_get_component_preview_url( $component_id ) : '',
 				'supports_count'      => count( $supports ),
 				'defaults_count'      => count( function_exists( 'cck_get_component_defaults' ) ? cck_get_component_defaults( $component_id ) : array() ),

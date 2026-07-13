@@ -21,5 +21,18 @@ defined( 'ABSPATH' ) || exit;
 			?>
 		</span>
 		<span class="cck-admin-status cck-admin-status--active"><?php esc_html_e( 'Plugin Active', 'craft-commerce-kit' ); ?></span>
+		<?php if ( ! empty( $meta ) && is_array( $meta ) ) : ?>
+			<?php foreach ( $meta as $meta_item ) : ?>
+				<?php
+				$label = isset( $meta_item['label'] ) ? $meta_item['label'] : '';
+				$value = isset( $meta_item['value'] ) ? $meta_item['value'] : '';
+				?>
+				<?php if ( '' !== $label || '' !== $value ) : ?>
+					<span class="cck-admin-badge">
+						<?php echo esc_html( trim( $label . ' ' . $value ) ); ?>
+					</span>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		<?php endif; ?>
 	</div>
 </div>

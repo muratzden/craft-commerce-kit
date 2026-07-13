@@ -127,14 +127,42 @@ if ( ! function_exists( 'cck_get_current_admin_page' ) ) {
 	 * @return string
 	 */
 	function cck_get_current_admin_page() {
+		$registry = cck_get_admin_screen_registry();
+		$page     = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+
+		if ( '' !== $page ) {
+			foreach ( $registry as $screen ) {
+				if ( empty( $screen['slug'] ) || $page !== $screen['slug'] ) {
+					continue;
+				}
+
+				if ( ! empty( $screen['hidden'] ) ) {
+					return 'craft-commerce-kit-components';
+				}
+
+				return $screen['slug'];
+			}
+		}
+
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		$page   = 'craft-commerce-kit';
 
 		if ( $screen && ! empty( $screen->id ) ) {
 			$page = str_replace( 'craft-commerce-kit_page_', '', $screen->id );
 			$page = str_replace( 'toplevel_page_', '', $page );
+
+			foreach ( $registry as $screen_item ) {
+				if ( empty( $screen_item['slug'] ) || $page !== $screen_item['slug'] ) {
+					continue;
+				}
+
+				if ( ! empty( $screen_item['hidden'] ) ) {
+					return 'craft-commerce-kit-components';
+				}
+
+				return $screen_item['slug'];
+			}
 		}
 
-		return array_key_exists( $page, cck_get_admin_screen_registry() ) ? $page : 'craft-commerce-kit';
+		return 'craft-commerce-kit';
 	}
 }

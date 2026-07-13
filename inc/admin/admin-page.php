@@ -13,9 +13,10 @@ if ( ! function_exists( 'cck_render_admin_workspace_open' ) ) {
 	 *
 	 * @param string $title Page title.
 	 * @param string $description Page description.
+	 * @param array  $meta Page-level summary metadata.
 	 * @return void
 	 */
-	function cck_render_admin_workspace_open( $title, $description ) {
+	function cck_render_admin_workspace_open( $title, $description, array $meta = array() ) {
 		$current_page = cck_get_current_admin_page();
 		?>
 		<div class="wrap cck-admin-dashboard">
