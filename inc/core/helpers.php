@@ -176,6 +176,10 @@ if ( ! function_exists( 'cck_render_svg_icon' ) ) {
 			'spark'       => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l1.9 6.1L20 11l-6.1 1.9L12 19l-1.9-6.1L4 11l6.1-1.9L12 3z"></path></svg>',
 			'leaf'        => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4c-7.5.3-13 4.2-15 11 .9 3 3.2 5 6.5 5 6 0 9.5-5.3 8.5-16z"></path><path d="M5 19c3.3-4.3 6.9-7.1 11-9"></path></svg>',
 			'arrow-trend' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 16l6-6 4 4 6-8"></path><path d="M14 6h6v6"></path></svg>',
+			'heart'       => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20s-7-4.4-9.2-8.4C1 8.1 2.6 5.5 5.6 5.1c1.8-.2 3.4.7 4.4 2 1-1.3 2.6-2.2 4.4-2 3 .4 4.6 3 2.8 6.5C19 15.6 12 20 12 20z"></path></svg>',
+			'eye'         => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path><circle cx="12" cy="12" r="2.8"></circle></svg>',
+			'bag'         => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 8h12l-1 12H7L6 8z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>',
+			'star'        => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 16.9 6.6 19.8l1-6.1L3.2 9.4l6.1-.9L12 3z"></path></svg>',
 			'instagram'   => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="4"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17" cy="7" r="1"></circle></svg>',
 			'pinterest'   => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 0 0-3 17.5c-.1-1-.2-2.6 0-3.7l1.4-5.9s-.4-.9-.4-2.2c0-2 1.2-3.4 2.7-3.4 1.3 0 1.9 1 1.9 2.2 0 1.4-.9 3.4-1.4 5.3-.4 1.6.8 2.9 2.4 2.9 2.9 0 5-3.7 5-8.1 0-3.3-2.2-5.8-6.2-5.8-4.5 0-7.3 3.4-7.3 7.1 0 1.3.5 2.2 1.2 2.8.1.2.1.4.1.6l-.5 2c-.2.6-.5 1.4-.8 2 .9.3 1.9.4 2.8.4 4.9 0 9-4 9-9A9 9 0 0 0 12 3z"></path></svg>',
 		);
