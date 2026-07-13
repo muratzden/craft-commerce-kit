@@ -8,7 +8,14 @@ return array(
 	'version'     => '1.0.0',
 	'category'    => 'ui',
 	'icon'        => 'megaphone',
-	'preview'     => '',
+	'preview'     => array(
+		'attributes' => array(
+			'title'        => __( 'Ready to craft something exceptional?', 'craft-commerce-kit' ),
+			'text'         => __( 'Build reusable WooCommerce experiences with Craft Commerce Kit.', 'craft-commerce-kit' ),
+			'button_label' => __( 'Explore Components', 'craft-commerce-kit' ),
+			'button_url'   => '/components/',
+		),
+	),
 	'callback'    => 'cck_component_cta',
 	'supports'    => array( 'background', 'spacing', 'typography', 'button', 'visibility' ),
 	'settings'    => array(

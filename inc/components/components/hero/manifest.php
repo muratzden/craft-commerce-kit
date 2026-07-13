@@ -14,7 +14,18 @@ return array(
 	'version'     => '1.0.0',
 	'category'    => 'ui',
 	'icon'        => 'cover-image',
-	'preview'     => '',
+	'preview'     => array(
+		'attributes' => array(
+			'eyebrow'         => __( 'Atelier Collection', 'craft-commerce-kit' ),
+			'title'           => __( 'Crafted for the quiet luxury of everyday rituals.', 'craft-commerce-kit' ),
+			'text'            => __( 'Build reusable WooCommerce experiences with Craft Commerce Kit.', 'craft-commerce-kit' ),
+			'primary_label'   => __( 'Explore Components', 'craft-commerce-kit' ),
+			'primary_url'     => '/shop/',
+			'secondary_label' => __( 'Visit the Workshop', 'craft-commerce-kit' ),
+			'secondary_url'   => '/workshop/',
+			'image_url'       => content_url( 'uploads/woocommerce-placeholder-768x768.webp' ),
+		),
+	),
 	'callback'    => 'cck_component_hero',
 	'supports'    => array(
 		'background',

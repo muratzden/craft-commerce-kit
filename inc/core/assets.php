@@ -148,16 +148,7 @@ if ( ! function_exists( 'cck_enqueue_admin_assets' ) ) {
 	 * @return void
 	 */
 	function cck_enqueue_admin_assets( $hook_suffix ) {
-		$admin_pages = array(
-			'toplevel_page_craft-commerce-kit',
-			'craft-commerce-kit_page_craft-commerce-kit-components',
-			'craft-commerce-kit_page_craft-commerce-kit-component-preview',
-			'craft-commerce-kit_page_craft-commerce-kit-experiences',
-			'craft-commerce-kit_page_craft-commerce-kit-brands',
-			'craft-commerce-kit_page_craft-commerce-kit-settings',
-		);
-
-		if ( ! in_array( $hook_suffix, $admin_pages, true ) ) {
+		if ( false === strpos( (string) $hook_suffix, 'craft-commerce-kit' ) ) {
 			return;
 		}
 
@@ -171,7 +162,7 @@ if ( ! function_exists( 'cck_enqueue_admin_assets' ) ) {
 			file_exists( $css_path ) ? filemtime( $css_path ) : CCK_VERSION
 		);
 
-		if ( 'craft-commerce-kit_page_craft-commerce-kit-component-preview' === $hook_suffix ) {
+		if ( false !== strpos( (string) $hook_suffix, 'craft-commerce-kit-component-preview' ) ) {
 			$frontend_css_path = CCK_PLUGIN_DIR . 'assets/css/cck.css';
 
 			wp_enqueue_style(

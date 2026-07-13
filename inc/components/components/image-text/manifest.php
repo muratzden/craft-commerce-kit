@@ -8,7 +8,16 @@ return array(
 	'version'     => '1.0.0',
 	'category'    => 'ui',
 	'icon'        => 'align-pull-left',
-	'preview'     => '',
+	'preview'     => array(
+		'attributes' => array(
+			'title'        => __( 'Built with patient hands and thoughtful materials.', 'craft-commerce-kit' ),
+			'text'         => __( 'Use this block for workshop photography, collection storytelling, or an editorial brand statement.', 'craft-commerce-kit' ),
+			'button_label' => __( 'Visit the Workshop', 'craft-commerce-kit' ),
+			'button_url'   => '/workshop/',
+			'image_url'    => content_url( 'uploads/woocommerce-placeholder-768x768.webp' ),
+			'reverse'      => 'true',
+		),
+	),
 	'callback'    => 'cck_component_image_text',
 	'supports'    => array( 'background', 'spacing', 'typography', 'button', 'visibility' ),
 	'settings'    => array(

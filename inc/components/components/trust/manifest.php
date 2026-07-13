@@ -8,7 +8,11 @@ return array(
 	'version'     => '1.0.0',
 	'category'    => 'ui',
 	'icon'        => 'shield',
-	'preview'     => '',
+	'preview'     => array(
+		'attributes' => array(
+			'items' => 'Hand-finished|Natural materials|Secure checkout',
+		),
+	),
 	'callback'    => 'cck_component_trust_block',
 	'supports'    => array( 'background', 'spacing', 'typography', 'visibility' ),
 	'settings'    => array(

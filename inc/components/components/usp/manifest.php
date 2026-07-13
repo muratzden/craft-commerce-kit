@@ -14,7 +14,16 @@ return array(
 	'version'     => '1.0.0',
 	'category'    => 'ui',
 	'icon'        => 'star-filled',
-	'preview'     => '',
+	'preview'     => array(
+		'attributes' => array(
+			'item_one_title'   => __( 'Handmade Quality', 'craft-commerce-kit' ),
+			'item_one_text'    => __( 'Designed for product stories that value material, process, and detail.', 'craft-commerce-kit' ),
+			'item_two_title'   => __( 'WooCommerce Ready', 'craft-commerce-kit' ),
+			'item_two_text'    => __( 'Built to complement WooCommerce storefront flows without replacing native behavior.', 'craft-commerce-kit' ),
+			'item_three_title' => __( 'Modular Design', 'craft-commerce-kit' ),
+			'item_three_text'  => __( 'Reusable sections can be rendered independently through the component definition system.', 'craft-commerce-kit' ),
+		),
+	),
 	'callback'    => 'cck_component_package_render_usp',
 	'supports'    => array(
 		'background',

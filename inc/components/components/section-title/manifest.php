@@ -8,7 +8,14 @@ return array(
 	'version'     => '1.0.0',
 	'category'    => 'ui',
 	'icon'        => 'heading',
-	'preview'     => '',
+	'preview'     => array(
+		'attributes' => array(
+			'eyebrow' => __( 'Editorial Story', 'craft-commerce-kit' ),
+			'title'   => __( 'Made for brands that prefer calm confidence over noise.', 'craft-commerce-kit' ),
+			'text'    => __( 'Set a clear section hierarchy for product stories, collection intros, and campaign notes.', 'craft-commerce-kit' ),
+			'align'   => 'center',
+		),
+	),
 	'callback'    => 'cck_component_section_title',
 	'supports'    => array( 'spacing', 'typography', 'visibility' ),
 	'settings'    => array(

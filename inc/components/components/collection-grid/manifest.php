@@ -8,7 +8,12 @@ return array(
 	'version'     => '1.0.0',
 	'category'    => 'ui',
 	'icon'        => 'screenoptions',
-	'preview'     => '',
+	'preview'     => array(
+		'attributes' => array(
+			'items'   => 'Leather Bags,/shop/bags/|Wallets,/shop/wallets/|Belts,/shop/belts/',
+			'columns' => '3',
+		),
+	),
 	'callback'    => 'cck_component_collection_grid',
 	'supports'    => array( 'background', 'spacing', 'typography', 'visibility' ),
 	'settings'    => array(

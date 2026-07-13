@@ -36,21 +36,56 @@
 		callback();
 	}
 
-	document.addEventListener('DOMContentLoaded', function () {
+	function init() {
 		var adminRoot = document.querySelector('.cck-admin-dashboard');
+		var previewCanvas = document.querySelector('[data-preview-canvas]');
 
 		if (!adminRoot) {
-			return;
+			adminRoot = null;
 		}
 
-		adminRoot.addEventListener('click', function (event) {
-			var button = event.target.closest('.cck-admin-copy');
+		if (previewCanvas) {
+			var previewButtons = Array.prototype.slice.call(document.querySelectorAll('.cck-admin-preview-tabs [data-preview-mode]'));
 
-			if (!button || !adminRoot.contains(button)) {
-				return;
+			if (previewButtons.length) {
+				var setPreviewMode = function (mode) {
+					previewCanvas.classList.remove('cck-preview-desktop', 'cck-preview-tablet', 'cck-preview-mobile');
+					previewCanvas.classList.add('cck-preview-' + mode);
+
+					previewButtons.forEach(function (button) {
+						var isActive = button.getAttribute('data-preview-mode') === mode;
+
+						button.classList.toggle('is-active', isActive);
+						button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+					});
+				};
+
+				previewButtons.forEach(function (button) {
+					button.addEventListener('click', function () {
+						setPreviewMode(button.getAttribute('data-preview-mode'));
+					});
+				});
+
+				setPreviewMode('desktop');
 			}
+		}
 
-			copyText(button.getAttribute('data-cck-copy') || '', button);
-		});
-	});
+		if (adminRoot) {
+			adminRoot.addEventListener('click', function (event) {
+				var button = event.target.closest('.cck-admin-copy');
+
+				if (!button || !adminRoot.contains(button)) {
+					return;
+				}
+
+				copyText(button.getAttribute('data-cck-copy') || '', button);
+			});
+		}
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', init);
+	} else {
+		init();
+	}
 })();

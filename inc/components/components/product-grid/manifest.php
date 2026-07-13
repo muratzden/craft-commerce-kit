@@ -14,7 +14,14 @@ return array(
 	'version'     => '1.0.0',
 	'category'    => 'commerce',
 	'icon'        => 'products',
-	'preview'     => '',
+	'preview'     => array(
+		'attributes' => array(
+			'eyebrow' => __( 'Latest Products', 'craft-commerce-kit' ),
+			'title'   => __( 'Fresh from the storefront.', 'craft-commerce-kit' ),
+			'limit'   => 4,
+			'type'    => 'latest',
+		),
+	),
 	'callback'    => 'cck_component_package_render_product_grid',
 	'supports'    => array(
 		'background',
