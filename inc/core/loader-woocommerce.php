@@ -36,5 +36,6 @@ if ( ! function_exists( 'cck_is_woocommerce_active' ) ) {
 
 if ( cck_is_woocommerce_active() ) {
 	require_once CCK_PLUGIN_DIR . 'inc/woocommerce/product-trust-notes.php';
+	require_once CCK_PLUGIN_DIR . 'inc/demo/loader.php';
 	require_once CCK_PLUGIN_DIR . 'inc/woocommerce/storefront.php';
 }

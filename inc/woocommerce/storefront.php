@@ -723,6 +723,135 @@ if ( ! function_exists( 'cck_wc_render_product_cta_section' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_wc_render_related_product_section' ) ) {
+	/**
+	 * Render a related product grid section.
+	 *
+	 * @param string $section_id Section ID.
+	 * @param string $eyebrow Section eyebrow.
+	 * @param string $title Section title.
+	 * @param array  $product_ids Product IDs to render.
+	 * @param string $empty_title Empty state title.
+	 * @param string $empty_text Empty state text.
+	 * @return void
+	 */
+	function cck_wc_render_related_product_section( $section_id, $eyebrow, $title, array $product_ids, $empty_title, $empty_text ) {
+		if ( ! is_product() ) {
+			return;
+		}
+
+		$product_ids = array_values( array_unique( array_filter( array_map( 'absint', $product_ids ) ) ) );
+
+		echo '<section class="cck-wc-section cck-wc-' . esc_attr( sanitize_key( $section_id ) ) . '"><div class="cck-container cck-wc-section__inner">';
+		echo '<div class="cck-section-heading"><p class="cck-eyebrow">' . esc_html( $eyebrow ) . '</p><h2>' . esc_html( $title ) . '</h2></div>';
+
+		if ( empty( $product_ids ) ) {
+			echo '<article class="cck-wc-card cck-wc-empty-card"><h3>' . esc_html( $empty_title ) . '</h3><p>' . esc_html( $empty_text ) . '</p></article>';
+			echo '</div></section>';
+
+			return;
+		}
+
+		echo '<div class="cck-wc-grid cck-wc-related__grid">';
+
+		foreach ( array_slice( $product_ids, 0, 4 ) as $product_id ) {
+			$product_html = cck_wc_render_product_card_markup( $product_id, $section_id );
+
+			if ( '' !== $product_html ) {
+				echo wp_kses_post( $product_html );
+			}
+		}
+
+		echo '</div></div></section>';
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_product_related_products_section' ) ) {
+	/**
+	 * Render product related products.
+	 *
+	 * @return void
+	 */
+	function cck_wc_render_product_related_products_section() {
+		if ( ! is_product() ) {
+			return;
+		}
+
+		global $product;
+
+		if ( ! $product instanceof WC_Product ) {
+			return;
+		}
+
+		$related_ids = function_exists( 'wc_get_related_products' ) ? wc_get_related_products( $product->get_id(), 4, $product->get_upsell_ids() ) : array();
+
+		cck_wc_render_related_product_section(
+			'related',
+			__( 'Related Products', 'craft-commerce-kit' ),
+			__( 'Recommended pieces that stay in the same world.', 'craft-commerce-kit' ),
+			$related_ids,
+			__( 'No related products yet.', 'craft-commerce-kit' ),
+			__( 'This catalog entry does not have a related product set yet.', 'craft-commerce-kit' )
+		);
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_product_upsells_section' ) ) {
+	/**
+	 * Render product upsells.
+	 *
+	 * @return void
+	 */
+	function cck_wc_render_product_upsells_section() {
+		if ( ! is_product() ) {
+			return;
+		}
+
+		global $product;
+
+		if ( ! $product instanceof WC_Product ) {
+			return;
+		}
+
+		cck_wc_render_related_product_section(
+			'upsells',
+			__( 'Upsells', 'craft-commerce-kit' ),
+			__( 'A more premium step up from this product.', 'craft-commerce-kit' ),
+			$product->get_upsell_ids(),
+			__( 'No upsells yet.', 'craft-commerce-kit' ),
+			__( 'This product does not have upsells assigned yet.', 'craft-commerce-kit' )
+		);
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_product_cross_sells_section' ) ) {
+	/**
+	 * Render product cross-sells.
+	 *
+	 * @return void
+	 */
+	function cck_wc_render_product_cross_sells_section() {
+		if ( ! is_product() ) {
+			return;
+		}
+
+		global $product;
+
+		if ( ! $product instanceof WC_Product ) {
+			return;
+		}
+
+		cck_wc_render_related_product_section(
+			'cross-sells',
+			__( 'Cross-sells', 'craft-commerce-kit' ),
+			__( 'Complementary pieces that make the set feel complete.', 'craft-commerce-kit' ),
+			$product->get_cross_sell_ids(),
+			__( 'No cross-sells yet.', 'craft-commerce-kit' ),
+			__( 'This product does not have cross-sells assigned yet.', 'craft-commerce-kit' )
+		);
+	}
+}
+
 if ( ! function_exists( 'cck_wc_render_cart_shell_open' ) ) {
 	/**
 	 * Open the cart shell.
@@ -895,6 +1024,9 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_story_section', 10 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_reviews_section', 15 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_faq_section', 20 );
+		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_related_products_section', 22 );
+		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_upsells_section', 23 );
+		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_cross_sells_section', 24 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_cta_section', 25 );
 
 		add_action( 'woocommerce_before_cart', 'cck_wc_render_cart_shell_open', 1 );
