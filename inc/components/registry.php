@@ -132,6 +132,7 @@ if ( ! function_exists( 'cck_get_component_manifest' ) ) {
 	function cck_get_component_manifest( $component_id ) {
 		$component_id = sanitize_key( $component_id );
 		$component_id = 'trust' === $component_id ? 'trust-block' : $component_id;
+		$component_id = 'product_grid' === $component_id ? 'product-grid' : $component_id;
 		$registry     = cck_get_component_registry();
 
 		return cck_array_get( $registry, $component_id, null );

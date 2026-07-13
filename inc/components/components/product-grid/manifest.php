@@ -8,13 +8,14 @@
 defined( 'ABSPATH' ) || exit;
 
 return array(
-	'id'          => 'product_grid',
+	'id'          => 'product-grid',
 	'name'        => __( 'Product Grid', 'craft-commerce-kit' ),
 	'description' => __( 'Latest WooCommerce products grid.', 'craft-commerce-kit' ),
 	'version'     => '1.0.0',
 	'category'    => 'commerce',
 	'icon'        => 'products',
 	'preview'     => '',
+	'callback'    => 'cck_component_package_render_product_grid',
 	'supports'    => array(
 		'background',
 		'spacing',
@@ -45,6 +46,14 @@ return array(
 			'default'           => 4,
 			'required'          => false,
 			'sanitize_callback' => 'absint',
+		),
+		'type'    => array(
+			'type'              => 'select',
+			'label'             => __( 'Product Type', 'craft-commerce-kit' ),
+			'description'       => __( 'Show latest or featured products.', 'craft-commerce-kit' ),
+			'default'           => 'latest',
+			'required'          => false,
+			'sanitize_callback' => 'sanitize_key',
 		),
 	),
 );
