@@ -23,7 +23,7 @@ return array(
 			'primary_url'     => '/shop/',
 			'secondary_label' => __( 'Visit the Workshop', 'craft-commerce-kit' ),
 			'secondary_url'   => '/workshop/',
-			'image_url'       => content_url( 'uploads/woocommerce-placeholder-768x768.webp' ),
+			'image_url'       => function_exists( 'cck_get_demo_asset' ) ? cck_get_demo_asset( 'hero.webp', __( 'Atelier hero', 'craft-commerce-kit' ) )['url'] : content_url( 'uploads/woocommerce-placeholder-768x768.webp' ),
 		),
 	),
 	'callback'    => 'cck_component_hero',
@@ -92,11 +92,11 @@ return array(
 			'required'          => false,
 			'sanitize_callback' => 'esc_url_raw',
 		),
-		'image_url'       => array(
+			'image_url'       => array(
 			'type'              => 'url',
 			'label'             => __( 'Image URL', 'craft-commerce-kit' ),
 			'description'       => __( 'Hero visual image URL.', 'craft-commerce-kit' ),
-			'default'           => '',
+			'default'           => function_exists( 'cck_get_demo_asset' ) ? cck_get_demo_asset( 'hero.webp', __( 'Atelier hero', 'craft-commerce-kit' ) )['url'] : '',
 			'required'          => false,
 			'sanitize_callback' => 'esc_url_raw',
 		),

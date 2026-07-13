@@ -13,5 +13,7 @@ return array(
 	'intro',
 	'collections',
 	'story',
+	'product-grid',
 	'cta',
+	'footer',
 );

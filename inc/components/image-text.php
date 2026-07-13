@@ -21,7 +21,7 @@ if ( ! function_exists( 'cck_component_image_text' ) ) {
 				'text'         => '',
 				'button_label' => '',
 				'button_url'   => '',
-				'image_url'    => '',
+				'image_url'    => function_exists( 'cck_get_demo_asset' ) ? cck_get_demo_asset( 'story.webp', __( 'Story image', 'craft-commerce-kit' ) )['url'] : '',
 				'reverse'      => 'false',
 			),
 			$args,
@@ -36,9 +36,9 @@ if ( ! function_exists( 'cck_component_image_text' ) ) {
 			<div class="cck-container cck-image-text__inner">
 				<div class="cck-image-text__media">
 					<?php if ( '' !== $args['image_url'] ) : ?>
-						<img src="<?php echo esc_url( $args['image_url'] ); ?>" alt="" loading="lazy">
+						<img src="<?php echo esc_url( $args['image_url'] ); ?>" alt="<?php echo esc_attr__( 'Story image', 'craft-commerce-kit' ); ?>" loading="lazy" decoding="async">
 					<?php else : ?>
-						<div class="cck-placeholder" aria-hidden="true"></div>
+						<div class="cck-placeholder cck-placeholder--image-text" aria-hidden="true"></div>
 					<?php endif; ?>
 				</div>
 				<div class="cck-image-text__content">

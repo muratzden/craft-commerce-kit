@@ -13,7 +13,7 @@ return array(
 			'title'        => __( 'Ready to craft something exceptional?', 'craft-commerce-kit' ),
 			'text'         => __( 'Build reusable WooCommerce experiences with Craft Commerce Kit.', 'craft-commerce-kit' ),
 			'button_label' => __( 'Explore Components', 'craft-commerce-kit' ),
-			'button_url'   => '/components/',
+			'button_url'   => '/shop/',
 		),
 	),
 	'callback'    => 'cck_component_cta',

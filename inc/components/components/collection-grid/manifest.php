@@ -10,14 +10,14 @@ return array(
 	'icon'        => 'screenoptions',
 	'preview'     => array(
 		'attributes' => array(
-			'items'   => 'Leather Bags,/shop/bags/|Wallets,/shop/wallets/|Belts,/shop/belts/',
+			'items'   => 'Featured,Curated highlights,/shop/featured/,featured.webp|New Arrivals,Fresh seasonal additions,/shop/new-arrivals/,new-arrivals.webp|Best Sellers,Customer-loved essentials,/shop/best-sellers/,best-sellers.webp',
 			'columns' => '3',
 		),
 	),
 	'callback'    => 'cck_component_collection_grid',
 	'supports'    => array( 'background', 'spacing', 'typography', 'visibility' ),
 	'settings'    => array(
-		'items'   => array( 'type' => 'textarea', 'label' => __( 'Items', 'craft-commerce-kit' ), 'default' => 'Bags,/product-category/bags/|Wallets,/product-category/wallets/', 'sanitize_callback' => 'sanitize_text_field' ),
+		'items'   => array( 'type' => 'textarea', 'label' => __( 'Items', 'craft-commerce-kit' ), 'default' => 'Featured,Curated highlights,/shop/featured/,featured.webp|New Arrivals,Fresh seasonal additions,/shop/new-arrivals/,new-arrivals.webp|Best Sellers,Customer-loved essentials,/shop/best-sellers/,best-sellers.webp', 'sanitize_callback' => 'sanitize_text_field' ),
 		'columns' => array( 'type' => 'number', 'label' => __( 'Columns', 'craft-commerce-kit' ), 'default' => '2', 'sanitize_callback' => 'absint' ),
 	),
 );

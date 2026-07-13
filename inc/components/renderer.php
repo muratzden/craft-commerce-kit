@@ -72,6 +72,7 @@ if ( ! function_exists( 'cck_register_core_component_renderers' ) ) {
 	 */
 	function cck_register_core_component_renderers() {
 		$renderers = array(
+			'footer'          => 'cck_component_footer',
 			'hero'            => 'cck_component_hero',
 			'collection-grid' => 'cck_component_collection_grid',
 			'cta'             => 'cck_component_cta',

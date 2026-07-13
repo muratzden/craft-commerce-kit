@@ -15,5 +15,10 @@ return array(
 		'button_label' => 'brand.cta_label',
 		'button_url'   => 'brand.cta_url',
 	),
-	'attributes' => array(),
+	'attributes' => array(
+		'title'        => 'Ready to craft something exceptional?',
+		'text'         => 'Build reusable WooCommerce experiences with Craft Commerce Kit.',
+		'button_label' => 'Explore the Collection',
+		'button_url'   => '/shop/',
+	),
 );

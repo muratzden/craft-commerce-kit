@@ -44,6 +44,7 @@ if ( ! function_exists( 'cck_get_component_manifest_files' ) ) {
 	 */
 	function cck_get_component_manifest_files() {
 		$packages = array(
+			'footer',
 			'collection-grid',
 			'cta',
 			'hero',

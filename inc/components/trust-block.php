@@ -17,7 +17,7 @@ if ( ! function_exists( 'cck_component_trust_block' ) ) {
 	function cck_component_trust_block( array $args = array() ) {
 		$args = shortcode_atts(
 			array(
-				'items' => 'Handmade|Honest materials|Small-batch production|Built to age',
+				'items' => 'Handmade::Small-batch production with attention to every stitch|Honest materials::Vegetable-tanned leather, honest hardware, and refined finishes|Built to age::Pieces designed to soften beautifully over time',
 			),
 			$args,
 			'cck_trust_block'
@@ -31,7 +31,16 @@ if ( ! function_exists( 'cck_component_trust_block' ) ) {
 			<div class="cck-container">
 				<div class="cck-trust__grid">
 					<?php foreach ( $items as $item ) : ?>
-						<div class="cck-trust__item"><?php echo esc_html( $item ); ?></div>
+						<?php
+						$parts = array_map( 'trim', explode( '::', $item, 2 ) );
+						$title = isset( $parts[0] ) ? $parts[0] : '';
+						$text  = isset( $parts[1] ) ? $parts[1] : $title;
+						?>
+						<article class="cck-trust__item">
+							<span class="cck-trust__icon"><?php echo cck_render_svg_icon( 'shield' ); ?></span>
+							<h3><?php echo esc_html( $title ); ?></h3>
+							<p><?php echo esc_html( $text ); ?></p>
+						</article>
 					<?php endforeach; ?>
 				</div>
 			</div>
