@@ -140,7 +140,14 @@ if ( ! function_exists( 'cck_get_admin_experience_rows' ) ) {
 				}
 			}
 
-			$layout = isset( $experience['layout'] ) ? sanitize_key( $experience['layout'] ) : '';
+			$definition = function_exists( 'cck_get_experience_definition' ) ? cck_get_experience_definition( $experience_id ) : array();
+			$layout     = '';
+
+			if ( isset( $definition['layout'] ) ) {
+				$layout = sanitize_key( $definition['layout'] );
+			} elseif ( isset( $experience['layout'] ) ) {
+				$layout = sanitize_key( $experience['layout'] );
+			}
 
 			$section_count = function_exists( 'cck_get_experience_section_count' ) ? cck_get_experience_section_count( $experience_id ) : 0;
 
