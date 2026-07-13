@@ -1109,6 +1109,20 @@
 		grid-template-columns: 1fr;
 	}
 
+	.cck-admin-grid {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.cck-admin-card,
+	.cck-admin-card--wide {
+		box-sizing: border-box;
+		max-width: 100%;
+		min-width: 0;
+	}
+
 	.cck-admin-overview-inline,
 	.cck-admin-preview-status-grid {
 		grid-template-columns: 1fr;
@@ -1120,6 +1134,7 @@
 
 	.cck-admin-preview-tabs {
 		width: 100%;
+		flex-wrap: wrap;
 	}
 
 	.cck-admin-preview-tab {
