@@ -20,6 +20,7 @@ require_once CCK_PLUGIN_DIR . 'inc/components/image-text.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/cta.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/collection-grid.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/components/product-grid/render.php';
+require_once CCK_PLUGIN_DIR . 'inc/components/components/usp/render.php';
 
 if ( function_exists( 'cck_register_core_component_renderers' ) ) {
 	cck_register_core_component_renderers();

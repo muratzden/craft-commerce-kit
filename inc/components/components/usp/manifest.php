@@ -15,6 +15,7 @@ return array(
 	'category'    => 'ui',
 	'icon'        => 'star-filled',
 	'preview'     => '',
+	'callback'    => 'cck_component_package_render_usp',
 	'supports'    => array(
 		'background',
 		'spacing',
