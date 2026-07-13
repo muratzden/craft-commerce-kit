@@ -34,6 +34,21 @@ if ( ! function_exists( 'cck_register_admin_page' ) ) {
 				continue;
 			}
 
+			if ( ! empty( $screen['hidden'] ) ) {
+				add_submenu_page(
+					'craft-commerce-kit',
+					$screen['page_title'],
+					$screen['label'],
+					'manage_options',
+					$screen['slug'],
+					$screen['callback']
+				);
+
+				remove_submenu_page( 'craft-commerce-kit', $screen['slug'] );
+
+				continue;
+			}
+
 			add_submenu_page(
 				'craft-commerce-kit',
 				$screen['page_title'],

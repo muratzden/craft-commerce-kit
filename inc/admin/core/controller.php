@@ -31,6 +31,15 @@ if ( ! function_exists( 'cck_get_admin_screen_registry' ) ) {
 				'slug'        => 'craft-commerce-kit-components',
 				'callback'    => 'cck_render_components_page',
 			),
+			'component-preview' => array(
+				'id'          => 'component-preview',
+				'label'       => __( 'Component Preview', 'craft-commerce-kit' ),
+				'page_title'  => __( 'Component Preview', 'craft-commerce-kit' ),
+				'description' => __( 'Read-only preview of a registered component rendered by the production callback.', 'craft-commerce-kit' ),
+				'slug'        => 'craft-commerce-kit-component-preview',
+				'callback'    => 'cck_render_component_preview_page',
+				'hidden'      => true,
+			),
 			'experiences' => array(
 				'id'          => 'experiences',
 				'label'       => __( 'Experiences', 'craft-commerce-kit' ),
@@ -100,6 +109,10 @@ if ( ! function_exists( 'cck_get_admin_nav_items' ) ) {
 		$items = array();
 
 		foreach ( cck_get_admin_screen_registry() as $screen ) {
+			if ( ! empty( $screen['hidden'] ) ) {
+				continue;
+			}
+
 			$items[ $screen['slug'] ] = $screen['label'];
 		}
 
@@ -122,6 +135,6 @@ if ( ! function_exists( 'cck_get_current_admin_page' ) ) {
 			$page = str_replace( 'toplevel_page_', '', $page );
 		}
 
-		return array_key_exists( $page, cck_get_admin_nav_items() ) ? $page : 'craft-commerce-kit';
+		return array_key_exists( $page, cck_get_admin_screen_registry() ) ? $page : 'craft-commerce-kit';
 	}
 }

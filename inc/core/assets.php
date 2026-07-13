@@ -151,6 +151,7 @@ if ( ! function_exists( 'cck_enqueue_admin_assets' ) ) {
 		$admin_pages = array(
 			'toplevel_page_craft-commerce-kit',
 			'craft-commerce-kit_page_craft-commerce-kit-components',
+			'craft-commerce-kit_page_craft-commerce-kit-component-preview',
 			'craft-commerce-kit_page_craft-commerce-kit-experiences',
 			'craft-commerce-kit_page_craft-commerce-kit-brands',
 			'craft-commerce-kit_page_craft-commerce-kit-settings',
@@ -169,6 +170,17 @@ if ( ! function_exists( 'cck_enqueue_admin_assets' ) ) {
 			array(),
 			file_exists( $css_path ) ? filemtime( $css_path ) : CCK_VERSION
 		);
+
+		if ( 'craft-commerce-kit_page_craft-commerce-kit-component-preview' === $hook_suffix ) {
+			$frontend_css_path = CCK_PLUGIN_DIR . 'assets/css/cck.css';
+
+			wp_enqueue_style(
+				'craft-commerce-kit-preview',
+				CCK_PLUGIN_URL . 'assets/css/cck.css',
+				array(),
+				file_exists( $frontend_css_path ) ? filemtime( $frontend_css_path ) : CCK_VERSION
+			);
+		}
 
 		wp_enqueue_script(
 			'craft-commerce-kit-admin',

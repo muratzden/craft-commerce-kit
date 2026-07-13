@@ -108,6 +108,7 @@ if ( ! function_exists( 'cck_get_admin_component_rows' ) ) {
 				'id'                  => $component_id,
 				'label'               => $component_name,
 				'callback'            => $callback,
+				'preview_url'         => function_exists( 'cck_get_component_preview_url' ) ? cck_get_component_preview_url( $component_id ) : '',
 				'supports_count'      => count( $supports ),
 				'defaults_count'      => count( function_exists( 'cck_get_component_defaults' ) ? cck_get_component_defaults( $component_id ) : array() ),
 				'schema_fields_count'  => count( $settings ),

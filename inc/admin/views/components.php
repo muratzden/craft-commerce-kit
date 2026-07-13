@@ -37,6 +37,7 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 								<th scope="col"><?php esc_html_e( 'Defaults', 'craft-commerce-kit' ); ?></th>
 								<th scope="col"><?php esc_html_e( 'Schema', 'craft-commerce-kit' ); ?></th>
 								<th scope="col"><?php esc_html_e( 'Status', 'craft-commerce-kit' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Actions', 'craft-commerce-kit' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -54,6 +55,13 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 									<td><?php echo esc_html( (string) $component['defaults_count'] ); ?></td>
 									<td><?php echo esc_html( (string) $component['schema_fields_count'] ); ?></td>
 									<td><?php echo esc_html( $component['status'] ); ?></td>
+									<td>
+										<?php if ( ! empty( $component['preview_url'] ) ) : ?>
+											<a class="button button-small" href="<?php echo esc_url( $component['preview_url'] ); ?>"><?php esc_html_e( 'Preview', 'craft-commerce-kit' ); ?></a>
+										<?php else : ?>
+											<span class="cck-admin-muted"><?php esc_html_e( 'Unavailable', 'craft-commerce-kit' ); ?></span>
+										<?php endif; ?>
+									</td>
 								</tr>
 							<?php endforeach; ?>
 						</tbody>
