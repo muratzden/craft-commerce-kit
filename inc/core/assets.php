@@ -162,7 +162,7 @@ if ( ! function_exists( 'cck_enqueue_admin_assets' ) ) {
 			file_exists( $css_path ) ? filemtime( $css_path ) : CCK_VERSION
 		);
 
-		if ( false !== strpos( (string) $hook_suffix, 'craft-commerce-kit-component-preview' ) ) {
+		if ( false !== strpos( (string) $hook_suffix, 'craft-commerce-kit-component-preview' ) || false !== strpos( (string) $hook_suffix, 'craft-commerce-kit-experience-preview' ) ) {
 			$frontend_css_path = CCK_PLUGIN_DIR . 'assets/css/cck.css';
 
 			wp_enqueue_style(

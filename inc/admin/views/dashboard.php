@@ -32,6 +32,8 @@ if ( ! function_exists( 'cck_render_admin_page' ) ) {
 		}
 
 		$woocommerce_status = ! empty( $summary['woocommerce_active'] ) ? __( 'Active', 'craft-commerce-kit' ) : __( 'Inactive', 'craft-commerce-kit' );
+		$homepage_label = ! empty( $summary['homepage_label'] ) ? $summary['homepage_label'] : __( 'Not set', 'craft-commerce-kit' );
+		$last_published_label = ! empty( $summary['last_published_label'] ) ? $summary['last_published_label'] : __( 'Not published yet', 'craft-commerce-kit' );
 		$header_meta = array(
 			array(
 				'label' => __( 'Version', 'craft-commerce-kit' ),
@@ -48,6 +50,10 @@ if ( ! function_exists( 'cck_render_admin_page' ) ) {
 			array(
 				'label' => __( 'Brands', 'craft-commerce-kit' ),
 				'value' => (string) $summary['registered_brands'],
+			),
+			array(
+				'label' => __( 'Published', 'craft-commerce-kit' ),
+				'value' => (string) $summary['published_experiences'],
 			),
 		);
 
@@ -88,6 +94,33 @@ if ( ! function_exists( 'cck_render_admin_page' ) ) {
 				</div>
 				<div class="cck-admin-overview-card__value"><?php echo esc_html( number_format_i18n( (int) $summary['registered_brands'] ) ); ?></div>
 				<p><?php esc_html_e( 'Registered brand presets and the currently active brand are shown live.', 'craft-commerce-kit' ); ?></p>
+			</article>
+
+			<article class="cck-admin-card">
+				<div class="cck-admin-card__heading">
+					<h2><?php esc_html_e( 'Published Experiences', 'craft-commerce-kit' ); ?></h2>
+					<span class="cck-admin-badge"><?php echo esc_html( sprintf( _n( '%s item', '%s items', (int) $summary['published_experiences'], 'craft-commerce-kit' ), number_format_i18n( (int) $summary['published_experiences'] ) ) ); ?></span>
+				</div>
+				<div class="cck-admin-overview-card__value"><?php echo esc_html( number_format_i18n( (int) $summary['published_experiences'] ) ); ?></div>
+				<p><?php esc_html_e( 'Experience pages published to WordPress and backed by the registry mapping.', 'craft-commerce-kit' ); ?></p>
+			</article>
+
+			<article class="cck-admin-card">
+				<div class="cck-admin-card__heading">
+					<h2><?php esc_html_e( 'Homepage', 'craft-commerce-kit' ); ?></h2>
+					<span class="cck-admin-badge"><?php echo esc_html( ! empty( $summary['homepage_experience_id'] ) ? $summary['homepage_experience_id'] : __( 'Not set', 'craft-commerce-kit' ) ); ?></span>
+				</div>
+				<div class="cck-admin-overview-card__value"><?php echo esc_html( $homepage_label ); ?></div>
+				<p><?php esc_html_e( 'The experience page currently assigned as the static front page.', 'craft-commerce-kit' ); ?></p>
+			</article>
+
+			<article class="cck-admin-card">
+				<div class="cck-admin-card__heading">
+					<h2><?php esc_html_e( 'Last Published', 'craft-commerce-kit' ); ?></h2>
+					<span class="cck-admin-badge"><?php echo esc_html( ! empty( $summary['last_published_id'] ) ? $summary['last_published_id'] : __( 'None', 'craft-commerce-kit' ) ); ?></span>
+				</div>
+				<div class="cck-admin-overview-card__value"><?php echo esc_html( $last_published_label ); ?></div>
+				<p><?php esc_html_e( 'Most recent experience publish event stored in the registry.', 'craft-commerce-kit' ); ?></p>
 			</article>
 
 			<article class="cck-admin-card">

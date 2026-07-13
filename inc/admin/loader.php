@@ -34,6 +34,7 @@ require_once __DIR__ . '/core/shortcodes.php';
 require_once __DIR__ . '/views/dashboard.php';
 require_once __DIR__ . '/views/components.php';
 require_once __DIR__ . '/views/component-preview.php';
+require_once __DIR__ . '/views/experience-preview.php';
 require_once __DIR__ . '/views/brand.php';
 require_once __DIR__ . '/views/experiences.php';
 require_once __DIR__ . '/views/settings.php';

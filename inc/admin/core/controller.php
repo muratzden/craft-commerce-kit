@@ -44,9 +44,18 @@ if ( ! function_exists( 'cck_get_admin_screen_registry' ) ) {
 				'id'          => 'experiences',
 				'label'       => __( 'Experiences', 'craft-commerce-kit' ),
 				'page_title'  => __( 'Experiences', 'craft-commerce-kit' ),
-				'description' => __( 'Read-only catalog of registered experience metadata.', 'craft-commerce-kit' ),
+				'description' => __( 'Registered experience metadata, publishing, and homepage controls.', 'craft-commerce-kit' ),
 				'slug'        => 'craft-commerce-kit-experiences',
 				'callback'    => 'cck_render_experiences_page',
+			),
+			'experience-preview' => array(
+				'id'          => 'experience-preview',
+				'label'       => __( 'Experience Preview', 'craft-commerce-kit' ),
+				'page_title'  => __( 'Experience Preview', 'craft-commerce-kit' ),
+				'description' => __( 'Read-only preview of a registered experience rendered by the production callback.', 'craft-commerce-kit' ),
+				'slug'        => 'craft-commerce-kit-experience-preview',
+				'callback'    => 'cck_render_experience_preview_page',
+				'hidden'      => true,
 			),
 			'brands' => array(
 				'id'          => 'brands',
@@ -156,7 +165,7 @@ if ( ! function_exists( 'cck_get_current_admin_page' ) ) {
 				}
 
 				if ( ! empty( $screen_item['hidden'] ) ) {
-					return 'craft-commerce-kit-components';
+					return 'craft-commerce-kit-experiences';
 				}
 
 				return $screen_item['slug'];
