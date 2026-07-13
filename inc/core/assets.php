@@ -151,11 +151,9 @@ if ( ! function_exists( 'cck_enqueue_admin_assets' ) ) {
 		$admin_pages = array(
 			'toplevel_page_craft-commerce-kit',
 			'craft-commerce-kit_page_craft-commerce-kit-components',
-			'craft-commerce-kit_page_craft-commerce-kit-templates',
-			'craft-commerce-kit_page_craft-commerce-kit-layouts',
-			'craft-commerce-kit_page_craft-commerce-kit-brand',
-			'craft-commerce-kit_page_craft-commerce-kit-commerce',
-			'craft-commerce-kit_page_craft-commerce-kit-system',
+			'craft-commerce-kit_page_craft-commerce-kit-experiences',
+			'craft-commerce-kit_page_craft-commerce-kit-brands',
+			'craft-commerce-kit_page_craft-commerce-kit-settings',
 		);
 
 		if ( ! in_array( $hook_suffix, $admin_pages, true ) ) {
