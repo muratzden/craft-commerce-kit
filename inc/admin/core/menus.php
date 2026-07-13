@@ -16,6 +16,7 @@ if ( ! function_exists( 'cck_register_admin_page' ) ) {
 	 */
 	function cck_register_admin_page() {
 		$screen = cck_get_admin_screen( 'overview' );
+		$preview_parent_slug = 'craft-commerce-kit-components';
 
 		add_menu_page(
 			__( 'Craft Commerce Kit', 'craft-commerce-kit' ),
@@ -36,7 +37,7 @@ if ( ! function_exists( 'cck_register_admin_page' ) ) {
 
 			if ( ! empty( $screen['hidden'] ) ) {
 				add_submenu_page(
-					'craft-commerce-kit',
+					$preview_parent_slug,
 					$screen['page_title'],
 					$screen['label'],
 					'manage_options',
@@ -44,7 +45,7 @@ if ( ! function_exists( 'cck_register_admin_page' ) ) {
 					$screen['callback']
 				);
 
-				remove_submenu_page( 'craft-commerce-kit', $screen['slug'] );
+				remove_submenu_page( $preview_parent_slug, $screen['slug'] );
 
 				continue;
 			}
