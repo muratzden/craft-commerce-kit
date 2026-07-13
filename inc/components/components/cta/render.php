@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Cta component render dosyası.
  *

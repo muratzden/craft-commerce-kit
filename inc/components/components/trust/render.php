@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Trust component render dosyası.
  *

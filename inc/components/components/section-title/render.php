@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Section Title component render dosyası.
  *

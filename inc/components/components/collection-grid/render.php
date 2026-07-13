@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Collection Grid component render dosyası.
  *
