@@ -48,15 +48,10 @@ if ( ! function_exists( 'cck_demo_catalog_files' ) ) {
 
 if ( ! function_exists( 'cck_demo_catalog_find_attachment_id' ) ) {
 	function cck_demo_catalog_find_attachment_id( $filename ) {
-		static $cache = array();
 		$filename = sanitize_file_name( cck_to_string( $filename ) );
 
 		if ( '' === $filename ) {
 			return 0;
-		}
-
-		if ( isset( $cache[ $filename ] ) ) {
-			return absint( $cache[ $filename ] );
 		}
 
 		$query = new WP_Query(
@@ -77,9 +72,7 @@ if ( ! function_exists( 'cck_demo_catalog_find_attachment_id' ) ) {
 			)
 		);
 
-		$cache[ $filename ] = ! empty( $query->posts[0] ) ? absint( $query->posts[0] ) : 0;
-
-		return absint( $cache[ $filename ] );
+		return ! empty( $query->posts[0] ) ? absint( $query->posts[0] ) : 0;
 	}
 }
 
