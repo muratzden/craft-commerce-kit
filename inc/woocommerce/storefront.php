@@ -179,6 +179,40 @@ if ( ! function_exists( 'cck_wc_get_product_card_demo_image_asset' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_wc_build_demo_image_html' ) ) {
+	/**
+	 * Build a resilient demo image HTML fragment for a product.
+	 *
+	 * @param WC_Product $product Product object.
+	 * @param array      $asset   Demo asset definition.
+	 * @param string     $class   Image class list.
+	 * @return string
+	 */
+	function cck_wc_build_demo_image_html( WC_Product $product, array $asset, $class = 'attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image' ) {
+		if ( empty( $asset['url'] ) ) {
+			return '';
+		}
+
+		$asset_size = array();
+
+		if ( ! empty( $asset['path'] ) ) {
+			$asset_size = @getimagesize( $asset['path'] );
+		}
+
+		$width  = is_array( $asset_size ) && ! empty( $asset_size[0] ) ? ' width="' . absint( $asset_size[0] ) . '"' : '';
+		$height = is_array( $asset_size ) && ! empty( $asset_size[1] ) ? ' height="' . absint( $asset_size[1] ) . '"' : '';
+
+		return sprintf(
+			'<img src="%1$s" alt="%2$s" class="%3$s" loading="lazy" decoding="async"%4$s%5$s />',
+			esc_url( $asset['url'] ),
+			esc_attr( $product->get_name() ),
+			esc_attr( $class ),
+			$width,
+			$height
+		);
+	}
+}
+
 if ( ! function_exists( 'cck_wc_get_product_badges' ) ) {
 	/**
 	 * Get product card badge HTML fragments.
@@ -1449,6 +1483,7 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_cross_sells_section', 24 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_cta_section', 25 );
 
+		add_filter( 'woocommerce_single_product_image_thumbnail_html', 'cck_wc_render_single_product_fallback_image_html', 10, 2 );
 		add_filter( 'woocommerce_cart_item_thumbnail', 'cck_wc_render_cart_item_thumbnail', 10, 3 );
 		add_filter( 'woocommerce_widget_cart_item_image', 'cck_wc_render_widget_cart_item_image', 10, 2 );
 		add_filter( 'render_block', 'cck_wc_strip_duplicate_archive_blocks', 10, 2 );
@@ -1480,6 +1515,56 @@ if ( ! function_exists( 'cck_wc_render_cart_item_thumbnail' ) ) {
 		}
 
 		return $definition['image_html'];
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_single_product_fallback_image_html' ) ) {
+	/**
+	 * Replace broken single-product gallery images with bundled demo assets.
+	 *
+	 * @param string $html Existing image HTML.
+	 * @param int    $attachment_id Gallery attachment ID.
+	 * @return string
+	 */
+	function cck_wc_render_single_product_fallback_image_html( $html, $attachment_id = 0 ) {
+		if ( ! is_product() ) {
+			return $html;
+		}
+
+		if ( $attachment_id ) {
+			$attachment_path = get_attached_file( absint( $attachment_id ) );
+			$attachment_path = is_string( $attachment_path ) ? $attachment_path : '';
+
+			if ( '' !== $attachment_path && file_exists( $attachment_path ) ) {
+				return $html;
+			}
+		}
+
+		global $product;
+
+		if ( ! $product instanceof WC_Product ) {
+			return $html;
+		}
+
+		$asset = cck_wc_get_product_card_demo_image_asset( $product );
+
+		if ( ! empty( $asset ) ) {
+			$fallback = cck_wc_build_demo_image_html( $product, $asset );
+
+			if ( '' !== $fallback ) {
+				return sprintf(
+					'<div class="woocommerce-product-gallery__image"><a href="%1$s">%2$s</a></div>',
+					esc_url( $asset['url'] ),
+					$fallback
+				);
+			}
+		}
+
+		if ( function_exists( 'wc_placeholder_img' ) ) {
+			return wc_placeholder_img( 'woocommerce_thumbnail' );
+		}
+
+		return $html;
 	}
 }
 
