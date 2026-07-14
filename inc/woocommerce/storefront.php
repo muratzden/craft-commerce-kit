@@ -1548,6 +1548,106 @@ if ( ! function_exists( 'cck_wc_wrap_storefront_content' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_wc_strip_single_product_extra_sections' ) ) {
+	/**
+	 * Remove remaining upsell / related product sections from product content.
+	 *
+	 * @param string $content Page content.
+	 * @return string
+	 */
+	function cck_wc_strip_single_product_extra_sections( $content ) {
+		if ( is_admin() || ! is_product() || ! in_the_loop() || ! is_main_query() ) {
+			return $content;
+		}
+
+		if ( false === strpos( $content, 'up-sells' ) && false === strpos( $content, 'woocommerce/product-collection' ) && false === strpos( $content, 'cross-sells' ) && false === strpos( $content, 'related products' ) ) {
+			return $content;
+		}
+
+		$previous_errors = libxml_use_internal_errors( true );
+		$document        = new DOMDocument( '1.0', 'UTF-8' );
+		$loaded          = $document->loadHTML( '<?xml encoding="utf-8" ?><div id="cck-product-content-filter">' . $content . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+
+		if ( ! $loaded ) {
+			libxml_clear_errors();
+			libxml_use_internal_errors( $previous_errors );
+			return $content;
+		}
+
+		$xpath = new DOMXPath( $document );
+		$nodes  = $xpath->query(
+			'//*[@data-block-name="woocommerce/product-collection"] | //section[contains(concat(" ", normalize-space(@class), " "), " up-sells ")] | //section[contains(concat(" ", normalize-space(@class), " "), " upsells ")] | //section[contains(concat(" ", normalize-space(@class), " "), " cross-sells ")] | //section[contains(concat(" ", normalize-space(@class), " "), " related ")]'
+		);
+
+		if ( $nodes instanceof DOMNodeList && $nodes->length > 0 ) {
+			$remove = array();
+
+			foreach ( $nodes as $node ) {
+				$remove[] = $node;
+			}
+
+			foreach ( array_reverse( $remove ) as $node ) {
+				if ( $node->parentNode ) {
+					$node->parentNode->removeChild( $node );
+				}
+			}
+		}
+
+		$wrapper = $document->getElementById( 'cck-product-content-filter' );
+		$cleaned = '';
+
+		if ( $wrapper instanceof DOMElement ) {
+			foreach ( $wrapper->childNodes as $child ) {
+				$cleaned .= $document->saveHTML( $child );
+			}
+		}
+
+		libxml_clear_errors();
+		libxml_use_internal_errors( $previous_errors );
+
+		return '' !== $cleaned ? $cleaned : $content;
+	}
+}
+
+if ( ! function_exists( 'cck_wc_filter_single_product_output_buffer' ) ) {
+	/**
+	 * Filter final single-product HTML and remove any remaining recommendation sections.
+	 *
+	 * @param string $html Full page HTML.
+	 * @return string
+	 */
+	function cck_wc_filter_single_product_output_buffer( $html ) {
+		if ( is_admin() || ! is_product() ) {
+			return $html;
+		}
+
+		$patterns = array(
+			'#<section[^>]+class="[^"]*\bup-sells\b[^"]*">.*?</section>#si',
+			'#<section[^>]+class="[^"]*\bupsells\b[^"]*">.*?</section>#si',
+			'#<section[^>]+class="[^"]*\bcross-sells\b[^"]*">.*?</section>#si',
+			'#<section[^>]+class="[^"]*\brelated\b[^"]*">.*?</section>#si',
+			'#<div[^>]+data-block-name="woocommerce/product-collection"[^>]*>.*?</div>\s*#si',
+		);
+
+		return preg_replace( $patterns, '', $html );
+	}
+}
+
+if ( ! function_exists( 'cck_wc_start_single_product_output_buffer' ) ) {
+	/**
+	 * Start a single-product output buffer so we can remove the remaining recommendation sections safely.
+	 *
+	 * @return void
+	 */
+	function cck_wc_start_single_product_output_buffer() {
+		if ( is_admin() || ! is_product() ) {
+			return;
+		}
+
+		ob_start( 'cck_wc_filter_single_product_output_buffer' );
+	}
+}
+
 if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 	/**
 	 * Register WooCommerce presentation hooks.
@@ -1595,17 +1695,15 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_action( 'woocommerce_before_single_product_summary', 'cck_wc_render_gallery_close', 99 );
 
 		add_action( 'woocommerce_single_product_summary', 'cck_wc_render_single_product_summary', 1 );
-		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_features_section', 5 );
-		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_related_products_section', 22 );
-		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_upsells_section', 23 );
-		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_cross_sells_section', 24 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_service_strip', 26 );
 
 		add_filter( 'woocommerce_single_product_image_thumbnail_html', 'cck_wc_render_single_product_fallback_image_html', 10, 2 );
 		add_filter( 'woocommerce_cart_item_thumbnail', 'cck_wc_render_cart_item_thumbnail', 10, 3 );
 		add_filter( 'woocommerce_widget_cart_item_image', 'cck_wc_render_widget_cart_item_image', 10, 2 );
 		add_filter( 'render_block', 'cck_wc_strip_duplicate_archive_blocks', 10, 2 );
+		add_filter( 'the_content', 'cck_wc_strip_single_product_extra_sections', 20 );
 		add_filter( 'the_content', 'cck_wc_wrap_storefront_content', 9 );
+		add_action( 'template_redirect', 'cck_wc_start_single_product_output_buffer', 0 );
 		add_action( 'wp', 'cck_wc_remove_default_loop_hooks', 20 );
 	}
 }
@@ -1779,6 +1877,7 @@ if ( ! function_exists( 'cck_wc_strip_duplicate_archive_blocks' ) ) {
 				'core/post-excerpt',
 				'woocommerce/add-to-cart-form',
 				'woocommerce/product-meta',
+				'woocommerce/product-collection',
 			);
 
 			if ( in_array( $block_name, $product_strip_blocks, true ) ) {
