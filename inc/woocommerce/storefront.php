@@ -83,15 +83,311 @@ if ( ! function_exists( 'cck_wc_get_shop_columns' ) ) {
 		$map    = array(
 			'2-column'  => 2,
 			'3-column'  => 3,
-			'4-column'  => 4,
-			'masonry'   => 4,
+			'4-column'  => 3,
+			'masonry'   => 3,
 			'editorial' => 3,
-			'luxury'    => 4,
+			'luxury'    => 3,
 		);
 
-		$columns = isset( $map[ $layout ] ) ? $map[ $layout ] : 4;
+		$columns = isset( $map[ $layout ] ) ? $map[ $layout ] : 3;
 
 		return absint( apply_filters( 'cck_wc_shop_columns', $columns, $layout ) );
+	}
+}
+
+if ( ! function_exists( 'cck_wc_get_product_card_demo_image_map' ) ) {
+	/**
+	 * Map demo product slugs to bundled demo images.
+	 *
+	 * @return array<string,string>
+	 */
+	function cck_wc_get_product_card_demo_image_map() {
+		return array(
+			'executive-messenger-bag' => 'leather-tote-bag.webp',
+			'classic-briefcase'       => 'leather-laptop-sleeve.webp',
+			'leather-laptop-sleeve'   => 'leather-laptop-sleeve.webp',
+			'everyday-wallet'         => 'leather-wallet.webp',
+			'slim-card-holder'        => 'leather-card-holder.webp',
+			'artisan-guitar-strap'    => 'leather-belt-bag.webp',
+			'travel-organizer'        => 'leather-passport-holder.webp',
+			'signature-journal-cover' => 'leather-notebook-cover.webp',
+		);
+	}
+}
+
+if ( ! function_exists( 'cck_wc_get_product_card_demo_image_asset' ) ) {
+	/**
+	 * Resolve a bundled demo image asset for a product card.
+	 *
+	 * @param WC_Product $product Product object.
+	 * @return array{file:string,path:string,url:string}|array
+	 */
+	function cck_wc_get_product_card_demo_image_asset( $product ) {
+		$product = cck_wc_get_product_object( $product );
+
+		if ( ! $product || ! defined( 'CCK_PLUGIN_DIR' ) || ! defined( 'CCK_PLUGIN_URL' ) ) {
+			return array();
+		}
+
+		$slug_map = cck_wc_get_product_card_demo_image_map();
+		$slug     = sanitize_key( $product->get_slug() );
+		$file     = isset( $slug_map[ $slug ] ) ? sanitize_file_name( $slug_map[ $slug ] ) : '';
+
+		if ( '' === $file ) {
+			return array();
+		}
+
+		$path = trailingslashit( CCK_PLUGIN_DIR ) . 'assets/demo/product-images/' . $file;
+
+		if ( ! file_exists( $path ) ) {
+			return array();
+		}
+
+		return array(
+			'file' => $file,
+			'path' => $path,
+			'url'  => trailingslashit( CCK_PLUGIN_URL ) . 'assets/demo/product-images/' . rawurlencode( $file ),
+		);
+	}
+}
+
+if ( ! function_exists( 'cck_wc_get_product_badges' ) ) {
+	/**
+	 * Get product card badge HTML fragments.
+	 *
+	 * @param WC_Product $product Product object.
+	 * @return array
+	 */
+	function cck_wc_get_product_badges( WC_Product $product ) {
+		$badges = array();
+
+		if ( $product->is_on_sale() ) {
+			$badges[] = '<span class="cck-product-card__badge cck-product-card__badge--sale">' . esc_html__( 'Sale', 'craft-commerce-kit' ) . '</span>';
+		}
+
+		if ( $product->is_featured() ) {
+			$badges[] = '<span class="cck-product-card__badge cck-product-card__badge--featured">' . esc_html__( 'Featured', 'craft-commerce-kit' ) . '</span>';
+		}
+
+		$new_threshold = 30;
+		$product_age   = current_time( 'timestamp', true ) - (int) get_post_time( 'U', true, $product->get_id() );
+
+		if ( $product_age <= ( DAY_IN_SECONDS * $new_threshold ) ) {
+			$badges[] = '<span class="cck-product-card__badge cck-product-card__badge--new">' . esc_html__( 'New', 'craft-commerce-kit' ) . '</span>';
+		}
+
+		$stock_quantity = $product->get_stock_quantity();
+		if ( $product->managing_stock() && null !== $stock_quantity && $stock_quantity > 0 && $stock_quantity <= 5 ) {
+			$badges[] = '<span class="cck-product-card__badge cck-product-card__badge--limited">' . esc_html__( 'Limited', 'craft-commerce-kit' ) . '</span>';
+		}
+
+		return array_slice( array_unique( $badges ), 0, 2 );
+	}
+}
+
+if ( ! function_exists( 'cck_wc_cardify_action_html' ) ) {
+	/**
+	 * Turn a WooCommerce action link into a compact icon action.
+	 *
+	 * @param string $html  Raw action markup.
+	 * @param string $icon  Icon slug.
+	 * @param string $label Visible/accessibility label.
+	 * @param string $class Extra CSS class.
+	 * @return string
+	 */
+	function cck_wc_cardify_action_html( $html, $icon, $label, $class ) {
+		$html  = trim( (string) $html );
+		$icon  = cck_render_svg_icon( $icon );
+		$label = esc_html( $label );
+
+		if ( '' === $html ) {
+			return sprintf(
+				'<button type="button" class="cck-product-card__slot-button %1$s" aria-label="%2$s">%3$s<span>%4$s</span></button>',
+				esc_attr( $class ),
+				esc_attr( $label ),
+				$icon,
+				$label
+			);
+		}
+
+		if ( preg_match( '/^<(a|button)([^>]*)>(.*)<\\/\\1>$/s', $html, $matches ) ) {
+			$tag      = $matches[1];
+			$attrs    = $matches[2];
+			$content  = trim( $matches[3] );
+			$icon_html = '<span class="cck-product-card__slot-icon">' . $icon . '</span>';
+			$text_html = '<span>' . esc_html( wp_strip_all_tags( $content ) ) . '</span>';
+			$attrs    = preg_replace( '/class=("|\')(.*?)\\1/i', 'class="$2 ' . esc_attr( $class ) . '"', $attrs, 1, $count );
+
+			if ( 1 !== $count ) {
+				$attrs .= ' class="' . esc_attr( $class ) . '"';
+			}
+
+			return sprintf( '<%1$s%2$s>%3$s%4$s</%1$s>', $tag, $attrs, $icon_html, $text_html );
+		}
+
+		return sprintf(
+			'<button type="button" class="cck-product-card__slot-button %1$s" aria-label="%2$s">%3$s<span>%4$s</span></button>',
+			esc_attr( $class ),
+			esc_attr( $label ),
+			$icon,
+			$label
+		);
+	}
+}
+
+if ( ! function_exists( 'cck_wc_cardify_add_to_cart_html' ) ) {
+	/**
+	 * Convert the loop add-to-cart output into a compact icon control.
+	 *
+	 * @param string $html Raw WooCommerce button HTML.
+	 * @return string
+	 */
+	function cck_wc_cardify_add_to_cart_html( $html ) {
+		$html = trim( (string) $html );
+
+		if ( '' === $html ) {
+			return '';
+		}
+
+		$icon = '<span class="cck-product-card__slot-icon">' . cck_render_svg_icon( 'bag' ) . '</span>';
+
+		if ( preg_match( '/^<(a|button)([^>]*)>(.*)<\\/\\1>$/s', $html, $matches ) ) {
+			$tag     = $matches[1];
+			$attrs   = $matches[2];
+			$content = trim( wp_strip_all_tags( $matches[3] ) );
+			$attrs   = preg_replace( '/class=("|\')(.*?)\\1/i', 'class="$2 cck-product-card__action-button cck-product-card__action-button--cart"', $attrs, 1, $count );
+
+			if ( 1 !== $count ) {
+				$attrs .= ' class="cck-product-card__action-button cck-product-card__action-button--cart"';
+			}
+
+			return sprintf(
+				'<%1$s%2$s>%3$s<span>%4$s</span></%1$s>',
+				$tag,
+				$attrs,
+				$icon,
+				esc_html( $content )
+			);
+		}
+
+		return $html;
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_product_card_action_link' ) ) {
+	/**
+	 * Render a compact product card action button from the product object.
+	 *
+	 * @param WC_Product $product Product object.
+	 * @return string
+	 */
+	function cck_wc_render_product_card_action_link( $product ) {
+		$product = cck_wc_get_product_object( $product );
+
+		if ( ! $product ) {
+			return '';
+		}
+
+		$button_text = $product->add_to_cart_text();
+		$button_url  = $product->add_to_cart_url();
+
+		if ( '' === $button_text ) {
+			$button_text = __( 'Add to cart', 'craft-commerce-kit' );
+		}
+
+		if ( '' === $button_url ) {
+			$button_url = $product->get_permalink();
+		}
+
+		$classes = array(
+			'button',
+			'cck-product-card__action-button',
+			'cck-product-card__action-button--cart',
+		);
+
+		if ( $product->supports( 'ajax_add_to_cart' ) ) {
+			$classes[] = 'ajax_add_to_cart';
+			$classes[] = 'add_to_cart_button';
+		}
+
+		$classes[] = 'product_type_' . sanitize_html_class( $product->get_type() );
+
+		$attributes = array(
+			'href'       => $button_url,
+			'class'      => implode( ' ', array_filter( $classes ) ),
+			'aria-label' => $button_text,
+			'rel'        => 'nofollow',
+		);
+
+		if ( $product->is_purchasable() ) {
+			$attributes['data-product_id']  = $product->get_id();
+			$attributes['data-product_sku'] = $product->get_sku();
+			$attributes['data-quantity']    = 1;
+		}
+
+		$attribute_html = array();
+
+		foreach ( $attributes as $key => $value ) {
+			$attribute_html[] = sprintf( '%1$s="%2$s"', esc_attr( $key ), esc_attr( $value ) );
+		}
+
+		return sprintf(
+			'<a %1$s>%2$s<span>%3$s</span></a>',
+			implode( ' ', $attribute_html ),
+			'<span class="cck-product-card__slot-icon">' . cck_render_svg_icon( 'bag' ) . '</span>',
+			esc_html( $button_text )
+		);
+	}
+}
+
+if ( ! function_exists( 'cck_wc_kses_product_card_action_html' ) ) {
+	/**
+	 * Allow compact product card actions to keep safe inline SVG icons.
+	 *
+	 * @param string $html Raw markup.
+	 * @return string
+	 */
+	function cck_wc_kses_product_card_action_html( $html ) {
+		$allowed = wp_kses_allowed_html( 'post' );
+		$allowed['button'] = array(
+			'type'             => true,
+			'class'            => true,
+			'aria-label'       => true,
+			'aria-describedby' => true,
+			'rel'              => true,
+			'data-product_id'  => true,
+			'data-product_sku' => true,
+			'data-quantity'    => true,
+		);
+		$allowed['svg'] = array(
+			'viewBox'     => true,
+			'viewbox'     => true,
+			'aria-hidden' => true,
+			'focusable'   => true,
+			'class'       => true,
+			'role'        => true,
+			'xmlns'       => true,
+		);
+		$allowed['path'] = array(
+			'd' => true,
+		);
+		$allowed['circle'] = array(
+			'cx' => true,
+			'cy' => true,
+			'r'  => true,
+		);
+		$allowed['rect'] = array(
+			'x'      => true,
+			'y'      => true,
+			'width'  => true,
+			'height' => true,
+			'rx'     => true,
+		);
+		$allowed['span'] = array(
+			'class' => true,
+		);
+
+		return wp_kses( $html, $allowed );
 	}
 }
 
@@ -111,47 +407,96 @@ if ( ! function_exists( 'cck_wc_get_product_card_definition' ) ) {
 		}
 
 		$context   = sanitize_key( $context );
-		$image_id  = $product->get_image_id();
-		$image_html = $image_id ? wp_get_attachment_image( $image_id, 'woocommerce_thumbnail', false, array( 'loading' => 'lazy', 'decoding' => 'async' ) ) : '';
-		$image_url  = $image_id ? wp_get_attachment_image_url( $image_id, 'woocommerce_thumbnail' ) : '';
+		$image_id  = absint( $product->get_image_id() );
+		$image_html = '';
+		$image_url = '';
+
+		$demo_asset = cck_wc_get_product_card_demo_image_asset( $product );
+
+		if ( ! empty( $demo_asset ) ) {
+			$asset_size = @getimagesize( $demo_asset['path'] );
+
+			$image_html = sprintf(
+				'<img src="%1$s" alt="%2$s" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image" loading="lazy" decoding="async"%3$s%4$s />',
+				esc_url( $demo_asset['url'] ),
+				esc_attr( $product->get_name() ),
+				is_array( $asset_size ) && ! empty( $asset_size[0] ) ? ' width="' . absint( $asset_size[0] ) . '"' : '',
+				is_array( $asset_size ) && ! empty( $asset_size[1] ) ? ' height="' . absint( $asset_size[1] ) . '"' : ''
+			);
+			$image_url  = $demo_asset['url'];
+		} elseif ( $image_id ) {
+			$attachment_path = get_attached_file( $image_id );
+			$attachment_path = is_string( $attachment_path ) ? $attachment_path : '';
+
+			if ( '' !== $attachment_path && file_exists( $attachment_path ) ) {
+				$image_html = wp_get_attachment_image(
+					$image_id,
+					'woocommerce_thumbnail',
+					false,
+					array(
+						'loading'  => 'lazy',
+						'decoding' => 'async',
+					)
+				);
+				$image_url  = wp_get_attachment_image_url( $image_id, 'woocommerce_thumbnail' );
+			} else {
+				$demo_asset = sanitize_file_name( (string) get_post_meta( $image_id, '_cck_demo_asset', true ) );
+
+				if ( '' !== $demo_asset && defined( 'CCK_PLUGIN_DIR' ) && defined( 'CCK_PLUGIN_URL' ) ) {
+					$asset_path = trailingslashit( CCK_PLUGIN_DIR ) . 'assets/demo/catalog/' . $demo_asset;
+					$asset_url  = trailingslashit( CCK_PLUGIN_URL ) . 'assets/demo/catalog/' . rawurlencode( $demo_asset );
+					$asset_size = array( 0, 0 );
+
+					if ( file_exists( $asset_path ) ) {
+						$detected = @getimagesize( $asset_path );
+
+						if ( is_array( $detected ) && ! empty( $detected[0] ) && ! empty( $detected[1] ) ) {
+							$asset_size = array( absint( $detected[0] ), absint( $detected[1] ) );
+						}
+
+						$image_html = sprintf(
+							'<img src="%1$s" alt="%2$s" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image" loading="lazy" decoding="async"%3$s%4$s />',
+							esc_url( $asset_url ),
+							esc_attr( $product->get_name() ),
+							! empty( $asset_size[0] ) ? ' width="' . absint( $asset_size[0] ) . '"' : '',
+							! empty( $asset_size[1] ) ? ' height="' . absint( $asset_size[1] ) . '"' : ''
+						);
+						$image_url  = $asset_url;
+					}
+				}
+			}
+		}
+
+		if ( '' === $image_html && function_exists( 'wc_placeholder_img' ) ) {
+			$image_html = wc_placeholder_img( 'woocommerce_thumbnail' );
+		}
+
+		if ( '' === $image_url && function_exists( 'wc_placeholder_img_src' ) ) {
+			$image_url = wc_placeholder_img_src( 'woocommerce_thumbnail' );
+		}
 		$short_desc  = wp_strip_all_tags( (string) $product->get_short_description() );
 		$short_desc  = '' !== $short_desc ? wp_trim_words( $short_desc, 14 ) : '';
 		$price_html  = $product->get_price_html();
 		$rating_html = function_exists( 'wc_get_rating_html' ) ? wc_get_rating_html( (float) $product->get_average_rating(), (int) $product->get_rating_count() ) : '';
-		$badge_html  = '';
-
-		if ( $product->is_on_sale() ) {
-			$badge_html = '<span class="cck-product-card__badge cck-product-card__badge--sale">' . esc_html__( 'Sale', 'craft-commerce-kit' ) . '</span>';
-		} elseif ( $product->is_featured() ) {
-			$badge_html = '<span class="cck-product-card__badge cck-product-card__badge--featured">' . esc_html__( 'Featured', 'craft-commerce-kit' ) . '</span>';
-		}
-
-		$wishlist_slot = apply_filters( 'cck_wc_product_card_wishlist_slot', '', $product, $context );
-		$quick_view_slot = apply_filters( 'cck_wc_product_card_quick_view_slot', '', $product, $context );
+		$badge_html       = implode( '', cck_wc_get_product_badges( $product ) );
+		$wishlist_slot    = apply_filters( 'cck_wc_product_card_wishlist_slot', '', $product, $context );
+		$quick_view_slot  = apply_filters( 'cck_wc_product_card_quick_view_slot', '', $product, $context );
 
 		if ( '' === $wishlist_slot ) {
-			$wishlist_slot = sprintf(
-				'<button type="button" class="cck-product-card__slot-button cck-product-card__slot-button--wishlist" aria-label="%1$s">%2$s<span>%3$s</span></button>',
-				esc_attr__( 'Add to wishlist', 'craft-commerce-kit' ),
-				cck_render_svg_icon( 'heart' ),
-				esc_html__( 'Wishlist', 'craft-commerce-kit' )
-			);
+			$wishlist_slot = cck_wc_cardify_action_html( '', 'heart', __( 'Wishlist', 'craft-commerce-kit' ), 'cck-product-card__slot-button--wishlist' );
 		}
 
 		if ( '' === $quick_view_slot ) {
-			$quick_view_slot = sprintf(
-				'<button type="button" class="cck-product-card__slot-button cck-product-card__slot-button--quick-view" aria-label="%1$s">%2$s<span>%3$s</span></button>',
-				esc_attr__( 'Quick view', 'craft-commerce-kit' ),
-				cck_render_svg_icon( 'eye' ),
-				esc_html__( 'Quick view', 'craft-commerce-kit' )
-			);
+			$quick_view_slot = cck_wc_cardify_action_html( '', 'eye', __( 'Quick view', 'craft-commerce-kit' ), 'cck-product-card__slot-button--quick-view' );
 		}
 
-		ob_start();
-		if ( function_exists( 'woocommerce_template_loop_add_to_cart' ) ) {
+		$add_to_cart_html = cck_wc_render_product_card_action_link( $product );
+
+		if ( '' === $add_to_cart_html && function_exists( 'woocommerce_template_loop_add_to_cart' ) ) {
+			ob_start();
 			woocommerce_template_loop_add_to_cart();
+			$add_to_cart_html = cck_wc_cardify_add_to_cart_html( trim( ob_get_clean() ) );
 		}
-		$add_to_cart_html = trim( ob_get_clean() );
 
 		return apply_filters(
 			'cck_wc_product_card_definition',
@@ -208,11 +553,6 @@ if ( ! function_exists( 'cck_wc_render_product_card_markup' ) ) {
 						<?php echo wp_kses_post( $card['image_html'] ); ?>
 					</div>
 				</a>
-
-				<div class="cck-product-card__slots" aria-label="<?php esc_attr_e( 'Product actions', 'craft-commerce-kit' ); ?>">
-					<?php echo wp_kses_post( $card['wishlist_html'] ); ?>
-					<?php echo wp_kses_post( $card['quick_view_html'] ); ?>
-				</div>
 			</div>
 
 			<div class="cck-product-card__content">
@@ -230,14 +570,19 @@ if ( ! function_exists( 'cck_wc_render_product_card_markup' ) ) {
 							<div class="cck-product-card__rating"><?php echo wp_kses_post( $card['rating_html'] ); ?></div>
 						<?php endif; ?>
 
-						<?php if ( ! empty( $card['price_html'] ) ) : ?>
+				<?php if ( ! empty( $card['price_html'] ) ) : ?>
 							<div class="cck-product-card__price"><?php echo wp_kses_post( $card['price_html'] ); ?></div>
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>
 
+				<div class="cck-product-card__slots" aria-label="<?php esc_attr_e( 'Product actions', 'craft-commerce-kit' ); ?>">
+					<?php echo cck_wc_kses_product_card_action_html( $card['wishlist_html'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php echo cck_wc_kses_product_card_action_html( $card['quick_view_html'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</div>
+
 				<div class="cck-product-card__actions">
-					<?php echo wp_kses_post( $card['add_to_cart_html'] ); ?>
+					<?php echo cck_wc_kses_product_card_action_html( $card['add_to_cart_html'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</div>
 			</div>
 		</article>
