@@ -1510,7 +1510,7 @@ body.cck-woo-active .wc-block-mini-cart__drawer {
 
 .cck-wc-gallery__grid {
 	display: grid;
-	grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+	grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
 	gap: var(--cck-space-lg);
 	align-items: start;
 }

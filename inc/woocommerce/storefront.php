@@ -1449,15 +1449,60 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_cross_sells_section', 24 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_cta_section', 25 );
 
-		add_action( 'woocommerce_before_cart', 'cck_wc_render_cart_shell_open', 1 );
-		add_action( 'woocommerce_after_cart', 'cck_wc_render_cart_shell_close', 99 );
-		add_action( 'woocommerce_before_checkout_form', 'cck_wc_render_checkout_shell_open', 1 );
-		add_action( 'woocommerce_after_checkout_form', 'cck_wc_render_checkout_shell_close', 99 );
-		add_action( 'woocommerce_before_main_content', 'cck_wc_render_account_shell_open', 1 );
-		add_action( 'woocommerce_after_main_content', 'cck_wc_render_account_shell_close', 99 );
+		add_filter( 'woocommerce_cart_item_thumbnail', 'cck_wc_render_cart_item_thumbnail', 10, 3 );
+		add_filter( 'woocommerce_widget_cart_item_image', 'cck_wc_render_widget_cart_item_image', 10, 2 );
 		add_filter( 'render_block', 'cck_wc_strip_duplicate_archive_blocks', 10, 2 );
 		add_filter( 'the_content', 'cck_wc_wrap_storefront_content', 9 );
 		add_action( 'wp', 'cck_wc_remove_default_loop_hooks', 20 );
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_cart_item_thumbnail' ) ) {
+	/**
+	 * Render a resilient cart item thumbnail.
+	 *
+	 * @param string $thumbnail Existing thumbnail HTML.
+	 * @param array  $cart_item Cart item data.
+	 * @param string $cart_item_key Cart item key.
+	 * @return string
+	 */
+	function cck_wc_render_cart_item_thumbnail( $thumbnail, $cart_item, $cart_item_key ) {
+		unset( $cart_item_key );
+
+		if ( empty( $cart_item['data'] ) || ! $cart_item['data'] instanceof WC_Product ) {
+			return $thumbnail;
+		}
+
+		$definition = cck_wc_get_product_card_definition( $cart_item['data'] );
+
+		if ( empty( $definition['image_html'] ) ) {
+			return $thumbnail;
+		}
+
+		return $definition['image_html'];
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_widget_cart_item_image' ) ) {
+	/**
+	 * Render a resilient mini-cart thumbnail.
+	 *
+	 * @param string $thumbnail Existing thumbnail HTML.
+	 * @param array  $cart_item Cart item data.
+	 * @return string
+	 */
+	function cck_wc_render_widget_cart_item_image( $thumbnail, $cart_item ) {
+		if ( empty( $cart_item['data'] ) || ! $cart_item['data'] instanceof WC_Product ) {
+			return $thumbnail;
+		}
+
+		$definition = cck_wc_get_product_card_definition( $cart_item['data'] );
+
+		if ( empty( $definition['image_html'] ) ) {
+			return $thumbnail;
+		}
+
+		return $definition['image_html'];
 	}
 }
 
