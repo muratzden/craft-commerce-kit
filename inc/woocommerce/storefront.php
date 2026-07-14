@@ -823,7 +823,9 @@ if ( ! function_exists( 'cck_wc_render_gallery_slots' ) ) {
 
 		echo '<div class="cck-product-media__thumbs" aria-label="' . esc_attr__( 'Product gallery thumbnails', 'craft-commerce-kit' ) . '">';
 
-		foreach ( array_slice( $asset_ids, 0, 5 ) as $asset_id ) {
+		$visible_assets = array_slice( $asset_ids, 0, 5 );
+
+		foreach ( $visible_assets as $asset_id ) {
 			$thumb_html = '';
 
 			if ( $asset_id ) {
@@ -861,6 +863,14 @@ if ( ! function_exists( 'cck_wc_render_gallery_slots' ) ) {
 				echo wp_kses_post( $thumb_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '</button>';
 			}
+		}
+
+		$future_slots = max( 0, 5 - count( $visible_assets ) );
+
+		for ( $index = 0; $index < $future_slots; $index++ ) {
+			echo '<button type="button" class="cck-product-media__thumb cck-product-media__thumb--future" aria-label="' . esc_attr__( 'Daha fazla medya', 'craft-commerce-kit' ) . '">';
+			echo '<span class="cck-product-media__thumb-image" aria-hidden="true">' . cck_render_svg_icon( 'arrow-right' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '</button>';
 		}
 
 		echo '</div>';
@@ -1582,7 +1592,6 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_action( 'woocommerce_before_single_product_summary', 'cck_wc_render_gallery_open', 1 );
 		add_action( 'woocommerce_before_single_product_summary', 'cck_wc_render_gallery_badge', 10 );
 		add_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
-		add_action( 'woocommerce_before_single_product_summary', 'cck_wc_render_gallery_slots', 30 );
 		add_action( 'woocommerce_before_single_product_summary', 'cck_wc_render_gallery_close', 99 );
 
 		add_action( 'woocommerce_single_product_summary', 'cck_wc_render_single_product_summary', 1 );
