@@ -1622,14 +1622,31 @@ body.cck-woo-active.cck-product-page .woocommerce-product-gallery {
 body.cck-woo-active.cck-product-page .wp-block-woocommerce-product-image-gallery {
 	width: 100%;
 	max-width: none;
+	border-radius: var(--cck-radius-card);
+	overflow: hidden;
 }
 
 body.cck-woo-active.cck-product-page .woocommerce-product-gallery__wrapper {
-	border: 1px solid var(--cck-border);
 	border-radius: var(--cck-radius-card);
+	overflow: hidden;
+	border: 1px solid var(--cck-border);
 	background: var(--cck-paper);
 	box-shadow: var(--cck-shadow-soft);
+}
+
+body.cck-woo-active.cck-product-page .woocommerce-product-gallery .flex-viewport {
+	border-radius: var(--cck-radius-card);
 	overflow: hidden;
+}
+
+body.cck-woo-active.cck-product-page .woocommerce-product-gallery__image,
+body.cck-woo-active.cck-product-page .woocommerce-product-gallery__image a {
+	border-radius: var(--cck-radius-card);
+	overflow: hidden;
+}
+
+body.cck-woo-active.cck-product-page .woocommerce-product-gallery__image img {
+	border-radius: inherit;
 }
 
 body.cck-woo-active.cck-product-page .woocommerce-product-gallery__image {
