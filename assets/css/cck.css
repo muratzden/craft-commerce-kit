@@ -1681,20 +1681,16 @@ body.cck-woo-active .wc-block-mini-cart__drawer {
 }
 
 body.cck-woo-active.single-product .wp-site-blocks > .wp-block-group.woocommerce.product {
-	display: grid;
-	grid-template-columns: minmax(320px, 0.64fr) minmax(0, 1.36fr);
-	gap: var(--cck-space-xl) var(--cck-space-lg);
-	align-items: start;
+	display: block;
 }
 
 body.cck-woo-active.single-product .wp-site-blocks > .wp-block-group.woocommerce.product > .cck-wc-section.cck-wc-gallery {
-	grid-column: 1;
-	min-width: 0;
+	display: none;
 }
 
 body.cck-woo-active.single-product .wp-site-blocks > .wp-block-group.woocommerce.product > .wp-block-group.has-global-padding {
-	grid-column: 2;
 	box-sizing: border-box;
+	display: block;
 	min-width: 0;
 	max-width: 100%;
 	width: 100%;
