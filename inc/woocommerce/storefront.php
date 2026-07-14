@@ -1455,7 +1455,61 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_action( 'woocommerce_after_checkout_form', 'cck_wc_render_checkout_shell_close', 99 );
 		add_action( 'woocommerce_before_main_content', 'cck_wc_render_account_shell_open', 1 );
 		add_action( 'woocommerce_after_main_content', 'cck_wc_render_account_shell_close', 99 );
+		add_filter( 'render_block', 'cck_wc_strip_duplicate_archive_blocks', 10, 2 );
 		add_filter( 'the_content', 'cck_wc_wrap_storefront_content', 9 );
+		add_action( 'wp', 'cck_wc_remove_default_loop_hooks', 20 );
+	}
+}
+
+if ( ! function_exists( 'cck_wc_remove_default_loop_hooks' ) ) {
+	/**
+	 * Remove WooCommerce default loop callbacks after WooCommerce has finished registering them.
+	 *
+	 * @return void
+	 */
+	function cck_wc_remove_default_loop_hooks() {
+		if ( ! cck_is_woocommerce_active() ) {
+			return;
+		}
+
+		remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10 );
+		remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10 );
+		remove_action( 'woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10 );
+		remove_action( 'woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10 );
+		remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_rating', 5 );
+		remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10 );
+		remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+		remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5 );
+	}
+}
+
+if ( ! function_exists( 'cck_wc_strip_duplicate_archive_blocks' ) ) {
+	/**
+	 * Strip default WooCommerce archive product blocks when the CCK card renderer is already handling the item.
+	 *
+	 * @param string $block_content Rendered block content.
+	 * @param array  $block Parsed block.
+	 * @return string
+	 */
+	function cck_wc_strip_duplicate_archive_blocks( $block_content, $block ) {
+		if ( ! cck_wc_is_storefront_request() ) {
+			return $block_content;
+		}
+
+		$block_name = isset( $block['blockName'] ) ? trim( (string) $block['blockName'] ) : '';
+		$strip_blocks = array(
+			'core/post-title',
+			'woocommerce/product-image',
+			'woocommerce/product-title',
+			'woocommerce/product-price',
+			'woocommerce/product-button',
+		);
+
+		if ( ! in_array( $block_name, $strip_blocks, true ) ) {
+			return $block_content;
+		}
+
+		return '';
 	}
 }
 
