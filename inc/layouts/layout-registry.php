@@ -113,15 +113,23 @@ if ( ! function_exists( 'cck_get_layout_registry' ) ) {
 
 		$registry = array();
 
-		foreach ( cck_get_layout_manifest_files() as $layout_path ) {
-			$layout = cck_load_layout_manifest( $layout_path, basename( $layout_path, '.php' ) );
+	foreach ( cck_get_layout_manifest_files() as $layout_path ) {
+		$layout = cck_load_layout_manifest( $layout_path, basename( $layout_path, '.php' ) );
 
 			if ( empty( $layout['id'] ) ) {
 				continue;
 			}
 
-			$registry[ $layout['id'] ] = $layout;
+		$registry[ $layout['id'] ] = $layout;
+	}
+
+	if ( function_exists( 'cck_get_manual_layout_definition' ) ) {
+		$manual_layout = cck_get_manual_layout_definition();
+
+		if ( is_array( $manual_layout ) && ! empty( $manual_layout['id'] ) ) {
+			$registry[ $manual_layout['id'] ] = $manual_layout;
 		}
+	}
 
 		return $registry;
 	}

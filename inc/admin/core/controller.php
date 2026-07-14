@@ -31,6 +31,14 @@ if ( ! function_exists( 'cck_get_admin_screen_registry' ) ) {
 				'slug'        => 'craft-commerce-kit-components',
 				'callback'    => 'cck_render_components_page',
 			),
+			'layouts' => array(
+				'id'          => 'layouts',
+				'label'       => __( 'Layouts', 'craft-commerce-kit' ),
+				'page_title'  => __( 'Layouts', 'craft-commerce-kit' ),
+				'description' => __( 'Manual component composition and reusable layout sequences.', 'craft-commerce-kit' ),
+				'slug'        => 'craft-commerce-kit-layouts',
+				'callback'    => 'cck_render_layouts_page',
+			),
 			'component-preview' => array(
 				'id'          => 'component-preview',
 				'label'       => __( 'Component Preview', 'craft-commerce-kit' ),

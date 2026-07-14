@@ -60,7 +60,14 @@ if ( ! function_exists( 'cck_validate_component_manifest' ) ) {
 		$manifest['version']     = sanitize_text_field( cck_to_string( cck_manifest_get( $manifest, 'version', '1.0.0' ) ) );
 		$manifest['category']    = sanitize_key( cck_manifest_get( $manifest, 'category', 'ui' ) );
 		$manifest['icon']        = sanitize_key( cck_manifest_get( $manifest, 'icon', 'layout' ) );
-		$manifest['preview']     = esc_url_raw( cck_manifest_get( $manifest, 'preview', '' ) );
+		$preview = cck_manifest_get( $manifest, 'preview', array() );
+
+		if ( ! is_array( $preview ) ) {
+			$preview = array();
+		}
+
+		$preview['attributes'] = isset( $preview['attributes'] ) && is_array( $preview['attributes'] ) ? $preview['attributes'] : array();
+		$manifest['preview']   = $preview;
 		$manifest['supports']    = cck_validate_component_supports( cck_manifest_get( $manifest, 'supports', array() ) );
 		$manifest['settings']    = cck_validate_component_settings( cck_manifest_get( $manifest, 'settings', array() ) );
 		$manifest['callback']    = cck_manifest_get( $manifest, 'callback', '' );

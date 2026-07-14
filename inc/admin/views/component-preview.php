@@ -19,6 +19,25 @@ if ( ! function_exists( 'cck_render_component_preview_page' ) ) {
 		$screen       = cck_get_admin_screen( 'component-preview' );
 		$component_id = cck_get_component_preview_request_id();
 		$data         = cck_get_component_preview_data( $component_id );
+		$schema       = isset( $data['schema'] ) && is_array( $data['schema'] ) ? $data['schema'] : array();
+		$defaults     = isset( $data['defaults'] ) && is_array( $data['defaults'] ) ? $data['defaults'] : array();
+		$preview_attributes = null;
+		$preview_action = isset( $_POST['cck_component_preview_action'] ) ? sanitize_key( wp_unslash( $_POST['cck_component_preview_action'] ) ) : '';
+
+		if ( 'update' === $preview_action || 'reset' === $preview_action ) {
+			check_admin_referer( 'cck_update_component_preview_' . $component_id );
+
+			if ( 'reset' === $preview_action ) {
+				$preview_attributes = $defaults;
+			} else {
+				$raw_values = isset( $_POST['cck_component_preview']['attributes'] ) && is_array( $_POST['cck_component_preview']['attributes'] ) ? wp_unslash( $_POST['cck_component_preview']['attributes'] ) : array();
+				$preview_attributes = function_exists( 'cck_sanitize_schema_attribute_values' ) ? cck_sanitize_schema_attribute_values( $schema, $raw_values ) : $defaults;
+			}
+
+			$data = cck_get_component_preview_data( $component_id, $preview_attributes );
+			$schema = isset( $data['schema'] ) && is_array( $data['schema'] ) ? $data['schema'] : array();
+			$defaults = isset( $data['defaults'] ) && is_array( $data['defaults'] ) ? $data['defaults'] : array();
+		}
 
 		$header_meta = array();
 
@@ -152,23 +171,32 @@ if ( ! function_exists( 'cck_render_component_preview_page' ) ) {
 			<div class="cck-admin-card">
 				<div class="cck-admin-card__heading">
 					<h2><?php esc_html_e( 'Attributes', 'craft-commerce-kit' ); ?></h2>
-				</div>
-				<p class="cck-admin-muted"><?php esc_html_e( 'Preview-only demo attributes are used here. Production defaults remain unchanged in the runtime registry.', 'craft-commerce-kit' ); ?></p>
-				<?php if ( empty( $data['preview_attributes'] ) ) : ?>
-					<div class="cck-admin-empty-state">
-						<div class="cck-admin-empty-state__title"><?php esc_html_e( 'No preview attributes.', 'craft-commerce-kit' ); ?></div>
-						<p><?php esc_html_e( 'This component is falling back to production defaults for preview rendering.', 'craft-commerce-kit' ); ?></p>
+					<div class="cck-admin-template-actions">
+						<button type="submit" form="cck-component-preview-form" name="cck_component_preview_action" value="update" class="button button-primary"><?php esc_html_e( 'Update Preview', 'craft-commerce-kit' ); ?></button>
+						<button type="submit" form="cck-component-preview-form" name="cck_component_preview_action" value="reset" class="button"><?php esc_html_e( 'Reset to Defaults', 'craft-commerce-kit' ); ?></button>
 					</div>
-				<?php else : ?>
-					<dl class="cck-admin-definition-list">
-						<?php foreach ( $data['preview_attributes'] as $key => $value ) : ?>
-							<div>
-								<dt><code><?php echo esc_html( $key ); ?></code></dt>
-								<dd><code><?php echo esc_html( $format_value( $value ) ); ?></code></dd>
-							</div>
-						<?php endforeach; ?>
-					</dl>
-				<?php endif; ?>
+				</div>
+				<p class="cck-admin-muted"><?php esc_html_e( 'Preview-only attributes are editable here. Production defaults remain unchanged in the runtime registry.', 'craft-commerce-kit' ); ?></p>
+				<form id="cck-component-preview-form" method="post" class="cck-component-preview-form">
+					<?php wp_nonce_field( 'cck_update_component_preview_' . $component_id ); ?>
+					<input type="hidden" name="component" value="<?php echo esc_attr( $component_id ); ?>">
+					<?php if ( empty( $schema ) ) : ?>
+						<div class="cck-admin-empty-state">
+							<div class="cck-admin-empty-state__title"><?php esc_html_e( 'No preview attributes.', 'craft-commerce-kit' ); ?></div>
+							<p><?php esc_html_e( 'This component is falling back to production defaults for preview rendering.', 'craft-commerce-kit' ); ?></p>
+						</div>
+					<?php else : ?>
+						<div class="cck-schema-editor-grid">
+							<?php foreach ( $schema as $key => $setting ) : ?>
+								<?php
+								$value = array_key_exists( $key, $data['preview_attributes'] ) ? $data['preview_attributes'][ $key ] : cck_get_schema_field_default( is_array( $setting ) ? $setting : array() );
+								$field_name = 'cck_component_preview[attributes][' . sanitize_key( $key ) . ']';
+								?>
+								<?php echo cck_render_schema_field_editor( $field_name, 'cck-component-preview-' . sanitize_key( $component_id ) . '-' . sanitize_key( $key ), is_array( $setting ) ? $setting : array(), $value ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+							<?php endforeach; ?>
+						</div>
+					<?php endif; ?>
+				</form>
 			</div>
 
 			<div class="cck-admin-card">

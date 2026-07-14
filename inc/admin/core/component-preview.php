@@ -154,6 +154,37 @@ if ( ! function_exists( 'cck_get_component_preview_experience_usage' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_get_component_preview_attributes' ) ) {
+	/**
+	 * Get preview-only demo attributes for a component.
+	 *
+	 * @param string $component_id Component ID.
+	 * @return array
+	 */
+	function cck_get_component_preview_attributes( $component_id ) {
+		$component_id = sanitize_key( $component_id );
+
+		if ( '' === $component_id ) {
+			return array();
+		}
+
+		$defaults = function_exists( 'cck_get_component_defaults' ) ? cck_get_component_defaults( $component_id ) : array();
+		$manifest = function_exists( 'cck_get_component_manifest' ) ? cck_get_component_manifest( $component_id ) : array();
+		$preview   = cck_manifest_get( $manifest, 'preview', array() );
+		$preview_attributes = array();
+
+		if ( is_array( $preview ) && isset( $preview['attributes'] ) && is_array( $preview['attributes'] ) ) {
+			$preview_attributes = $preview['attributes'];
+		}
+
+		if ( empty( $preview_attributes ) ) {
+			return $defaults;
+		}
+
+		return array_merge( $defaults, $preview_attributes );
+	}
+}
+
 if ( ! function_exists( 'cck_render_component_preview_markup' ) ) {
 	/**
 	 * Render a production component preview safely.
@@ -225,9 +256,10 @@ if ( ! function_exists( 'cck_get_component_preview_data' ) ) {
 	 * Build preview data for a component.
 	 *
 	 * @param string $component_id Component ID.
+	 * @param array|null $preview_attributes Preview-only attributes.
 	 * @return array
 	 */
-	function cck_get_component_preview_data( $component_id ) {
+	function cck_get_component_preview_data( $component_id, $preview_attributes = null ) {
 		$component_id = sanitize_key( $component_id );
 		$manifest     = function_exists( 'cck_get_component_manifest' ) ? cck_get_component_manifest( $component_id ) : array();
 		$is_valid     = is_array( $manifest ) && ! empty( $manifest['id'] ) && $component_id === sanitize_key( $manifest['id'] );
@@ -243,6 +275,7 @@ if ( ! function_exists( 'cck_get_component_preview_data' ) ) {
 				'callback_callable'  => false,
 				'supports'           => array(),
 				'defaults'           => array(),
+				'preview_attributes' => array(),
 				'schema'             => array(),
 				'shortcodes'         => cck_get_component_preview_shortcode_examples( $component_id ),
 				'experience_usage'   => array(),
@@ -255,10 +288,12 @@ if ( ! function_exists( 'cck_get_component_preview_data' ) ) {
 		}
 
 		$defaults = function_exists( 'cck_get_component_defaults' ) ? cck_get_component_defaults( $component_id ) : array();
-		$schema    = cck_manifest_get( $manifest, 'schema', array() );
-		$callback  = cck_manifest_get( $manifest, 'callback', '' );
-		$callback  = is_string( $callback ) ? $callback : '';
-		$preview   = cck_render_component_preview_markup( $component_id, $defaults );
+		$preview_values = null === $preview_attributes ? cck_get_component_preview_attributes( $component_id ) : $preview_attributes;
+		$preview_values = is_array( $preview_values ) ? $preview_values : $defaults;
+		$schema        = cck_manifest_get( $manifest, 'schema', array() );
+		$callback      = cck_manifest_get( $manifest, 'callback', '' );
+		$callback      = is_string( $callback ) ? $callback : '';
+		$preview       = cck_render_component_preview_markup( $component_id, $preview_values );
 
 		return array(
 			'component_id'      => $component_id,
@@ -272,6 +307,7 @@ if ( ! function_exists( 'cck_get_component_preview_data' ) ) {
 			'callback_callable' => is_callable( $callback ),
 			'supports'         => cck_manifest_get( $manifest, 'supports', array() ),
 			'defaults'         => is_array( $defaults ) ? $defaults : array(),
+			'preview_attributes' => is_array( $preview_values ) ? $preview_values : array(),
 			'schema'           => is_array( $schema ) ? $schema : array(),
 			'shortcodes'       => cck_get_component_preview_shortcode_examples( $component_id ),
 			'experience_usage' => cck_get_component_preview_experience_usage( $component_id ),

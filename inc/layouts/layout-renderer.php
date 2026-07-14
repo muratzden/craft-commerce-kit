@@ -23,8 +23,8 @@ if ( ! function_exists( 'cck_normalize_layout_component' ) ) {
 		}
 
 		if ( is_array( $component ) ) {
-			$component_id = sanitize_key( cck_array_get( $component, 'id', '' ) );
-			$atts         = cck_array_get( $component, 'atts', array() );
+			$component_id = sanitize_key( cck_array_get( $component, 'id', cck_array_get( $component, 'type', cck_array_get( $component, 'component', '' ) ) ) );
+			$atts         = cck_array_get( $component, 'atts', cck_array_get( $component, 'attributes', array() ) );
 
 			return array(
 				'id'   => $component_id,
