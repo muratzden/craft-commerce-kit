@@ -1596,13 +1596,9 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 
 		add_action( 'woocommerce_single_product_summary', 'cck_wc_render_single_product_summary', 1 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_features_section', 5 );
-		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_story_section', 10 );
-		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_reviews_section', 15 );
-		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_faq_section', 20 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_related_products_section', 22 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_upsells_section', 23 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_cross_sells_section', 24 );
-		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_cta_section', 25 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_service_strip', 26 );
 
 		add_filter( 'woocommerce_single_product_image_thumbnail_html', 'cck_wc_render_single_product_fallback_image_html', 10, 2 );
@@ -1778,6 +1774,18 @@ if ( ! function_exists( 'cck_wc_strip_duplicate_archive_blocks' ) ) {
 		}
 
 		$block_name = isset( $block['blockName'] ) ? trim( (string) $block['blockName'] ) : '';
+		if ( is_product() ) {
+			$product_strip_blocks = array(
+				'core/post-excerpt',
+				'woocommerce/add-to-cart-form',
+				'woocommerce/product-meta',
+			);
+
+			if ( in_array( $block_name, $product_strip_blocks, true ) ) {
+				return '';
+			}
+		}
+
 		if ( is_product() && 'woocommerce/product-image-gallery' === $block_name ) {
 			ob_start();
 			cck_wc_render_gallery_slots();
