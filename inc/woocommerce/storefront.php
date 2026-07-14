@@ -1719,7 +1719,7 @@ if ( ! function_exists( 'cck_wc_render_product_service_strip' ) ) {
 			return;
 		}
 
-		echo '<section class="cck-wc-section cck-wc-service-strip cck-trust"><div class="cck-container cck-wc-section__inner">';
+		echo '<section class="cck-wc-section cck-wc-service-strip cck-trust alignfull"><div class="cck-container cck-wc-section__inner">';
 		echo '<div class="cck-trust__grid">';
 
 		$items = array(
