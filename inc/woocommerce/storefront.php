@@ -785,7 +785,7 @@ if ( ! function_exists( 'cck_wc_render_gallery_badge' ) ) {
 
 if ( ! function_exists( 'cck_wc_render_gallery_slots' ) ) {
 	/**
-	 * Render gallery future slots.
+	 * Render gallery thumbnails and future media slots.
 	 *
 	 * @return void
 	 */
@@ -794,11 +794,75 @@ if ( ! function_exists( 'cck_wc_render_gallery_slots' ) ) {
 			return;
 		}
 
-		echo '<div class="cck-wc-gallery__slots" aria-label="' . esc_attr__( 'Gallery tools', 'craft-commerce-kit' ) . '">';
-		echo '<span class="cck-wc-gallery__slot">' . cck_render_svg_icon( 'eye' ) . '<span>' . esc_html__( 'Zoom', 'craft-commerce-kit' ) . '</span></span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '<span class="cck-wc-gallery__slot">' . cck_render_svg_icon( 'arrow-right' ) . '<span>' . esc_html__( 'Fullscreen', 'craft-commerce-kit' ) . '</span></span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '<span class="cck-wc-gallery__slot cck-wc-gallery__slot--muted">' . esc_html__( 'Video slot', 'craft-commerce-kit' ) . '</span>';
-		echo '<span class="cck-wc-gallery__slot cck-wc-gallery__slot--muted">' . esc_html__( '3D slot', 'craft-commerce-kit' ) . '</span>';
+		global $product;
+
+		if ( ! $product instanceof WC_Product ) {
+			return;
+		}
+
+		$asset_ids = array();
+		$primary_id = absint( $product->get_image_id() );
+
+		if ( $primary_id ) {
+			$asset_ids[] = $primary_id;
+		}
+
+		$gallery_ids = method_exists( $product, 'get_gallery_image_ids' ) ? (array) $product->get_gallery_image_ids() : array();
+		$asset_ids   = array_merge( $asset_ids, array_map( 'absint', $gallery_ids ) );
+		$asset_ids   = array_values( array_unique( array_filter( $asset_ids ) ) );
+
+		if ( empty( $asset_ids ) ) {
+			$asset = cck_wc_get_product_card_demo_image_asset( $product );
+
+			if ( empty( $asset['url'] ) ) {
+				return;
+			}
+
+			$asset_ids = array( 0 );
+		}
+
+		echo '<div class="cck-product-media__thumbs" aria-label="' . esc_attr__( 'Product gallery thumbnails', 'craft-commerce-kit' ) . '">';
+
+		foreach ( array_slice( $asset_ids, 0, 5 ) as $asset_id ) {
+			$thumb_html = '';
+
+			if ( $asset_id ) {
+				$attachment_path = get_attached_file( $asset_id );
+				$attachment_path = is_string( $attachment_path ) ? $attachment_path : '';
+
+				if ( '' !== $attachment_path && file_exists( $attachment_path ) ) {
+					$thumb_html = wp_get_attachment_image(
+						$asset_id,
+						'woocommerce_thumbnail',
+						false,
+						array(
+							'class'    => 'cck-product-media__thumb-image',
+							'loading'  => 'lazy',
+							'decoding' => 'async',
+						)
+					);
+				}
+			}
+
+			if ( '' === $thumb_html ) {
+				$asset = cck_wc_get_product_card_demo_image_asset( $product );
+
+				if ( ! empty( $asset['url'] ) ) {
+					$thumb_html = sprintf(
+						'<img src="%1$s" alt="%2$s" class="cck-product-media__thumb-image" loading="lazy" decoding="async" />',
+						esc_url( $asset['url'] ),
+						esc_attr( $product->get_name() )
+					);
+				}
+			}
+
+			if ( '' !== $thumb_html ) {
+				echo '<button type="button" class="cck-product-media__thumb" aria-label="' . esc_attr( $product->get_name() ) . '">';
+				echo wp_kses_post( $thumb_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '</button>';
+			}
+		}
+
 		echo '</div>';
 	}
 }
@@ -872,7 +936,7 @@ if ( ! function_exists( 'cck_wc_render_single_product_summary' ) ) {
 		}
 
 		echo '<section class="cck-wc-section cck-wc-summary"><div class="cck-container cck-wc-section__inner cck-wc-summary__inner">';
-		echo '<div class="cck-wc-summary__eyebrow">' . esc_html__( 'Product', 'craft-commerce-kit' ) . '</div>';
+		echo '<div class="cck-wc-summary__eyebrow cck-wc-summary__eyebrow--craft">' . esc_html__( 'EL YAPIMI ÜRETİM', 'craft-commerce-kit' ) . '</div>';
 		echo '<h1 class="cck-wc-summary__title">' . esc_html( $product->get_name() ) . '</h1>';
 
 		if ( $product->get_average_rating() ) {
@@ -884,6 +948,52 @@ if ( ! function_exists( 'cck_wc_render_single_product_summary' ) ) {
 		if ( '' !== $description ) {
 			echo '<p class="cck-wc-summary__description">' . esc_html( $description ) . '</p>';
 		}
+
+		echo '<p class="cck-wc-summary__microcopy">' . esc_html__( 'Sessiz lüks deri işçiliği', 'craft-commerce-kit' ) . '</p>';
+
+		echo '<div class="cck-product-options" aria-label="' . esc_attr__( 'Product purchase options', 'craft-commerce-kit' ) . '">';
+		echo '<div class="cck-product-option-group cck-product-leather-color">';
+		echo '<div class="cck-product-option-group__head"><span>' . esc_html__( 'Deri rengi', 'craft-commerce-kit' ) . '</span></div>';
+		echo '<div class="cck-product-swatch-list" role="list">';
+		$swatches = array(
+			array( 'label' => __( 'Koyu Kahve', 'craft-commerce-kit' ), 'tone' => 'brown', 'active' => true ),
+			array( 'label' => __( 'Camel', 'craft-commerce-kit' ), 'tone' => 'camel', 'active' => false ),
+			array( 'label' => __( 'Siyah', 'craft-commerce-kit' ), 'tone' => 'black', 'active' => false ),
+		);
+		foreach ( $swatches as $swatch ) {
+			echo '<button type="button" class="cck-product-swatch cck-product-swatch--' . esc_attr( $swatch['tone'] ) . ( ! empty( $swatch['active'] ) ? ' is-active' : '' ) . '" aria-pressed="' . esc_attr( ! empty( $swatch['active'] ) ? 'true' : 'false' ) . '">';
+			echo '<span class="cck-product-swatch__circle" aria-hidden="true"></span>';
+			echo '<span class="cck-product-swatch__label">' . esc_html( $swatch['label'] ) . '</span>';
+			echo '</button>';
+		}
+		echo '</div>';
+		echo '</div>';
+
+		echo '<div class="cck-product-option-group cck-product-personalization">';
+		echo '<div class="cck-product-option-group__head"><span>' . esc_html__( 'Kişiselleştirme', 'craft-commerce-kit' ) . '</span></div>';
+		echo '<div class="cck-product-option-row">';
+		echo '<span class="cck-product-option-row__label">' . esc_html__( 'Lazer baskı', 'craft-commerce-kit' ) . '</span>';
+		echo '<input type="text" class="cck-product-option-row__input" placeholder="' . esc_attr__( 'İsim veya kısa not', 'craft-commerce-kit' ) . '" maxlength="18" />';
+		echo '<span class="cck-product-option-row__helper">' . esc_html__( 'Maks. 18 karakter', 'craft-commerce-kit' ) . '</span>';
+		echo '</div>';
+		echo '</div>';
+
+		echo '<div class="cck-product-option-group cck-product-delivery">';
+		echo '<button type="button" class="cck-product-option-row cck-product-option-row--button">';
+		echo '<span class="cck-product-option-row__label">' . esc_html__( 'Tahmini teslimat', 'craft-commerce-kit' ) . '</span>';
+		echo '<span class="cck-product-option-row__chev" aria-hidden="true">' . cck_render_svg_icon( 'arrow-right' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '</button>';
+		echo '</div>';
+
+		echo '<div class="cck-product-option-group cck-product-gift">';
+		echo '<button type="button" class="cck-product-option-row cck-product-option-row--button">';
+		echo '<span class="cck-product-option-row__label">' . esc_html__( 'Hediye paketi & notu', 'craft-commerce-kit' ) . '</span>';
+		echo '<span class="cck-product-option-row__chev" aria-hidden="true">' . cck_render_svg_icon( 'arrow-right' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '</button>';
+		echo '</div>';
+
+		do_action( 'cck_product_purchase_options', $product );
+		echo '</div>';
 
 		if ( ! empty( $features ) ) {
 			echo '<div class="cck-wc-summary__features">';
@@ -899,10 +1009,12 @@ if ( ! function_exists( 'cck_wc_render_single_product_summary' ) ) {
 		echo '<button type="button" class="cck-button cck-button--ghost cck-wc-summary__slot" aria-label="' . esc_attr__( 'Quick view', 'craft-commerce-kit' ) . '">' . cck_render_svg_icon( 'eye' ) . '<span>' . esc_html__( 'Quick view', 'craft-commerce-kit' ) . '</span></button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</div>';
 
+		$categories = wp_strip_all_tags( wc_get_product_category_list( $product->get_id(), ', ' ) );
+
 		echo '<div class="cck-wc-summary__meta">';
 		echo '<div><strong>' . esc_html__( 'SKU', 'craft-commerce-kit' ) . '</strong><span>' . esc_html( $product->get_sku() ? $product->get_sku() : __( '—', 'craft-commerce-kit' ) ) . '</span></div>';
-		echo '<div><strong>' . esc_html__( 'Stock', 'craft-commerce-kit' ) . '</strong><span>' . esc_html( $product->is_in_stock() ? __( 'In stock', 'craft-commerce-kit' ) : __( 'Out of stock', 'craft-commerce-kit' ) ) . '</span></div>';
-		echo '<div><strong>' . esc_html__( 'Type', 'craft-commerce-kit' ) . '</strong><span>' . esc_html( wc_get_product_types() && isset( wc_get_product_types()[ $product->get_type() ] ) ? wc_get_product_types()[ $product->get_type() ] : ucfirst( $product->get_type() ) ) . '</span></div>';
+		echo '<div><strong>' . esc_html__( 'Stok Durumu', 'craft-commerce-kit' ) . '</strong><span>' . esc_html( $product->is_in_stock() ? __( 'Stokta var', 'craft-commerce-kit' ) : __( 'Stokta yok', 'craft-commerce-kit' ) ) . '</span></div>';
+		echo '<div><strong>' . esc_html__( 'Kategori', 'craft-commerce-kit' ) . '</strong><span>' . esc_html( '' !== $categories ? $categories : __( '—', 'craft-commerce-kit' ) ) . '</span></div>';
 		echo '</div>';
 
 		echo '</div></section>';
@@ -1482,6 +1594,7 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_upsells_section', 23 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_cross_sells_section', 24 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_cta_section', 25 );
+		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_service_strip', 26 );
 
 		add_filter( 'woocommerce_single_product_image_thumbnail_html', 'cck_wc_render_single_product_fallback_image_html', 10, 2 );
 		add_filter( 'woocommerce_cart_item_thumbnail', 'cck_wc_render_cart_item_thumbnail', 10, 3 );
@@ -1489,6 +1602,35 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_filter( 'render_block', 'cck_wc_strip_duplicate_archive_blocks', 10, 2 );
 		add_filter( 'the_content', 'cck_wc_wrap_storefront_content', 9 );
 		add_action( 'wp', 'cck_wc_remove_default_loop_hooks', 20 );
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_product_service_strip' ) ) {
+	/**
+	 * Render a premium service/trust strip.
+	 *
+	 * @return void
+	 */
+	function cck_wc_render_product_service_strip() {
+		if ( ! is_product() ) {
+			return;
+		}
+
+		echo '<section class="cck-wc-section cck-wc-service-strip cck-trust"><div class="cck-container cck-wc-section__inner">';
+		echo '<div class="cck-trust__grid">';
+
+		$items = array(
+			array( 'icon' => 'shield', 'title' => __( 'Ücretsiz Kargo', 'craft-commerce-kit' ), 'text' => __( '1.000 TL ve üzeri siparişlerde ücretsiz teslimat.', 'craft-commerce-kit' ) ),
+			array( 'icon' => 'leaf', 'title' => __( 'Kolay İade', 'craft-commerce-kit' ), 'text' => __( '14 gün içinde kolay iade ve değişim.', 'craft-commerce-kit' ) ),
+			array( 'icon' => 'star', 'title' => __( 'Güvenli Ödeme', 'craft-commerce-kit' ), 'text' => __( 'Tüm ödemeleriniz SSL koruması altında.', 'craft-commerce-kit' ) ),
+			array( 'icon' => 'bag', 'title' => __( '2 Yıl Garanti', 'craft-commerce-kit' ), 'text' => __( 'Tüm ürünlerde iki yıl garanti desteği.', 'craft-commerce-kit' ) ),
+		);
+
+		foreach ( $items as $item ) {
+			echo '<article class="cck-trust__item"><span class="cck-trust__icon">' . cck_render_svg_icon( $item['icon'] ) . '</span><h3>' . esc_html( $item['title'] ) . '</h3><p>' . esc_html( $item['text'] ) . '</p></article>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+
+		echo '</div></div></section>';
 	}
 }
 
@@ -1627,6 +1769,16 @@ if ( ! function_exists( 'cck_wc_strip_duplicate_archive_blocks' ) ) {
 		}
 
 		$block_name = isset( $block['blockName'] ) ? trim( (string) $block['blockName'] ) : '';
+		if ( is_product() && 'woocommerce/product-image-gallery' === $block_name ) {
+			ob_start();
+			cck_wc_render_gallery_slots();
+			$thumbs = trim( (string) ob_get_clean() );
+
+			if ( '' !== $thumbs ) {
+				return $block_content . $thumbs;
+			}
+		}
+
 		$strip_blocks = array(
 			'core/post-title',
 			'woocommerce/product-image',
@@ -1658,6 +1810,10 @@ if ( ! function_exists( 'cck_wc_body_classes' ) ) {
 		$classes[] = 'cck-woo-active';
 		$classes[] = 'cck-woo-layout-' . cck_wc_get_shop_layout();
 		$classes[] = 'cck-woo-columns-' . cck_wc_get_shop_columns();
+
+		if ( is_product() ) {
+			$classes[] = 'cck-product-page';
+		}
 
 		return array_unique( $classes );
 	}
