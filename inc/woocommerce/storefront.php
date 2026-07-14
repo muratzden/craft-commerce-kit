@@ -119,19 +119,47 @@ if ( ! function_exists( 'cck_wc_get_product_card_demo_image_asset' ) ) {
 	/**
 	 * Resolve a bundled demo image asset for a product card.
 	 *
-	 * @param WC_Product $product Product object.
+	 * @param mixed $product Product object, array, ID, slug, or seed.
 	 * @return array{file:string,path:string,url:string}|array
 	 */
 	function cck_wc_get_product_card_demo_image_asset( $product ) {
-		$product = cck_wc_get_product_object( $product );
-
-		if ( ! $product || ! defined( 'CCK_PLUGIN_DIR' ) || ! defined( 'CCK_PLUGIN_URL' ) ) {
+		if ( ! defined( 'CCK_PLUGIN_DIR' ) || ! defined( 'CCK_PLUGIN_URL' ) ) {
 			return array();
 		}
 
 		$slug_map = cck_wc_get_product_card_demo_image_map();
-		$slug     = sanitize_key( $product->get_slug() );
-		$file     = isset( $slug_map[ $slug ] ) ? sanitize_file_name( $slug_map[ $slug ] ) : '';
+		$seed     = '';
+		$product_id = 0;
+
+		if ( $product instanceof WC_Product ) {
+			$product_id = absint( $product->get_id() );
+			$seed       = sanitize_key( $product->get_slug() );
+		} elseif ( is_array( $product ) ) {
+			$product_id = absint( cck_array_get( $product, 'id', 0 ) );
+			$seed       = sanitize_key( cck_array_get( $product, 'slug', cck_array_get( $product, 'title', '' ) ) );
+		} elseif ( is_numeric( $product ) ) {
+			$product_id = absint( $product );
+			$seed       = (string) $product_id;
+		} elseif ( is_string( $product ) ) {
+			$seed = sanitize_key( $product );
+		}
+
+		$file = '';
+
+		if ( '' !== $seed && isset( $slug_map[ $seed ] ) ) {
+			$file = sanitize_file_name( $slug_map[ $seed ] );
+		}
+
+		if ( '' === $file ) {
+			$image_files = array_values( array_unique( array_filter( array_map( 'sanitize_file_name', array_values( $slug_map ) ) ) ) );
+
+			if ( empty( $image_files ) ) {
+				return array();
+			}
+
+			$hash = $product_id > 0 ? $product_id : absint( sprintf( '%u', crc32( $seed ) ) );
+			$file = $image_files[ $hash % count( $image_files ) ];
+		}
 
 		if ( '' === $file ) {
 			return array();
@@ -182,6 +210,74 @@ if ( ! function_exists( 'cck_wc_get_product_badges' ) ) {
 		}
 
 		return array_slice( array_unique( $badges ), 0, 2 );
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_product_card_from_definition' ) ) {
+	/**
+	 * Render a product card from a normalized definition array.
+	 *
+	 * @param array $card Product card definition.
+	 * @return string
+	 */
+	function cck_wc_render_product_card_from_definition( array $card ) {
+		if ( empty( $card['id'] ) ) {
+			return '';
+		}
+
+		$context = isset( $card['context'] ) ? sanitize_key( $card['context'] ) : 'archive';
+
+		ob_start();
+		?>
+		<article class="cck-product-card cck-product-card--wc cck-product-card--<?php echo esc_attr( $context ); ?>">
+			<div class="cck-product-card__media">
+				<?php if ( ! empty( $card['badge_html'] ) ) : ?>
+					<div class="cck-product-card__badges">
+						<?php echo wp_kses_post( $card['badge_html'] ); ?>
+					</div>
+				<?php endif; ?>
+
+				<a class="cck-product-card__image-link" href="<?php echo esc_url( cck_array_get( $card, 'url', '#' ) ); ?>">
+					<div class="cck-product-card__image">
+						<?php echo wp_kses_post( cck_array_get( $card, 'image_html', '' ) ); ?>
+					</div>
+				</a>
+			</div>
+
+			<div class="cck-product-card__content">
+				<h3 class="cck-product-card__title">
+					<a href="<?php echo esc_url( cck_array_get( $card, 'url', '#' ) ); ?>"><?php echo esc_html( cck_array_get( $card, 'title', '' ) ); ?></a>
+				</h3>
+
+				<?php if ( ! empty( $card['short_description'] ) ) : ?>
+					<p class="cck-product-card__description"><?php echo esc_html( $card['short_description'] ); ?></p>
+				<?php endif; ?>
+
+				<?php if ( ! empty( $card['rating_html'] ) || ! empty( $card['price_html'] ) ) : ?>
+					<div class="cck-product-card__meta">
+						<?php if ( ! empty( $card['rating_html'] ) ) : ?>
+							<div class="cck-product-card__rating"><?php echo wp_kses_post( cck_array_get( $card, 'rating_html', '' ) ); ?></div>
+						<?php endif; ?>
+
+						<?php if ( ! empty( $card['price_html'] ) ) : ?>
+							<div class="cck-product-card__price"><?php echo wp_kses_post( cck_array_get( $card, 'price_html', '' ) ); ?></div>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
+
+				<div class="cck-product-card__slots" aria-label="<?php esc_attr_e( 'Product actions', 'craft-commerce-kit' ); ?>">
+					<?php echo cck_wc_kses_product_card_action_html( cck_array_get( $card, 'wishlist_html', '' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php echo cck_wc_kses_product_card_action_html( cck_array_get( $card, 'quick_view_html', '' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</div>
+
+				<div class="cck-product-card__actions">
+					<?php echo cck_wc_kses_product_card_action_html( cck_array_get( $card, 'add_to_cart_html', '' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</div>
+			</div>
+		</article>
+		<?php
+
+		return trim( ob_get_clean() );
 	}
 }
 
@@ -411,20 +507,7 @@ if ( ! function_exists( 'cck_wc_get_product_card_definition' ) ) {
 		$image_html = '';
 		$image_url = '';
 
-		$demo_asset = cck_wc_get_product_card_demo_image_asset( $product );
-
-		if ( ! empty( $demo_asset ) ) {
-			$asset_size = @getimagesize( $demo_asset['path'] );
-
-			$image_html = sprintf(
-				'<img src="%1$s" alt="%2$s" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image" loading="lazy" decoding="async"%3$s%4$s />',
-				esc_url( $demo_asset['url'] ),
-				esc_attr( $product->get_name() ),
-				is_array( $asset_size ) && ! empty( $asset_size[0] ) ? ' width="' . absint( $asset_size[0] ) . '"' : '',
-				is_array( $asset_size ) && ! empty( $asset_size[1] ) ? ' height="' . absint( $asset_size[1] ) . '"' : ''
-			);
-			$image_url  = $demo_asset['url'];
-		} elseif ( $image_id ) {
+		if ( $image_id ) {
 			$attachment_path = get_attached_file( $image_id );
 			$attachment_path = is_string( $attachment_path ) ? $attachment_path : '';
 
@@ -439,31 +522,23 @@ if ( ! function_exists( 'cck_wc_get_product_card_definition' ) ) {
 					)
 				);
 				$image_url  = wp_get_attachment_image_url( $image_id, 'woocommerce_thumbnail' );
-			} else {
-				$demo_asset = sanitize_file_name( (string) get_post_meta( $image_id, '_cck_demo_asset', true ) );
+			}
+		}
 
-				if ( '' !== $demo_asset && defined( 'CCK_PLUGIN_DIR' ) && defined( 'CCK_PLUGIN_URL' ) ) {
-					$asset_path = trailingslashit( CCK_PLUGIN_DIR ) . 'assets/demo/catalog/' . $demo_asset;
-					$asset_url  = trailingslashit( CCK_PLUGIN_URL ) . 'assets/demo/catalog/' . rawurlencode( $demo_asset );
-					$asset_size = array( 0, 0 );
+		if ( '' === $image_html ) {
+			$demo_asset = cck_wc_get_product_card_demo_image_asset( $product );
 
-					if ( file_exists( $asset_path ) ) {
-						$detected = @getimagesize( $asset_path );
+			if ( ! empty( $demo_asset ) ) {
+				$asset_size = @getimagesize( $demo_asset['path'] );
 
-						if ( is_array( $detected ) && ! empty( $detected[0] ) && ! empty( $detected[1] ) ) {
-							$asset_size = array( absint( $detected[0] ), absint( $detected[1] ) );
-						}
-
-						$image_html = sprintf(
-							'<img src="%1$s" alt="%2$s" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image" loading="lazy" decoding="async"%3$s%4$s />',
-							esc_url( $asset_url ),
-							esc_attr( $product->get_name() ),
-							! empty( $asset_size[0] ) ? ' width="' . absint( $asset_size[0] ) . '"' : '',
-							! empty( $asset_size[1] ) ? ' height="' . absint( $asset_size[1] ) . '"' : ''
-						);
-						$image_url  = $asset_url;
-					}
-				}
+				$image_html = sprintf(
+					'<img src="%1$s" alt="%2$s" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image" loading="lazy" decoding="async"%3$s%4$s />',
+					esc_url( $demo_asset['url'] ),
+					esc_attr( $product->get_name() ),
+					is_array( $asset_size ) && ! empty( $asset_size[0] ) ? ' width="' . absint( $asset_size[0] ) . '"' : '',
+					is_array( $asset_size ) && ! empty( $asset_size[1] ) ? ' height="' . absint( $asset_size[1] ) . '"' : ''
+				);
+				$image_url = $demo_asset['url'];
 			}
 		}
 
