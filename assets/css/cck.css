@@ -1133,12 +1133,6 @@ body.cck-woo-active .wc-block-catalog-sorting select {
 	box-sizing: border-box;
 }
 
-body.cck-woo-active footer.wp-block-template-part,
-body.cck-woo-active .site-footer,
-body.cck-woo-active #colophon {
-	display: none !important;
-}
-
 .cck-wc-shell,
 .cck-wc-section {
 	padding: var(--cck-space-2xl) 0;
