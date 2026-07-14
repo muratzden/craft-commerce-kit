@@ -73,6 +73,8 @@ if ( ! function_exists( 'cck_render_layouts_page' ) ) {
 					<button type="submit" class="button button-primary"><?php esc_html_e( 'Save Layout', 'craft-commerce-kit' ); ?></button>
 				</div>
 
+				<p class="cck-admin-muted"><?php esc_html_e( 'Reordering, adding, removing, and changing component types save automatically. Use Save Layout after editing component fields.', 'craft-commerce-kit' ); ?></p>
+
 				<template id="cck-layout-row-template">
 					<?php echo cck_render_manual_layout_component_row( '__INDEX__', array() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</template>
@@ -83,7 +85,7 @@ if ( ! function_exists( 'cck_render_layouts_page' ) ) {
 			<div class="cck-admin-card__heading">
 				<h2><?php esc_html_e( 'Manual Preview', 'craft-commerce-kit' ); ?></h2>
 				<div class="cck-admin-template-actions">
-					<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=craft-commerce-kit-component-preview&component=hero' ) ); ?>"><?php esc_html_e( 'Open Hero Preview', 'craft-commerce-kit' ); ?></a>
+					<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=craft-commerce-kit-component-preview&component=hero' ) ); ?>"><?php esc_html_e( 'Open Component Preview', 'craft-commerce-kit' ); ?></a>
 				</div>
 			</div>
 			<p class="cck-admin-muted"><?php esc_html_e( 'This canvas uses the production layout renderer and the registered component callbacks.', 'craft-commerce-kit' ); ?></p>

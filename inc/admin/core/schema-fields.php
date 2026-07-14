@@ -249,7 +249,7 @@ if ( ! function_exists( 'cck_render_manual_layout_component_row' ) ) {
 
 		ob_start();
 		?>
-		<article class="cck-layout-row" data-layout-row data-layout-row-index="<?php echo esc_attr( $row_index ); ?>">
+		<article class="cck-layout-row" data-layout-row data-layout-row-index="<?php echo esc_attr( $row_index ); ?>" data-layout-row-current-type="<?php echo esc_attr( $current_type ); ?>">
 			<header class="cck-layout-row__head">
 				<div class="cck-layout-row__head-main">
 					<span class="cck-admin-badge"><?php echo esc_html( $current_name ); ?></span>
@@ -266,7 +266,7 @@ if ( ! function_exists( 'cck_render_manual_layout_component_row' ) ) {
 				</div>
 			</header>
 			<?php if ( '' !== $current_callback ) : ?>
-				<p class="description"><code><?php echo esc_html( $current_callback ); ?></code></p>
+				<p class="description cck-layout-row__callback"><code><?php echo esc_html( $current_callback ); ?></code></p>
 			<?php endif; ?>
 
 			<div class="cck-layout-row__fields">
