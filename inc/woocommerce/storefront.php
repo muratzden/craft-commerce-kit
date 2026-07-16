@@ -1660,11 +1660,93 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_filter( 'woocommerce_single_product_image_thumbnail_html', 'cck_wc_render_single_product_fallback_image_html', 10, 2 );
 		add_filter( 'woocommerce_cart_item_thumbnail', 'cck_wc_render_cart_item_thumbnail', 10, 3 );
 		add_filter( 'woocommerce_widget_cart_item_image', 'cck_wc_render_widget_cart_item_image', 10, 2 );
+		add_filter( 'pre_render_block', 'cck_wc_pre_render_mini_cart_block', 10, 2 );
 		add_filter( 'render_block', 'cck_wc_strip_duplicate_archive_blocks', 10, 2 );
+		add_filter( 'render_block', 'cck_wc_render_mini_cart_block_fallback', 10, 2 );
 		add_filter( 'the_content', 'cck_wc_strip_single_product_extra_sections', 20 );
 		add_filter( 'the_content', 'cck_wc_wrap_storefront_content', 9 );
 		add_action( 'template_redirect', 'cck_wc_start_single_product_output_buffer', 0 );
 		add_action( 'wp', 'cck_wc_remove_default_loop_hooks', 20 );
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_lightweight_cart_link' ) ) {
+	/**
+	 * Render a lightweight cart link for non-cart storefront pages.
+	 *
+	 * @return string
+	 */
+	function cck_wc_render_lightweight_cart_link() {
+		$cart_url = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' );
+		$label    = __( 'Cart', 'craft-commerce-kit' );
+		$icon     = function_exists( 'cck_render_layout_action_icon' ) ? cck_render_layout_action_icon( 'bag' ) : '';
+
+		ob_start();
+		?>
+		<a class="cck-header-action cck-header-action--cart cck-header-action--cart-link" href="<?php echo esc_url( $cart_url ); ?>" aria-label="<?php echo esc_attr( $label ); ?>">
+			<span class="cck-header-action__icon" aria-hidden="true"><?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+			<span class="screen-reader-text"><?php echo esc_html( $label ); ?></span>
+		</a>
+		<?php
+
+		return trim( ob_get_clean() );
+	}
+}
+
+if ( ! function_exists( 'cck_wc_should_replace_mini_cart_block' ) ) {
+	/**
+	 * Check whether the Woo mini cart block should be replaced with a lightweight cart link.
+	 *
+	 * @return bool
+	 */
+	function cck_wc_should_replace_mini_cart_block() {
+		if ( ! function_exists( 'is_cart' ) || ! function_exists( 'is_checkout' ) ) {
+			return false;
+		}
+
+		return ! is_cart() && ! is_checkout();
+	}
+}
+
+if ( ! function_exists( 'cck_wc_pre_render_mini_cart_block' ) ) {
+	/**
+	 * Short-circuit the Woo mini cart block before it hydrates on non-cart pages.
+	 *
+	 * @param string|null $pre_render Pre-rendered block content.
+	 * @param array       $parsed_block Parsed block data.
+	 * @return string|null
+	 */
+	function cck_wc_pre_render_mini_cart_block( $pre_render, $parsed_block ) {
+		if ( null !== $pre_render ) {
+			return $pre_render;
+		}
+
+		$block_name = isset( $parsed_block['blockName'] ) ? trim( (string) $parsed_block['blockName'] ) : '';
+
+		if ( 'woocommerce/mini-cart' !== $block_name || ! cck_wc_should_replace_mini_cart_block() ) {
+			return null;
+		}
+
+		return cck_wc_render_lightweight_cart_link();
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_mini_cart_block_fallback' ) ) {
+	/**
+	 * Replace any remaining rendered Woo mini cart block output on non-cart pages.
+	 *
+	 * @param string $block_content Rendered block content.
+	 * @param array  $block Parsed block data.
+	 * @return string
+	 */
+	function cck_wc_render_mini_cart_block_fallback( $block_content, $block ) {
+		$block_name = isset( $block['blockName'] ) ? trim( (string) $block['blockName'] ) : '';
+
+		if ( 'woocommerce/mini-cart' !== $block_name || ! cck_wc_should_replace_mini_cart_block() ) {
+			return $block_content;
+		}
+
+		return cck_wc_render_lightweight_cart_link();
 	}
 }
 
