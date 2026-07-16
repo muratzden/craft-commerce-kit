@@ -1662,7 +1662,6 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_filter( 'woocommerce_widget_cart_item_image', 'cck_wc_render_widget_cart_item_image', 10, 2 );
 		add_filter( 'pre_render_block', 'cck_wc_pre_render_mini_cart_block', 10, 2 );
 		add_filter( 'render_block', 'cck_wc_strip_duplicate_archive_blocks', 10, 2 );
-		add_filter( 'render_block', 'cck_wc_render_mini_cart_block_fallback', 10, 2 );
 		add_filter( 'the_content', 'cck_wc_strip_single_product_extra_sections', 20 );
 		add_filter( 'the_content', 'cck_wc_wrap_storefront_content', 9 );
 		add_action( 'template_redirect', 'cck_wc_start_single_product_output_buffer', 0 );
@@ -1729,25 +1728,6 @@ if ( ! function_exists( 'cck_wc_pre_render_mini_cart_block' ) ) {
 
 		if ( 'woocommerce/mini-cart' !== $block_name || ! cck_wc_should_replace_mini_cart_block() ) {
 			return null;
-		}
-
-		return cck_wc_render_lightweight_cart_link();
-	}
-}
-
-if ( ! function_exists( 'cck_wc_render_mini_cart_block_fallback' ) ) {
-	/**
-	 * Replace any remaining rendered Woo mini cart block output on non-cart pages.
-	 *
-	 * @param string $block_content Rendered block content.
-	 * @param array  $block Parsed block data.
-	 * @return string
-	 */
-	function cck_wc_render_mini_cart_block_fallback( $block_content, $block ) {
-		$block_name = isset( $block['blockName'] ) ? trim( (string) $block['blockName'] ) : '';
-
-		if ( 'woocommerce/mini-cart' !== $block_name || ! cck_wc_should_replace_mini_cart_block() ) {
-			return $block_content;
 		}
 
 		return cck_wc_render_lightweight_cart_link();
