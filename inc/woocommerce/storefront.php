@@ -1704,6 +1704,10 @@ if ( ! function_exists( 'cck_wc_should_replace_mini_cart_block' ) ) {
 			return false;
 		}
 
+		if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+			return false;
+		}
+
 		return ! is_cart() && ! is_checkout();
 	}
 }
