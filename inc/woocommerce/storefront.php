@@ -961,49 +961,9 @@ if ( ! function_exists( 'cck_wc_render_single_product_summary' ) ) {
 
 		echo '<p class="cck-wc-summary__microcopy">' . esc_html__( 'Sessiz lüks deri işçiliği', 'craft-commerce-kit' ) . '</p>';
 
-		echo '<div class="cck-product-options" aria-label="' . esc_attr__( 'Product purchase options', 'craft-commerce-kit' ) . '">';
-		echo '<div class="cck-product-option-group cck-product-leather-color">';
-		echo '<div class="cck-product-option-group__head"><span>' . esc_html__( 'Deri rengi', 'craft-commerce-kit' ) . '</span></div>';
-		echo '<div class="cck-product-swatch-list" role="list">';
-		$swatches = array(
-			array( 'label' => __( 'Koyu Kahve', 'craft-commerce-kit' ), 'tone' => 'brown', 'active' => true ),
-			array( 'label' => __( 'Camel', 'craft-commerce-kit' ), 'tone' => 'camel', 'active' => false ),
-			array( 'label' => __( 'Siyah', 'craft-commerce-kit' ), 'tone' => 'black', 'active' => false ),
-		);
-		foreach ( $swatches as $swatch ) {
-			echo '<button type="button" class="cck-product-swatch cck-product-swatch--' . esc_attr( $swatch['tone'] ) . ( ! empty( $swatch['active'] ) ? ' is-active' : '' ) . '" aria-pressed="' . esc_attr( ! empty( $swatch['active'] ) ? 'true' : 'false' ) . '">';
-			echo '<span class="cck-product-swatch__circle" aria-hidden="true"></span>';
-			echo '<span class="cck-product-swatch__label">' . esc_html( $swatch['label'] ) . '</span>';
-			echo '</button>';
-		}
-		echo '</div>';
-		echo '</div>';
-
-		echo '<div class="cck-product-option-group cck-product-personalization">';
-		echo '<div class="cck-product-option-group__head"><span>' . esc_html__( 'Kişiselleştirme', 'craft-commerce-kit' ) . '</span></div>';
-		echo '<div class="cck-product-option-row">';
-		echo '<span class="cck-product-option-row__label">' . esc_html__( 'Lazer baskı', 'craft-commerce-kit' ) . '</span>';
-		echo '<input type="text" class="cck-product-option-row__input" placeholder="' . esc_attr__( 'İsim veya kısa not', 'craft-commerce-kit' ) . '" maxlength="18" />';
-		echo '<span class="cck-product-option-row__helper">' . esc_html__( 'Maks. 18 karakter', 'craft-commerce-kit' ) . '</span>';
-		echo '</div>';
-		echo '</div>';
-
-		echo '<div class="cck-product-option-group cck-product-delivery">';
-		echo '<button type="button" class="cck-product-option-row cck-product-option-row--button">';
-		echo '<span class="cck-product-option-row__label">' . esc_html__( 'Tahmini teslimat', 'craft-commerce-kit' ) . '</span>';
-		echo '<span class="cck-product-option-row__chev" aria-hidden="true">' . cck_render_svg_icon( 'arrow-right' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '</button>';
-		echo '</div>';
-
-		echo '<div class="cck-product-option-group cck-product-gift">';
-		echo '<button type="button" class="cck-product-option-row cck-product-option-row--button">';
-		echo '<span class="cck-product-option-row__label">' . esc_html__( 'Hediye paketi & notu', 'craft-commerce-kit' ) . '</span>';
-		echo '<span class="cck-product-option-row__chev" aria-hidden="true">' . cck_render_svg_icon( 'arrow-right' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '</button>';
-		echo '</div>';
-
-		do_action( 'cck_product_purchase_options', $product );
-		echo '</div>';
+			echo '<div class="cck-product-options" aria-label="' . esc_attr__( 'Product purchase options', 'craft-commerce-kit' ) . '">';
+			do_action( 'cck_product_purchase_options', $product );
+			echo '</div>';
 
 		if ( ! empty( $features ) ) {
 			echo '<div class="cck-wc-summary__features">';
