@@ -33,7 +33,7 @@ if ( ! function_exists( 'cck_component_footer' ) ) {
 					<div class="cck-footer__brand">
 						<a class="cck-footer__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 							<span class="cck-footer__logo-mark" aria-hidden="true">CCK</span>
-							<span class="cck-footer__logo-text"><?php esc_html_e( 'Craft Commerce Kit', 'craft-commerce-kit' ); ?></span>
+							<span class="cck-footer__logo-text"><?php echo esc_html( function_exists( 'cck_get_active_brand_preset' ) ? cck_array_get( cck_get_active_brand_preset(), 'brand_name', __( 'Craft Commerce Kit', 'craft-commerce-kit' ) ) : __( 'Craft Commerce Kit', 'craft-commerce-kit' ) ); ?></span>
 						</a>
 						<p class="cck-footer__about"><?php echo esc_html( $args['about'] ); ?></p>
 					</div>

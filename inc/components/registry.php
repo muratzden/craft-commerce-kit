@@ -44,7 +44,11 @@ if ( ! function_exists( 'cck_get_component_manifest_files' ) ) {
 	 */
 	function cck_get_component_manifest_files() {
 		$packages = array(
+			'brand-preset',
+			'header',
+			'header-actions',
 			'footer',
+			'layout-assets',
 			'collection-grid',
 			'cta',
 			'hero',

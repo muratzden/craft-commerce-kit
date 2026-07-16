@@ -12,6 +12,7 @@ require_once CCK_PLUGIN_DIR . 'inc/components/manifest-validator.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/registry.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/renderer.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/settings-renderer.php';
+require_once CCK_PLUGIN_DIR . 'inc/components/layout-shell.php';
 
 require_once CCK_PLUGIN_DIR . 'inc/components/hero.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/section-title.php';
