@@ -2302,6 +2302,62 @@ body.cck-woo-active.single-product .wp-site-blocks > .wp-block-group.woocommerce
 	gap: var(--cck-space-lg);
 }
 
+.cck-wc-checkout,
+.cck-wc-checkout .cck-wc-shell__inner,
+.cck-wc-checkout .cck-wc-shell__content,
+.cck-wc-checkout form.checkout,
+.cck-wc-checkout .woocommerce-checkout,
+.cck-wc-checkout .woocommerce-checkout-review-order,
+.cck-wc-checkout .woocommerce-checkout-payment {
+	min-width: 0;
+	max-width: 100%;
+}
+
+.cck-wc-checkout .woocommerce-checkout-review-order,
+.cck-wc-checkout .woocommerce-checkout-payment {
+	box-sizing: border-box;
+}
+
+.cck-wc-checkout .woocommerce-checkout-review-order-table,
+.cck-wc-checkout .shop_table {
+	table-layout: fixed;
+	width: 100%;
+}
+
+.cck-wc-checkout .woocommerce-checkout-review-order-table th,
+.cck-wc-checkout .woocommerce-checkout-review-order-table td,
+.cck-wc-checkout .shop_table th,
+.cck-wc-checkout .shop_table td {
+	min-width: 0;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+	hyphens: auto;
+	vertical-align: top;
+}
+
+.cck-wc-checkout .woocommerce-checkout-review-order-table .product-name,
+.cck-wc-checkout .woocommerce-checkout-review-order-table .product-total,
+.cck-wc-checkout .shop_table .product-name,
+.cck-wc-checkout .shop_table .product-total,
+.cck-wc-checkout .wc-item-meta,
+.cck-wc-checkout .wc-item-meta li,
+.cck-wc-checkout .wc-item-meta p {
+	overflow-wrap: anywhere;
+	word-break: break-word;
+	hyphens: auto;
+}
+
+.cck-wc-checkout .woocommerce-checkout-review-order-table .product-name,
+.cck-wc-checkout .shop_table .product-name {
+	width: 68%;
+}
+
+.cck-wc-checkout .woocommerce-checkout-review-order-table .product-total,
+.cck-wc-checkout .shop_table .product-total {
+	text-align: right;
+	width: 32%;
+}
+
 .cck-wc-cart .cart_totals,
 .cck-wc-checkout .woocommerce-checkout-review-order,
 .cck-wc-account .woocommerce-MyAccount-navigation,
@@ -2362,6 +2418,10 @@ body.cck-woo-active.single-product .wp-site-blocks > .wp-block-group.woocommerce
 	.cck-wc-specs {
 		grid-template-columns: 1fr;
 	}
+
+	.cck-wc-checkout form.checkout {
+		grid-template-columns: 1fr;
+	}
 }
 
 @media (max-width: 560px) {
@@ -2395,5 +2455,12 @@ body.cck-woo-active.single-product .wp-site-blocks > .wp-block-group.woocommerce
 
 	.cck-trust__grid {
 		grid-template-columns: 1fr;
+	}
+
+	.cck-wc-checkout .woocommerce-checkout-review-order-table .product-name,
+	.cck-wc-checkout .shop_table .product-name,
+	.cck-wc-checkout .woocommerce-checkout-review-order-table .product-total,
+	.cck-wc-checkout .shop_table .product-total {
+		width: auto;
 	}
 }
