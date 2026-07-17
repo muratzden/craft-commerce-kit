@@ -1920,6 +1920,10 @@ if ( ! function_exists( 'cck_wc_strip_duplicate_archive_blocks' ) ) {
 				return $block_content . $thumbs;
 			}
 		}
+		
+		if ( is_product() ) {
+			return $block_content;
+		}
 
 		$strip_blocks = array(
 			'core/post-title',
