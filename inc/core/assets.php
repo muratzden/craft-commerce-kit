@@ -100,13 +100,15 @@ if ( ! function_exists( 'cck_enqueue_frontend_assets' ) ) {
 			file_exists( $css_path ) ? filemtime( $css_path ) : CCK_VERSION
 		);
 
-		wp_enqueue_script(
-			'craft-commerce-kit',
-			CCK_PLUGIN_URL . 'assets/js/cck.js',
-			array(),
-			file_exists( $js_path ) ? filemtime( $js_path ) : CCK_VERSION,
-			true
-		);
+		if ( apply_filters( 'cck_enqueue_frontend_script', true ) ) {
+			wp_enqueue_script(
+				'craft-commerce-kit',
+				CCK_PLUGIN_URL . 'assets/js/cck.js',
+				array(),
+				file_exists( $js_path ) ? filemtime( $js_path ) : CCK_VERSION,
+				true
+			);
+		}
 	}
 }
 
