@@ -1,3 +1,8 @@
+body.cck-layout-active header.wp-block-template-part,
+body.cck-layout-active footer.wp-block-template-part {
+	display: none !important;
+}
+
 .cck-site-header,
 .cck-footer {
 	box-sizing: border-box;
@@ -57,7 +62,8 @@
 }
 
 .cck-site-header__nav-link:hover,
-.cck-header-action:hover {
+.cck-header-action:hover,
+.cck-cart-action:hover {
 	color: var(--cck-colors-accent, #9a5a2e);
 }
 
@@ -68,7 +74,8 @@
 	justify-content: flex-end;
 }
 
-.cck-header-action {
+.cck-header-action,
+.cck-cart-action {
 	align-items: center;
 	color: inherit;
 	display: inline-flex;
@@ -80,18 +87,28 @@
 }
 
 .cck-header-action__icon,
-.cck-header-action svg {
+.cck-header-action svg,
+.cck-cart-action svg {
 	display: inline-flex;
 	height: 22px;
 	width: 22px;
 }
 
-.cck-header-action svg {
+.cck-header-action svg,
+.cck-cart-action svg {
 	fill: none;
 	stroke: currentColor;
 	stroke-linecap: round;
 	stroke-linejoin: round;
 	stroke-width: 1.8;
+}
+
+.cck-header-action svg path,
+.cck-header-action svg circle, 
+.cck-cart-action svg path,
+.cck-cart-action svg circle {
+	fill: none;
+	stroke: currentColor;
 }
 
 .cck-header-action__count {

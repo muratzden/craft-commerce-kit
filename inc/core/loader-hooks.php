@@ -35,6 +35,10 @@ if ( is_admin() && function_exists( 'cck_enqueue_admin_assets' ) ) {
 	add_action( 'admin_enqueue_scripts', 'cck_enqueue_admin_assets' );
 }
 
+if ( function_exists( 'cck_layout_body_classes' ) ) {
+	add_filter( 'body_class', 'cck_layout_body_classes' );
+}
+
 if ( function_exists( 'cck_render_global_header' ) ) {
 	add_action( 'wp_body_open', 'cck_render_global_header', 20 );
 }

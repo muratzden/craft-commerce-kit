@@ -276,7 +276,7 @@ if ( ! function_exists( 'cck_component_header_actions' ) ) {
 				<span class="screen-reader-text"><?php echo esc_html( $labels['wishlist'] ); ?></span>
 			</a>
 
-			<a class="cck-header-action cck-header-action--cart" href="<?php echo esc_url( $urls['cart'] ); ?>" aria-label="<?php echo esc_attr( $labels['cart'] ); ?>">
+			<a class="cck-cart-action cck-header-action--cart" href="<?php echo esc_url( $urls['cart'] ); ?>" aria-label="<?php echo esc_attr( $labels['cart'] ); ?>">
 				<span class="cck-header-action__icon" aria-hidden="true"><?php echo cck_render_layout_action_icon( 'bag' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 				<span class="cck-header-action__count"<?php echo $counts['cart'] > 0 ? ' data-count="' . esc_attr( (string) $counts['cart'] ) . '"' : ''; ?>><?php echo $counts['cart'] > 0 ? esc_html( (string) $counts['cart'] ) : ''; ?></span>
 				<span class="screen-reader-text"><?php echo esc_html( $labels['cart'] ); ?></span>
@@ -437,6 +437,10 @@ if ( ! function_exists( 'cck_layout_body_classes' ) ) {
 	function cck_layout_body_classes( $classes ) {
 		if ( ! is_array( $classes ) ) {
 			$classes = array();
+		}
+
+		if ( ! cck_should_render_global_chrome() ) {
+			return $classes;
 		}
 
 		$preset = cck_get_active_brand_preset_id();

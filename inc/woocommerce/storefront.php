@@ -77,6 +77,22 @@ if ( ! function_exists( 'cck_wc_disable_frontend_script' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_wc_should_render_global_chrome' ) ) {
+	/**
+	 * Enable CCK global chrome on WooCommerce storefront pages.
+	 *
+	 * @param bool $should_render Whether CCK should render global chrome.
+	 * @return bool
+	 */
+	function cck_wc_should_render_global_chrome( $should_render ) {
+		if ( cck_wc_is_storefront_request() ) {
+			return true;
+		}
+
+		return $should_render;
+	}
+}
+
 if ( ! function_exists( 'cck_wc_get_shop_layout' ) ) {
 	/**
 	 * Get the active shop layout name.
@@ -1636,6 +1652,7 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		}
 
 		add_action( 'wp_enqueue_scripts', 'cck_enqueue_woocommerce_storefront_assets', 20 );
+		add_filter( 'cck_should_render_global_chrome', 'cck_wc_should_render_global_chrome' );
 		add_filter( 'cck_enqueue_frontend_script', 'cck_wc_disable_frontend_script' );
 		add_filter( 'body_class', 'cck_wc_body_classes' );
 		add_filter( 'loop_shop_columns', 'cck_wc_loop_shop_columns', 20 );
