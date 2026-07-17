@@ -448,6 +448,17 @@ if ( ! function_exists( 'cck_layout_body_classes' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_should_render_global_chrome' ) ) {
+	/**
+	 * Determine whether CCK should render its own global header/footer chrome.
+	 *
+	 * @return bool
+	 */
+	function cck_should_render_global_chrome() {
+		return (bool) apply_filters( 'cck_should_render_global_chrome', false );
+	}
+}
+
 if ( ! function_exists( 'cck_render_global_header' ) ) {
 	/**
 	 * Echo the global site header.
@@ -455,6 +466,12 @@ if ( ! function_exists( 'cck_render_global_header' ) ) {
 	 * @return void
 	 */
 	function cck_render_global_header() {
+		if ( ! cck_should_render_global_chrome() ) {
+			return;
+		}
+
+		cck_enqueue_layout_assets();
+
 		echo cck_render_component( 'header' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
@@ -466,6 +483,12 @@ if ( ! function_exists( 'cck_render_global_footer' ) ) {
 	 * @return void
 	 */
 	function cck_render_global_footer() {
+		if ( ! cck_should_render_global_chrome() ) {
+			return;
+		}
+
+		cck_enqueue_layout_assets();
+
 		echo function_exists( 'cck_component_footer' ) ? cck_component_footer() : cck_render_component( 'footer' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
