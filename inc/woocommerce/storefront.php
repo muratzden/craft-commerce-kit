@@ -103,6 +103,42 @@ if ( ! function_exists( 'cck_wc_dequeue_legacy_frontend_script' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_wc_dequeue_classic_gallery_assets' ) ) {
+	/**
+	 * Remove classic WooCommerce gallery assets when CCK owns the product media layout.
+	 *
+	 * @return void
+	 */
+	function cck_wc_dequeue_classic_gallery_assets() {
+		if ( ! cck_wc_is_storefront_request() || ! is_product() ) {
+			return;
+		}
+
+		$styles = array(
+			'photoswipe',
+			'photoswipe-default-skin',
+		);
+
+		$scripts = array(
+			'wc-zoom',
+			'wc-flexslider',
+			'wc-photoswipe',
+			'wc-photoswipe-ui-default',
+			'wc-single-product',
+		);
+
+		foreach ( $styles as $style ) {
+			wp_dequeue_style( $style );
+			wp_deregister_style( $style );
+		}
+
+		foreach ( $scripts as $script ) {
+			wp_dequeue_script( $script );
+			wp_deregister_script( $script );
+		}
+	}
+}
+
 if ( ! function_exists( 'cck_wc_should_render_global_chrome' ) ) {
 	/**
 	 * Enable CCK global chrome on WooCommerce storefront pages.
@@ -1705,6 +1741,7 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 
 		add_action( 'wp_enqueue_scripts', 'cck_enqueue_woocommerce_storefront_assets', 20 );
 		add_action( 'wp_enqueue_scripts', 'cck_wc_dequeue_legacy_frontend_script', 99 );
+		add_action( 'wp_enqueue_scripts', 'cck_wc_dequeue_classic_gallery_assets', 99 );
 		add_filter( 'cck_should_render_global_chrome', 'cck_wc_should_render_global_chrome' );
 		add_filter( 'cck_enqueue_frontend_script', 'cck_wc_disable_frontend_script' );
 		add_filter( 'body_class', 'cck_wc_body_classes' );
