@@ -993,9 +993,16 @@ if ( ! function_exists( 'cck_wc_render_single_product_summary' ) ) {
 
 		echo '<p class="cck-wc-summary__microcopy">' . esc_html__( 'Sessiz lüks deri işçiliği', 'craft-commerce-kit' ) . '</p>';
 
-			echo '<div class="cck-product-options" aria-label="' . esc_attr__( 'Product purchase options', 'craft-commerce-kit' ) . '">';
+			ob_start();
 			do_action( 'cck_product_purchase_options', $product );
-			echo '</div>';
+			do_action( 'cck_product_option_blocks', $product );
+			$product_options_html = trim( ob_get_clean() );
+
+			if ( '' !== $product_options_html ) {
+				echo '<div class="cck-product-options" aria-label="' . esc_attr__( 'Product purchase options', 'craft-commerce-kit' ) . '">';
+				echo $product_options_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '</div>';
+			}
 
 		if ( ! empty( $features ) ) {
 			echo '<div class="cck-wc-summary__features">';
