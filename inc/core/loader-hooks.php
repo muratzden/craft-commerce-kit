@@ -39,6 +39,14 @@ if ( function_exists( 'cck_layout_body_classes' ) ) {
 	add_filter( 'body_class', 'cck_layout_body_classes' );
 }
 
+if ( function_exists( 'cck_experience_should_render_global_chrome' ) ) {
+	add_filter( 'cck_should_render_global_chrome', 'cck_experience_should_render_global_chrome' );
+}
+
+if ( function_exists( 'cck_strip_theme_template_parts_for_global_chrome' ) ) {
+	add_filter( 'render_block', 'cck_strip_theme_template_parts_for_global_chrome', 9, 2 );
+}
+
 if ( function_exists( 'cck_render_global_header' ) ) {
 	add_action( 'wp_body_open', 'cck_render_global_header', 20 );
 }

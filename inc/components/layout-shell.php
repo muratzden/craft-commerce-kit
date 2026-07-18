@@ -463,6 +463,84 @@ if ( ! function_exists( 'cck_should_render_global_chrome' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_experience_should_render_global_chrome' ) ) {
+	/**
+	 * Enable CCK global chrome on published experience homepages.
+	 *
+	 * @param bool $should_render Whether CCK should render global chrome.
+	 * @return bool
+	 */
+	function cck_experience_should_render_global_chrome( $should_render ) {
+		if ( $should_render || is_admin() || wp_doing_ajax() ) {
+			return $should_render;
+		}
+
+		if ( ! function_exists( 'is_front_page' ) || ! is_front_page() ) {
+			return $should_render;
+		}
+
+		if ( ! function_exists( 'cck_get_published_experience_homepage_experience_id' ) ) {
+			return $should_render;
+		}
+
+		return '' !== cck_get_published_experience_homepage_experience_id();
+	}
+
+	if ( ! function_exists( 'cck_is_published_experience_page' ) ) {
+	/**
+	 * Determine whether the current queried page is a published CCK experience page.
+	 *
+	 * @return bool
+	 */
+	function cck_is_published_experience_page() {
+		if ( is_admin() || wp_doing_ajax() || ! is_singular( 'page' ) ) {
+			return false;
+		}
+
+		$page_id = absint( get_queried_object_id() );
+
+		if ( $page_id <= 0 ) {
+			return false;
+		}
+
+		$experience_id = sanitize_key( (string) get_post_meta( $page_id, '_cck_experience_id', true ) );
+
+		return '' !== $experience_id;
+	}
+}
+}
+
+if ( ! function_exists( 'cck_strip_theme_template_parts_for_global_chrome' ) ) {
+	/**
+	 * Prevent block-theme header/footer template parts from rendering when CCK owns global chrome.
+	 *
+	 * @param string $block_content Rendered block content.
+	 * @param array  $block         Parsed block.
+	 * @return string
+	 */
+	function cck_strip_theme_template_parts_for_global_chrome( $block_content, $block ) {
+		if ( ! cck_should_render_global_chrome() ) {
+			return $block_content;
+		}
+
+		$block_name = isset( $block['blockName'] ) ? (string) $block['blockName'] : '';
+
+		if ( 'core/template-part' !== $block_name ) {
+			return $block_content;
+		}
+
+		$attrs = isset( $block['attrs'] ) && is_array( $block['attrs'] ) ? $block['attrs'] : array();
+		$slug  = isset( $attrs['slug'] ) ? sanitize_key( $attrs['slug'] ) : '';
+		$area  = isset( $attrs['area'] ) ? sanitize_key( $attrs['area'] ) : '';
+
+		if ( in_array( $slug, array( 'header', 'footer' ), true ) || in_array( $area, array( 'header', 'footer' ), true ) ) {
+			return '';
+		}
+
+		return $block_content;
+	}
+}
+
 if ( ! function_exists( 'cck_render_global_header' ) ) {
 	/**
 	 * Echo the global site header.
@@ -488,6 +566,10 @@ if ( ! function_exists( 'cck_render_global_footer' ) ) {
 	 */
 	function cck_render_global_footer() {
 		if ( ! cck_should_render_global_chrome() ) {
+			return;
+		}
+
+		if ( function_exists( 'cck_is_published_experience_page' ) && cck_is_published_experience_page() ) {
 			return;
 		}
 
