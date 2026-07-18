@@ -58,6 +58,14 @@ if ( ! function_exists( 'cck_enqueue_woocommerce_storefront_assets' ) ) {
 		}
 
 		cck_enqueue_frontend_assets();
+
+		wp_enqueue_script(
+			'cck-frontend',
+			CCK_PLUGIN_URL . 'assets/js/cck.js',
+			array(),
+			defined( 'CCK_VERSION' ) ? CCK_VERSION : '1.0.0',
+			true
+		);
 	}
 }
 
@@ -896,8 +904,35 @@ if ( ! function_exists( 'cck_wc_render_gallery_slots' ) ) {
 				echo '</button>';
 			}
 		}
+						$video_url = cck_wc_get_product_video_url( $product );
+
+		if ( '' !== $video_url ) {
+			$youtube_id = cck_wc_get_youtube_video_id( $video_url );
+			$thumb_url  = '' !== $youtube_id ? 'https://img.youtube.com/vi/' . rawurlencode( $youtube_id ) . '/hqdefault.jpg' : '';
+			$embed_url  = '' !== $youtube_id ? 'https://www.youtube.com/embed/' . rawurlencode( $youtube_id ) . '?autoplay=1&rel=0' : $video_url;
+
+			echo '<button type="button" class="cck-product-media__thumb cck-product-media__thumb--video" data-cck-product-video="' . esc_url( $embed_url ) . '" aria-label="' . esc_attr__( 'Watch product video', 'craft-commerce-kit' ) . '">';
+
+			if ( '' !== $thumb_url ) {
+				echo '<img src="' . esc_url( $thumb_url ) . '" alt="' . esc_attr( $product->get_name() ) . '" class="cck-product-media__thumb-image" loading="lazy" decoding="async" />';
+			} else {
+				echo '<span class="cck-product-media__thumb-image" aria-hidden="true"></span>';
+			}
+
+			echo '<span class="cck-product-media__play" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 7l8 5-8 5V7z"></path></svg></span>';
+			echo '</button>';
+
+			echo '<div class="cck-product-video-modal" data-cck-product-video-modal hidden>';
+			echo '<div class="cck-product-video-modal__backdrop" data-cck-product-video-close></div>';
+			echo '<div class="cck-product-video-modal__dialog" role="dialog" aria-modal="true" aria-label="' . esc_attr__( 'Product video', 'craft-commerce-kit' ) . '">';
+			echo '<button type="button" class="cck-product-video-modal__close" data-cck-product-video-close aria-label="' . esc_attr__( 'Close video', 'craft-commerce-kit' ) . '">&times;</button>';
+			echo '<iframe data-cck-product-video-frame src="" title="' . esc_attr__( 'Product video', 'craft-commerce-kit' ) . '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+			echo '</div>';
+			echo '</div>';
+		}
 
 		echo '</div>';
+
 	}
 }
 
@@ -1655,6 +1690,8 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_filter( 'cck_enqueue_frontend_script', 'cck_wc_disable_frontend_script' );
 		add_filter( 'body_class', 'cck_wc_body_classes' );
 		add_filter( 'loop_shop_columns', 'cck_wc_loop_shop_columns', 20 );
+		add_action( 'add_meta_boxes_product', 'cck_wc_add_product_video_metabox' );
+		add_action( 'save_post_product', 'cck_wc_save_product_video_metabox', 10, 2 );
 
 		remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10 );
 		remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10 );
@@ -1933,9 +1970,12 @@ if ( ! function_exists( 'cck_wc_strip_duplicate_archive_blocks' ) ) {
 		$block_name = isset( $block['blockName'] ) ? trim( (string) $block['blockName'] ) : '';
 		if ( is_product() ) {
 			$product_strip_blocks = array(
+				'core/post-title',
 				'core/post-excerpt',
 				'woocommerce/add-to-cart-form',
 				'woocommerce/product-meta',
+				'woocommerce/product-price',
+				'woocommerce/product-title',
 				'woocommerce/product-collection',
 			);
 
@@ -1953,7 +1993,7 @@ if ( ! function_exists( 'cck_wc_strip_duplicate_archive_blocks' ) ) {
 				return $block_content . $thumbs;
 			}
 		}
-		
+
 		if ( is_product() ) {
 			return $block_content;
 		}
@@ -1971,6 +2011,99 @@ if ( ! function_exists( 'cck_wc_strip_duplicate_archive_blocks' ) ) {
 		}
 
 		return '';
+	}
+}
+
+if ( ! function_exists( 'cck_wc_get_product_video_url' ) ) {
+	function cck_wc_get_product_video_url( WC_Product $product ) {
+		$url = get_post_meta( $product->get_id(), '_cck_product_video_url', true );
+		$url = is_string( $url ) ? trim( $url ) : '';
+
+		return esc_url_raw( apply_filters( 'cck_wc_product_video_url', $url, $product ) );
+	}
+}
+
+if ( ! function_exists( 'cck_wc_get_youtube_video_id' ) ) {
+	function cck_wc_get_youtube_video_id( $url ) {
+		$parts = wp_parse_url( $url );
+		$host  = isset( $parts['host'] ) ? strtolower( (string) $parts['host'] ) : '';
+		$path  = isset( $parts['path'] ) ? trim( (string) $parts['path'], '/' ) : '';
+
+		if ( false !== strpos( $host, 'youtu.be' ) && '' !== $path ) {
+			return sanitize_text_field( strtok( $path, '/' ) );
+		}
+
+		if ( false === strpos( $host, 'youtube.com' ) ) {
+			return '';
+		}
+
+		if ( isset( $parts['query'] ) ) {
+			parse_str( $parts['query'], $query_args );
+			if ( ! empty( $query_args['v'] ) ) {
+				return sanitize_text_field( (string) $query_args['v'] );
+			}
+		}
+
+		if ( 0 === strpos( $path, 'shorts/' ) || 0 === strpos( $path, 'embed/' ) ) {
+			$segments = explode( '/', $path );
+			return isset( $segments[1] ) ? sanitize_text_field( $segments[1] ) : '';
+		}
+
+		return '';
+	}
+}
+
+if ( ! function_exists( 'cck_wc_add_product_video_metabox' ) ) {
+	function cck_wc_add_product_video_metabox() {
+		add_meta_box(
+			'cck-product-video',
+			__( 'CCK product video', 'craft-commerce-kit' ),
+			'cck_wc_render_product_video_metabox',
+			'product',
+			'side',
+			'default'
+		);
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_product_video_metabox' ) ) {
+	function cck_wc_render_product_video_metabox( $post ) {
+		$value = get_post_meta( $post->ID, '_cck_product_video_url', true );
+
+		wp_nonce_field( 'cck_wc_save_product_video_url', 'cck_wc_product_video_nonce' );
+
+		echo '<p><label for="cck_product_video_url">' . esc_html__( 'YouTube video URL', 'craft-commerce-kit' ) . '</label></p>';
+		echo '<input type="url" id="cck_product_video_url" name="cck_product_video_url" value="' . esc_attr( is_string( $value ) ? $value : '' ) . '" style="width:100%;" placeholder="https://www.youtube.com/watch?v=..." />';
+		echo '<p class="description">' . esc_html__( 'Shows a video thumbnail in the CCK product gallery.', 'craft-commerce-kit' ) . '</p>';
+	}
+}
+
+if ( ! function_exists( 'cck_wc_save_product_video_metabox' ) ) {
+	function cck_wc_save_product_video_metabox( $post_id, $post ) {
+		if ( ! $post || 'product' !== $post->post_type ) {
+			return;
+		}
+
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( ! isset( $_POST['cck_wc_product_video_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['cck_wc_product_video_nonce'] ) ), 'cck_wc_save_product_video_url' ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		$url = isset( $_POST['cck_product_video_url'] ) ? esc_url_raw( wp_unslash( $_POST['cck_product_video_url'] ) ) : '';
+
+		if ( '' === $url ) {
+			delete_post_meta( $post_id, '_cck_product_video_url' );
+			return;
+		}
+
+		update_post_meta( $post_id, '_cck_product_video_url', $url );
 	}
 }
 

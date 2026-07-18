@@ -1726,6 +1726,70 @@ body.cck-woo-active.cck-product-page .cck-product-media__thumb {
 	cursor: pointer;
 }
 
+body.cck-woo-active.cck-product-page .cck-product-media__thumb--video {
+	position: relative;
+	display: block;
+	color: var(--cck-colors-surface);
+	text-decoration: none;
+	background: #201711;
+}
+
+body.cck-woo-active.cck-product-page .cck-product-media__thumb--video .cck-product-media__thumb-image {
+	filter: saturate(0.85) contrast(0.9) brightness(0.72);
+	transform: scale(1.04);
+}
+
+body.cck-woo-active.cck-product-page .cck-product-media__thumb--video::before {
+	position: absolute;
+	top: 8px;
+	left: 8px;
+	z-index: 3;
+	padding: 4px 7px;
+	border-radius: 999px;
+	background: rgba(255, 250, 243, 0.92);
+	color: #3a261a;
+	content: "Video";
+	font-size: 9px;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	line-height: 1;
+	text-transform: uppercase;
+}
+
+body.cck-woo-active.cck-product-page .cck-product-media__thumb--video::after {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background:
+		linear-gradient(180deg, rgba(23, 18, 14, 0.1), rgba(23, 18, 14, 0.52)),
+		rgba(23, 18, 14, 0.18);
+	content: "";
+}
+
+body.cck-woo-active.cck-product-page .cck-product-media__play {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 4;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 38px;
+	height: 38px;
+	border: 1px solid rgba(255, 250, 243, 0.72);
+	border-radius: 999px;
+	background: rgba(23, 18, 14, 0.82);
+	box-shadow: 0 12px 28px rgba(23, 18, 14, 0.28);
+	transform: translate(-50%, -50%);
+}
+
+body.cck-woo-active.cck-product-page .cck-product-media__play svg {
+	width: 18px;
+	height: 18px;
+	margin-left: 2px;
+	fill: currentColor;
+}
+
 body.cck-woo-active.cck-product-page .cck-product-media__thumb.is-active,
 body.cck-woo-active.cck-product-page .cck-product-media__thumb:hover {
 	border-color: rgba(139, 90, 53, 0.55);
@@ -2626,4 +2690,56 @@ body.cck-woo-active.single-product .wp-site-blocks > .wp-block-group.woocommerce
 	.cck-wc-checkout .shop_table .product-total {
 		width: auto;
 	}
+}
+
+.cck-product-video-modal[hidden] {
+	display: none;
+}
+
+.cck-product-video-modal {
+	position: fixed;
+	z-index: 100000;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	padding: 24px;
+}
+
+.cck-product-video-modal__backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba(23, 18, 14, 0.72);
+}
+
+.cck-product-video-modal__dialog {
+	position: relative;
+	z-index: 1;
+	width: min(920px, 100%);
+	aspect-ratio: 16 / 9;
+	background: #111;
+	border-radius: 14px;
+	overflow: hidden;
+	box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
+}
+
+.cck-product-video-modal__dialog iframe {
+	width: 100%;
+	height: 100%;
+	border: 0;
+	display: block;
+}
+
+.cck-product-video-modal__close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 2;
+	width: 34px;
+	height: 34px;
+	border: 0;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.92);
+	cursor: pointer;
+	font-size: 24px;
+	line-height: 1;
 }
