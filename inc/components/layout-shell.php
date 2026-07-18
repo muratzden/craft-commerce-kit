@@ -485,30 +485,31 @@ if ( ! function_exists( 'cck_experience_should_render_global_chrome' ) ) {
 
 		return '' !== cck_get_published_experience_homepage_experience_id();
 	}
+}
 
 	if ( ! function_exists( 'cck_is_published_experience_page' ) ) {
-	/**
-	 * Determine whether the current queried page is a published CCK experience page.
-	 *
-	 * @return bool
-	 */
-	function cck_is_published_experience_page() {
-		if ( is_admin() || wp_doing_ajax() || ! is_singular( 'page' ) ) {
-			return false;
+		/**
+		 * Determine whether the current queried page is a published CCK experience page.
+		 *
+		 * @return bool
+		 */
+		function cck_is_published_experience_page() {
+			if ( is_admin() || wp_doing_ajax() || ! is_singular( 'page' ) ) {
+				return false;
+			}
+
+			$page_id = absint( get_queried_object_id() );
+
+			if ( $page_id <= 0 ) {
+				return false;
+			}
+
+			$experience_id = sanitize_key( (string) get_post_meta( $page_id, '_cck_experience_id', true ) );
+
+			return '' !== $experience_id;
 		}
-
-		$page_id = absint( get_queried_object_id() );
-
-		if ( $page_id <= 0 ) {
-			return false;
-		}
-
-		$experience_id = sanitize_key( (string) get_post_meta( $page_id, '_cck_experience_id', true ) );
-
-		return '' !== $experience_id;
 	}
-}
-}
+
 
 if ( ! function_exists( 'cck_strip_theme_template_parts_for_global_chrome' ) ) {
 	/**
