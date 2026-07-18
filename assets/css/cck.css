@@ -1813,7 +1813,50 @@ body.cck-woo-active.cck-product-page .cck-product-media__thumb--future .cck-prod
 .cck-product-options {
 	display: grid;
 	gap: 18px;
+	min-width: 0;
 	padding-top: 4px;
+}
+
+.cck-product-options *,
+.cck-wc-summary__actions * {
+	box-sizing: border-box;
+}
+
+.cck-product-options details {
+	min-width: 0;
+}
+
+.cck-product-options label,
+.cck-product-options small,
+.cck-product-options span,
+.cck-product-options strong,
+.cck-product-options p {
+	overflow-wrap: normal;
+	word-break: normal;
+}
+
+.cck-product-options .cck-deo__options,
+.cck-product-options .cck-po__options {
+	grid-template-columns: repeat(2, minmax(128px, 1fr));
+}
+
+.cck-product-options .cck-deo__option,
+.cck-product-options .cck-deo__option-card,
+.cck-product-options .cck-po__option,
+.cck-product-options .cck-po__option-card {
+	min-width: 0;
+}
+
+.cck-product-options .cck-deo__option-card strong,
+.cck-product-options .cck-deo__option-card small,
+.cck-product-options .cck-po__option-card strong,
+.cck-product-options .cck-po__option-card small {
+	display: block;
+	hyphens: none;
+	line-height: 1.3;
+	overflow-wrap: normal;
+	white-space: normal;
+	word-break: normal;
 }
 
 .cck-product-option-group {
@@ -1957,10 +2000,27 @@ body.cck-woo-active.cck-product-page .cck-product-media__thumb--future .cck-prod
 }
 
 .cck-wc-summary__actions {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) repeat(2, minmax(52px, auto));
 	gap: 12px;
 	align-items: center;
+}
+
+.cck-wc-summary__actions form.cart {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	grid-column: 1 / -1;
+	margin: 0;
+	min-width: 0;
+}
+
+.cck-wc-summary__actions .stock {
+	display: none !important;
+}
+
+.cck-wc-summary__actions .quantity {
+	margin: 0;
 }
 
 .cck-wc-summary__actions .single_add_to_cart_button,
@@ -1969,7 +2029,14 @@ body.cck-woo-active.cck-product-page .cck-product-media__thumb--future .cck-prod
 }
 
 .cck-wc-summary__slot {
-	min-height: 54px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-height: 48px;
+	margin: 0;
+	border-radius: 999px;
+	white-space: nowrap;
 }
 
 .cck-wc-summary__meta {

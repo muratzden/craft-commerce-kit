@@ -897,14 +897,6 @@ if ( ! function_exists( 'cck_wc_render_gallery_slots' ) ) {
 			}
 		}
 
-		$future_slots = max( 0, 5 - count( $visible_assets ) );
-
-		for ( $index = 0; $index < $future_slots; $index++ ) {
-			echo '<button type="button" class="cck-product-media__thumb cck-product-media__thumb--future" aria-label="' . esc_attr__( 'Daha fazla medya', 'craft-commerce-kit' ) . '">';
-			echo '<span class="cck-product-media__thumb-image" aria-hidden="true">' . cck_render_svg_icon( 'arrow-right' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo '</button>';
-		}
-
 		echo '</div>';
 	}
 }
