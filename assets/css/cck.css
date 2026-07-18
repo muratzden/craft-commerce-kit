@@ -1635,11 +1635,25 @@ body.cck-woo-active.cck-product-page .cck-wc-gallery > .cck-wc-section__eyebrow 
 	display: none;
 }
 
+body.cck-woo-active.cck-product-page .wp-block-columns > .wp-block-column:last-child > h1,
+body.cck-woo-active.cck-product-page .wp-block-columns > .wp-block-column:last-child > .wp-block-post-title,
+body.cck-woo-active.cck-product-page .wp-block-columns > .wp-block-column:last-child > .wp-block-woocommerce-product-price,
+body.cck-woo-active.cck-product-page .wp-block-columns > .wp-block-column:last-child > .price,
+body.cck-woo-active.cck-product-page .wp-block-column > .wp-block-post-title,
+body.cck-woo-active.cck-product-page .wp-block-column > .wp-block-woocommerce-product-price,
+body.cck-woo-active.cck-product-page .summary.entry-summary > .product_title,
+body.cck-woo-active.cck-product-page .summary.entry-summary > .price {
+	display: none !important;
+}
+
 body.cck-woo-active.cck-product-page .wp-site-blocks > .wp-block-group.woocommerce.product > .wp-block-group.has-global-padding > .wp-block-columns > .wp-block-column:last-child {
 	display: flex;
 	flex-direction: column;
 	align-self: stretch;
 	min-width: 0;
+	padding-top: 0;
+	margin-top: 0;
+	transform: translateY(-18px);
 }
 
 body.cck-woo-active.cck-product-page .woocommerce-product-gallery {
@@ -2001,7 +2015,7 @@ body.cck-woo-active.cck-product-page .cck-product-media__thumb--future .cck-prod
 
 .cck-wc-summary__actions {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) repeat(2, minmax(52px, auto));
+	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: 12px;
 	align-items: center;
 }
@@ -2037,6 +2051,8 @@ body.cck-woo-active.cck-product-page .cck-product-media__thumb--future .cck-prod
 	margin: 0;
 	border-radius: 999px;
 	white-space: nowrap;
+	padding-inline: 14px;
+	width: 100%;
 }
 
 .cck-wc-summary__meta {
@@ -2116,6 +2132,10 @@ body.cck-woo-active.single-product .wp-site-blocks > .wp-block-group.woocommerce
 
 	body.cck-woo-active.single-product .wp-site-blocks > .wp-block-group.woocommerce.product > .wp-block-group.has-global-padding > .wp-block-columns > .wp-block-column + .wp-block-column {
 		margin-top: var(--cck-space-lg);
+	}
+
+	body.cck-woo-active.cck-product-page .wp-site-blocks > .wp-block-group.woocommerce.product > .wp-block-group.has-global-padding > .wp-block-columns > .wp-block-column:last-child {
+	transform: none;
 	}
 }
 
