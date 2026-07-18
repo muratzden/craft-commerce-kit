@@ -2743,3 +2743,81 @@ body.cck-woo-active.single-product .wp-site-blocks > .wp-block-group.woocommerce
 	font-size: 24px;
 	line-height: 1;
 }
+
+body.cck-woo-active.woocommerce-account .cck-wc-account {
+	padding-inline: 0;
+}
+
+body.cck-woo-active.woocommerce-account .cck-wc-account .cck-wc-shell__inner {
+	width: min(1120px, calc(100vw - 64px));
+	max-width: 1120px;
+}
+
+body.cck-woo-active.woocommerce-account .cck-wc-account .cck-wc-shell__content > .woocommerce {
+	display: grid !important;
+	grid-template-columns: 280px minmax(0, 1fr) !important;
+	gap: 36px !important;
+	align-items: start;
+}
+
+body.cck-woo-active.woocommerce-account .cck-wc-account .woocommerce-MyAccount-navigation,
+body.cck-woo-active.woocommerce-account .cck-wc-account .woocommerce-MyAccount-content {
+	float: none !important;
+	width: auto !important;
+	max-width: none !important;
+	margin: 0 !important;
+}
+
+body.cck-woo-active.woocommerce-account .cck-wc-account .woocommerce-MyAccount-navigation {
+	grid-column: 1;
+}
+
+body.cck-woo-active.woocommerce-account .cck-wc-account .woocommerce-MyAccount-content {
+	grid-column: 2;
+	min-width: 0;
+}
+
+body.cck-woo-active.woocommerce-account .cck-wishlist-list {
+	display: grid !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+	gap: 18px !important;
+}
+
+body.cck-woo-active.woocommerce-account .cck-wishlist-list__item {
+	min-width: 0;
+	overflow: hidden;
+	border-radius: 12px;
+}
+
+body.cck-woo-active.woocommerce-account .cck-wishlist-list__media img {
+	display: block;
+	aspect-ratio: 1 / 1;
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+}
+
+@media (max-width: 900px) {
+	body.cck-woo-active.woocommerce-account .cck-wc-account .cck-wc-shell__inner {
+		width: min(100% - 32px, 720px);
+	}
+
+	body.cck-woo-active.woocommerce-account .cck-wc-account .cck-wc-shell__content > .woocommerce {
+		grid-template-columns: 1fr !important;
+	}
+
+	body.cck-woo-active.woocommerce-account .cck-wc-account .woocommerce-MyAccount-navigation,
+	body.cck-woo-active.woocommerce-account .cck-wc-account .woocommerce-MyAccount-content {
+		grid-column: auto;
+	}
+
+	body.cck-woo-active.woocommerce-account .cck-wishlist-list {
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+	}
+}
+
+@media (max-width: 560px) {
+	body.cck-woo-active.woocommerce-account .cck-wishlist-list {
+		grid-template-columns: 1fr !important;
+	}
+}
