@@ -1728,6 +1728,26 @@ if ( ! function_exists( 'cck_wc_start_single_product_output_buffer' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_wc_disable_single_product_upsell_ids' ) ) {
+	/**
+	 * Prevent default WooCommerce upsells from rendering on CCK single product pages.
+	 *
+	 * @param array $upsell_ids Product upsell IDs.
+	 * @return array
+	 */
+	function cck_wc_disable_single_product_upsell_ids( $upsell_ids ) {
+		if ( is_admin() || ! function_exists( 'is_product' ) || ! is_product() ) {
+			return $upsell_ids;
+		}
+
+		if ( ! function_exists( 'cck_wc_is_storefront_request' ) || ! cck_wc_is_storefront_request() ) {
+			return $upsell_ids;
+		}
+
+		return array();
+	}
+}
+
 if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 	/**
 	 * Register WooCommerce presentation hooks.
@@ -1786,11 +1806,12 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		add_filter( 'woocommerce_single_product_image_thumbnail_html', 'cck_wc_render_single_product_fallback_image_html', 10, 2 );
 		add_filter( 'woocommerce_cart_item_thumbnail', 'cck_wc_render_cart_item_thumbnail', 10, 3 );
 		add_filter( 'woocommerce_widget_cart_item_image', 'cck_wc_render_widget_cart_item_image', 10, 2 );
+		add_filter( 'woocommerce_product_get_upsell_ids', 'cck_wc_disable_single_product_upsell_ids', 20 );
 		add_filter( 'pre_render_block', 'cck_wc_pre_render_mini_cart_block', 10, 2 );
 		add_filter( 'render_block', 'cck_wc_strip_duplicate_archive_blocks', 10, 2 );
 		add_filter( 'the_content', 'cck_wc_strip_single_product_extra_sections', 20 );
 		add_filter( 'the_content', 'cck_wc_wrap_storefront_content', 9 );
-		add_action( 'template_redirect', 'cck_wc_start_single_product_output_buffer', 0 );
+		
 		add_action( 'wp', 'cck_wc_remove_default_loop_hooks', 20 );
 	}
 }
