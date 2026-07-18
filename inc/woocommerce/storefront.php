@@ -85,6 +85,24 @@ if ( ! function_exists( 'cck_wc_disable_frontend_script' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_wc_dequeue_legacy_frontend_script' ) ) {
+	/**
+	 * Remove the legacy ready-state script from WooCommerce storefront pages.
+	 *
+	 * @return void
+	 */
+	function cck_wc_dequeue_legacy_frontend_script() {
+		if ( ! cck_wc_is_storefront_request() ) {
+			return;
+		}
+
+		wp_dequeue_script( 'cck-frontend' );
+		wp_deregister_script( 'cck-frontend' );
+		wp_dequeue_script( 'craft-commerce-kit' );
+		wp_deregister_script( 'craft-commerce-kit' );
+	}
+}
+
 if ( ! function_exists( 'cck_wc_should_render_global_chrome' ) ) {
 	/**
 	 * Enable CCK global chrome on WooCommerce storefront pages.
@@ -1686,6 +1704,7 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		}
 
 		add_action( 'wp_enqueue_scripts', 'cck_enqueue_woocommerce_storefront_assets', 20 );
+		add_action( 'wp_enqueue_scripts', 'cck_wc_dequeue_legacy_frontend_script', 99 );
 		add_filter( 'cck_should_render_global_chrome', 'cck_wc_should_render_global_chrome' );
 		add_filter( 'cck_enqueue_frontend_script', 'cck_wc_disable_frontend_script' );
 		add_filter( 'body_class', 'cck_wc_body_classes' );
