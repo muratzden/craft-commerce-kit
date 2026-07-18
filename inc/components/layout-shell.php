@@ -272,7 +272,7 @@ if ( ! function_exists( 'cck_component_header_actions' ) ) {
 
 			<a class="cck-header-action cck-header-action--wishlist" href="<?php echo esc_url( $urls['wishlist'] ); ?>" aria-label="<?php echo esc_attr( $labels['wishlist'] ); ?>">
 				<span class="cck-header-action__icon" aria-hidden="true"><?php echo cck_render_layout_action_icon( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-				<span class="cck-header-action__count"<?php echo $counts['wishlist'] > 0 ? ' data-count="' . esc_attr( (string) $counts['wishlist'] ) . '"' : ''; ?>><?php echo $counts['wishlist'] > 0 ? esc_html( (string) $counts['wishlist'] ) : ''; ?></span>
+				<span class="cck-header-action__count" data-cck-wishlist-count<?php echo $counts['wishlist'] > 0 ? ' data-count="' . esc_attr( (string) $counts['wishlist'] ) . '"' : ''; ?>><?php echo $counts['wishlist'] > 0 ? esc_html( (string) $counts['wishlist'] ) : ''; ?></span>
 				<span class="screen-reader-text"><?php echo esc_html( $labels['wishlist'] ); ?></span>
 			</a>
 
