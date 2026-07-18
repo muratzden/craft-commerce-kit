@@ -83,6 +83,24 @@ if ( ! function_exists( 'cck_component_package_render_product_grid' ) ) {
 								continue;
 							}
 
+							$image_html = cck_array_get( $product, 'image_html', '' );
+							$image_url  = '';
+
+							if ( '' === $image_html && function_exists( 'cck_wc_get_product_card_demo_image_asset' ) ) {
+								$image_asset = cck_wc_get_product_card_demo_image_asset(
+									cck_array_get( $product, 'slug', cck_array_get( $product, 'title', 'product-grid' ) )
+								);
+
+								if ( ! empty( $image_asset['url'] ) ) {
+									$image_url  = $image_asset['url'];
+									$image_html = sprintf(
+										'<img src="%1$s" alt="%2$s" loading="lazy" decoding="async" />',
+										esc_url( $image_asset['url'] ),
+										esc_attr( cck_array_get( $product, 'title', __( 'Product image', 'craft-commerce-kit' ) ) )
+									);
+								}
+							}
+
 							if ( function_exists( 'cck_wc_render_product_card_markup' ) ) {
 								$card = array(
 									'id'                => ! empty( $product['id'] ) ? absint( $product['id'] ) : sanitize_key( cck_array_get( $product, 'slug', cck_array_get( $product, 'title', 'product-grid' ) ) ),
@@ -91,8 +109,8 @@ if ( ! function_exists( 'cck_component_package_render_product_grid' ) ) {
 									'title'             => cck_array_get( $product, 'title', __( 'View Product', 'craft-commerce-kit' ) ),
 									'short_description' => '',
 									'badge_html'        => '',
-									'image_html'        => cck_array_get( $product, 'image_html', '' ),
-									'image_url'         => '',
+									'image_html'        => $image_html,
+									'image_url'         => $image_url,
 									'price_html'        => cck_array_get( $product, 'price_html', '' ),
 									'rating_html'       => '',
 									'wishlist_html'     => cck_wc_cardify_action_html( '', 'heart', __( 'Wishlist', 'craft-commerce-kit' ), 'cck-product-card__slot-button--wishlist' ),
