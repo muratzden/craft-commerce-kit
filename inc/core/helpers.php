@@ -138,47 +138,48 @@ if ( ! function_exists( 'cck_get_demo_asset' ) ) {
 	 * @return array
 	 */
 	function cck_get_demo_asset( $filename, $alt = '' ) {
-	static $asset_cache = array();
+		static $asset_cache = array();
 
-	$filename = sanitize_file_name( cck_to_string( $filename ) );
+		$filename = sanitize_file_name( cck_to_string( $filename ) );
 
-	if ( '' === $filename ) {
-		return array(
-			'url'    => '',
-			'path'   => '',
-			'width'  => 0,
-			'height' => 0,
-			'alt'    => sanitize_text_field( cck_to_string( $alt ) ),
-		);
-	}
-
-	if ( ! isset( $asset_cache[ $filename ] ) ) {
-		$path = cck_get_demo_asset_path( $filename );
-		$url  = '' !== $path ? CCK_PLUGIN_URL . 'assets/demo/' . $filename : '';
-		$size = array( 0, 0 );
-
-		if ( '' !== $path && file_exists( $path ) ) {
-			$detected = @getimagesize( $path );
-
-			if ( is_array( $detected ) && ! empty( $detected[0] ) && ! empty( $detected[1] ) ) {
-				$size = array( absint( $detected[0] ), absint( $detected[1] ) );
-			}
+		if ( '' === $filename ) {
+			return array(
+				'url'    => '',
+				'path'   => '',
+				'width'  => 0,
+				'height' => 0,
+				'alt'    => sanitize_text_field( cck_to_string( $alt ) ),
+			);
 		}
 
-		$asset_cache[ $filename ] = array(
-			'url'    => $url,
-			'path'   => $path,
-			'width'  => $size[0],
-			'height' => $size[1],
+		if ( ! isset( $asset_cache[ $filename ] ) ) {
+			$path = cck_get_demo_asset_path( $filename );
+			$url  = '' !== $path ? CCK_PLUGIN_URL . 'assets/demo/' . $filename : '';
+			$size = array( 0, 0 );
+
+			if ( '' !== $path && file_exists( $path ) ) {
+				$detected = @getimagesize( $path );
+
+				if ( is_array( $detected ) && ! empty( $detected[0] ) && ! empty( $detected[1] ) ) {
+					$size = array( absint( $detected[0] ), absint( $detected[1] ) );
+				}
+			}
+
+			$asset_cache[ $filename ] = array(
+				'url'    => $url,
+				'path'   => $path,
+				'width'  => $size[0],
+				'height' => $size[1],
+			);
+		}
+
+		return array_merge(
+			$asset_cache[ $filename ],
+			array(
+				'alt' => sanitize_text_field( cck_to_string( $alt ) ),
+			)
 		);
 	}
-
-	return array_merge(
-		$asset_cache[ $filename ],
-		array(
-			'alt' => sanitize_text_field( cck_to_string( $alt ) ),
-		)
-	);
 }
 
 if ( ! function_exists( 'cck_render_svg_icon' ) ) {
