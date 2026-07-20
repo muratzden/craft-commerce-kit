@@ -1084,7 +1084,7 @@ if ( ! function_exists( 'cck_wc_render_single_product_gallery' ) ) {
 		}
 
 		$image_ids = cck_wc_get_single_product_gallery_image_ids( $product );
-		
+
 		$fallback_asset = cck_wc_get_product_card_demo_image_asset( $product );
 		$main_html      = '';
 		
