@@ -1066,28 +1066,18 @@ if ( ! function_exists( 'cck_wc_get_single_product_gallery_image_ids' ) ) {
 	}
 }
 
-if ( ! function_exists( 'cck_wc_render_single_product_gallery' ) ) {
+if ( ! function_exists( 'cck_wc_render_single_product_gallery_markup' ) ) {
 	/**
-	 * Render the CCK-owned single product gallery.
+	 * Render the single product gallery markup.
 	 *
+	 * @param WC_Product $product Product object.
+	 * @param array      $image_ids Gallery image IDs.
 	 * @return void
 	 */
-	function cck_wc_render_single_product_gallery() {
-		if ( ! is_product() ) {
-			return;
-		}
-
-		global $product;
-
-		if ( ! $product instanceof WC_Product ) {
-			return;
-		}
-
-		$image_ids = cck_wc_get_single_product_gallery_image_ids( $product );
-
+	function cck_wc_render_single_product_gallery_markup( WC_Product $product, array $image_ids ) {
 		$fallback_asset = cck_wc_get_product_card_demo_image_asset( $product );
 		$main_html      = '';
-		
+
 		if ( ! empty( $image_ids[0] ) ) {
 			$main_html = wp_get_attachment_image(
 				$image_ids[0],
@@ -1147,6 +1137,29 @@ if ( ! function_exists( 'cck_wc_render_single_product_gallery' ) ) {
 
 		echo '</div>';
 		echo '</section>';
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_single_product_gallery' ) ) {
+	/**
+	 * Render the CCK-owned single product gallery.
+	 *
+	 * @return void
+	 */
+	function cck_wc_render_single_product_gallery() {
+		if ( ! is_product() ) {
+			return;
+		}
+
+		global $product;
+
+		if ( ! $product instanceof WC_Product ) {
+			return;
+		}
+
+		$image_ids = cck_wc_get_single_product_gallery_image_ids( $product );
+
+		cck_wc_render_single_product_gallery_markup( $product, $image_ids );
 	}
 }
 
