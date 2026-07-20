@@ -1053,21 +1053,29 @@ if ( ! function_exists( 'cck_wc_render_single_product_gallery' ) ) {
 		if ( ! $product instanceof WC_Product ) {
 			return;
 		}
+		
+		$contract = function_exists( 'cck_contract_normalize_product' ) ? cck_contract_normalize_product( $product, array( 'context' => 'single-product-gallery' ) ) : array();
+		$media    = isset( $contract['media'] ) && is_array( $contract['media'] ) ? $contract['media'] : array();
 
-		$image_ids  = array();
-		$primary_id = absint( $product->get_image_id() );
+		$image_ids = array();
 
-		if ( $primary_id ) {
-			$image_ids[] = $primary_id;
+		if ( ! empty( $media['featured']['id'] ) ) {
+			$image_ids[] = absint( $media['featured']['id'] );
 		}
 
-		$gallery_ids = method_exists( $product, 'get_gallery_image_ids' ) ? (array) $product->get_gallery_image_ids() : array();
-		$image_ids   = array_merge( $image_ids, array_map( 'absint', $gallery_ids ) );
-		$image_ids   = array_values( array_unique( array_filter( $image_ids ) ) );
+		if ( ! empty( $media['gallery'] ) && is_array( $media['gallery'] ) ) {
+			foreach ( $media['gallery'] as $gallery_item ) {
+				if ( ! empty( $gallery_item['id'] ) ) {
+					$image_ids[] = absint( $gallery_item['id'] );
+				}
+			}
+		}
+
+		$image_ids = array_values( array_unique( array_filter( $image_ids ) ) );
 
 		$fallback_asset = cck_wc_get_product_card_demo_image_asset( $product );
 		$main_html      = '';
-
+		
 		if ( ! empty( $image_ids[0] ) ) {
 			$main_html = wp_get_attachment_image(
 				$image_ids[0],
