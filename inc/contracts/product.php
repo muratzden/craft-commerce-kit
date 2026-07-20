@@ -63,12 +63,7 @@ if ( ! function_exists( 'cck_contract_normalize_product' ) ) {
 			'media'    => array(
 				'featured' => cck_contract_get_product_featured_media( $product ),
 				'gallery'  => cck_contract_get_product_gallery_media( $product ),
-				'video'    => array(
-					'url'       => '',
-					'provider'  => '',
-					'id'        => '',
-					'thumbnail' => '',
-				),
+				'video'    => cck_contract_get_product_video_media( $product ),
 			),
 			'purchase' => cck_contract_get_product_purchase( $product ),
 			'badges'   => array(
@@ -252,6 +247,37 @@ if ( ! function_exists( 'cck_contract_get_product_gallery_media' ) ) {
 		}
 
 		return $gallery;
+	}
+}
+
+if ( ! function_exists( 'cck_contract_get_product_video_media' ) ) {
+	/**
+	 * Get normalized product video media.
+	 *
+	 * @param object $product Product object.
+	 * @return array
+	 */
+	function cck_contract_get_product_video_media( $product ) {
+		$empty = array(
+			'url'       => '',
+			'provider'  => '',
+			'id'        => '',
+			'thumbnail' => '',
+		);
+
+		if ( ! is_object( $product ) || ! method_exists( $product, 'get_meta' ) ) {
+			return $empty;
+		}
+
+		$video_url = $product->get_meta( '_cck_product_video_url', true );
+
+		if ( ! is_string( $video_url ) || '' === trim( $video_url ) ) {
+			return $empty;
+		}
+
+		$empty['url'] = esc_url_raw( trim( $video_url ) );
+
+		return $empty;
 	}
 }
 
