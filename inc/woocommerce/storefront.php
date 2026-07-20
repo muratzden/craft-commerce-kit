@@ -630,28 +630,25 @@ if ( ! function_exists( 'cck_wc_get_product_card_definition' ) ) {
 			return array();
 		}
 
-		$context   = sanitize_key( $context );
-		$image_id  = absint( $product->get_image_id() );
-		$image_html = '';
-		$image_url = '';
+		$context = sanitize_key( $context );
 
-		if ( $image_id ) {
-			$attachment_path = get_attached_file( $image_id );
-			$attachment_path = is_string( $attachment_path ) ? $attachment_path : '';
-
-			if ( '' !== $attachment_path && file_exists( $attachment_path ) ) {
-				$image_html = wp_get_attachment_image(
-					$image_id,
-					'woocommerce_thumbnail',
-					false,
-					array(
-						'loading'  => 'lazy',
-						'decoding' => 'async',
-					)
-				);
-				$image_url  = wp_get_attachment_image_url( $image_id, 'woocommerce_thumbnail' );
-			}
+		if ( function_exists( 'cck_contract_normalize_product' ) ) {
+			$contract = cck_contract_normalize_product(
+				$product,
+				array(
+					'context' => $context,
+				)
+			);
+		} else {
+			$contract = array();
 		}
+
+		if ( empty( $contract ) ) {
+			return array();
+		}
+
+		$image_html = isset( $contract['media']['featured']['html'] ) ? $contract['media']['featured']['html'] : '';
+		$image_url  = isset( $contract['media']['featured']['url'] ) ? $contract['media']['featured']['url'] : '';
 
 		if ( '' === $image_html ) {
 			$demo_asset = cck_wc_get_product_card_demo_image_asset( $product );
@@ -662,7 +659,7 @@ if ( ! function_exists( 'cck_wc_get_product_card_definition' ) ) {
 				$image_html = sprintf(
 					'<img src="%1$s" alt="%2$s" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image" loading="lazy" decoding="async"%3$s%4$s />',
 					esc_url( $demo_asset['url'] ),
-					esc_attr( $product->get_name() ),
+					esc_attr( isset( $contract['identity']['title'] ) ? $contract['identity']['title'] : $product->get_name() ),
 					is_array( $asset_size ) && ! empty( $asset_size[0] ) ? ' width="' . absint( $asset_size[0] ) . '"' : '',
 					is_array( $asset_size ) && ! empty( $asset_size[1] ) ? ' height="' . absint( $asset_size[1] ) . '"' : ''
 				);
@@ -677,13 +674,9 @@ if ( ! function_exists( 'cck_wc_get_product_card_definition' ) ) {
 		if ( '' === $image_url && function_exists( 'wc_placeholder_img_src' ) ) {
 			$image_url = wc_placeholder_img_src( 'woocommerce_thumbnail' );
 		}
-		$short_desc  = wp_strip_all_tags( (string) $product->get_short_description() );
-		$short_desc  = '' !== $short_desc ? wp_trim_words( $short_desc, 14 ) : '';
-		$price_html  = $product->get_price_html();
-		$rating_html = function_exists( 'wc_get_rating_html' ) ? wc_get_rating_html( (float) $product->get_average_rating(), (int) $product->get_rating_count() ) : '';
-		$badge_html       = implode( '', cck_wc_get_product_badges( $product ) );
-		$wishlist_slot    = apply_filters( 'cck_wc_product_card_wishlist_slot', '', $product, $context );
-		$quick_view_slot  = apply_filters( 'cck_wc_product_card_quick_view_slot', '', $product, $context );
+
+		$wishlist_slot   = apply_filters( 'cck_wc_product_card_wishlist_slot', '', $product, $context );
+		$quick_view_slot = apply_filters( 'cck_wc_product_card_quick_view_slot', '', $product, $context );
 
 		if ( '' === $wishlist_slot ) {
 			$wishlist_slot = cck_wc_cardify_action_html( '', 'heart', __( 'Wishlist', 'craft-commerce-kit' ), 'cck-product-card__slot-button--wishlist' );
@@ -705,20 +698,20 @@ if ( ! function_exists( 'cck_wc_get_product_card_definition' ) ) {
 			'cck_wc_product_card_definition',
 			array(
 				'context'           => $context,
-				'id'                => $product->get_id(),
-				'url'               => $product->get_permalink(),
-				'title'             => $product->get_name(),
-				'short_description' => $short_desc,
-				'badge_html'        => $badge_html,
+				'id'                => isset( $contract['id'] ) ? absint( $contract['id'] ) : 0,
+				'url'               => isset( $contract['identity']['url'] ) ? $contract['identity']['url'] : '',
+				'title'             => isset( $contract['identity']['title'] ) ? $contract['identity']['title'] : '',
+				'short_description' => isset( $contract['content']['excerpt'] ) ? $contract['content']['excerpt'] : '',
+				'badge_html'        => isset( $contract['badges']['html'] ) ? $contract['badges']['html'] : '',
 				'image_html'        => $image_html,
 				'image_url'         => $image_url,
-				'price_html'        => $price_html,
-				'rating_html'       => $rating_html,
+				'price_html'        => isset( $contract['pricing']['price_html'] ) ? $contract['pricing']['price_html'] : '',
+				'rating_html'       => isset( $contract['rating']['html'] ) ? $contract['rating']['html'] : '',
 				'add_to_cart_html'  => $add_to_cart_html,
 				'wishlist_html'     => $wishlist_slot,
 				'quick_view_html'   => $quick_view_slot,
-				'is_sale'           => $product->is_on_sale(),
-				'is_featured'       => $product->is_featured(),
+				'is_sale'           => isset( $contract['pricing']['is_on_sale'] ) ? (bool) $contract['pricing']['is_on_sale'] : false,
+				'is_featured'       => method_exists( $product, 'is_featured' ) ? (bool) $product->is_featured() : false,
 			),
 			$product,
 			$context
@@ -1002,6 +995,138 @@ if ( ! function_exists( 'cck_wc_render_gallery_close' ) ) {
 		}
 
 		echo '</div></div></section>';
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_product_video_thumb' ) ) {
+	/**
+	 * Render the optional product video thumbnail and modal.
+	 *
+	 * @param WC_Product $product Product object.
+	 * @return void
+	 */
+	function cck_wc_render_product_video_thumb( WC_Product $product ) {
+		$video_url = cck_wc_get_product_video_url( $product );
+
+		if ( '' === $video_url ) {
+			return;
+		}
+
+		$youtube_id = cck_wc_get_youtube_video_id( $video_url );
+		$thumb_url  = '' !== $youtube_id ? 'https://img.youtube.com/vi/' . rawurlencode( $youtube_id ) . '/hqdefault.jpg' : '';
+		$embed_url  = '' !== $youtube_id ? 'https://www.youtube.com/embed/' . rawurlencode( $youtube_id ) . '?autoplay=1&rel=0' : $video_url;
+
+		echo '<button type="button" class="cck-product-media__thumb cck-product-media__thumb--video" data-cck-product-video="' . esc_url( $embed_url ) . '" aria-label="' . esc_attr__( 'Watch product video', 'craft-commerce-kit' ) . '">';
+
+		if ( '' !== $thumb_url ) {
+			echo '<img src="' . esc_url( $thumb_url ) . '" alt="' . esc_attr( $product->get_name() ) . '" class="cck-product-media__thumb-image" loading="lazy" decoding="async" />';
+		} else {
+			echo '<span class="cck-product-media__thumb-image" aria-hidden="true"></span>';
+		}
+
+		echo '<span class="cck-product-media__play" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 7l8 5-8 5V7z"></path></svg></span>';
+		echo '</button>';
+
+		echo '<div class="cck-product-video-modal" data-cck-product-video-modal hidden>';
+		echo '<div class="cck-product-video-modal__backdrop" data-cck-product-video-close></div>';
+		echo '<div class="cck-product-video-modal__dialog" role="dialog" aria-modal="true" aria-label="' . esc_attr__( 'Product video', 'craft-commerce-kit' ) . '">';
+		echo '<button type="button" class="cck-product-video-modal__close" data-cck-product-video-close aria-label="' . esc_attr__( 'Close video', 'craft-commerce-kit' ) . '">&times;</button>';
+		echo '<iframe data-cck-product-video-frame src="" title="' . esc_attr__( 'Product video', 'craft-commerce-kit' ) . '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+		echo '</div>';
+		echo '</div>';
+	}
+}
+
+if ( ! function_exists( 'cck_wc_render_single_product_gallery' ) ) {
+	/**
+	 * Render the CCK-owned single product gallery.
+	 *
+	 * @return void
+	 */
+	function cck_wc_render_single_product_gallery() {
+		if ( ! is_product() ) {
+			return;
+		}
+
+		global $product;
+
+		if ( ! $product instanceof WC_Product ) {
+			return;
+		}
+
+		$image_ids  = array();
+		$primary_id = absint( $product->get_image_id() );
+
+		if ( $primary_id ) {
+			$image_ids[] = $primary_id;
+		}
+
+		$gallery_ids = method_exists( $product, 'get_gallery_image_ids' ) ? (array) $product->get_gallery_image_ids() : array();
+		$image_ids   = array_merge( $image_ids, array_map( 'absint', $gallery_ids ) );
+		$image_ids   = array_values( array_unique( array_filter( $image_ids ) ) );
+
+		$fallback_asset = cck_wc_get_product_card_demo_image_asset( $product );
+		$main_html      = '';
+
+		if ( ! empty( $image_ids[0] ) ) {
+			$main_html = wp_get_attachment_image(
+				$image_ids[0],
+				'woocommerce_single',
+				false,
+				array(
+					'class'         => 'cck-product-gallery__main-image',
+					'loading'       => 'eager',
+					'decoding'      => 'async',
+					'fetchpriority' => 'high',
+				)
+			);
+		}
+
+		if ( '' === $main_html && ! empty( $fallback_asset['url'] ) ) {
+			$main_html = sprintf(
+				'<img src="%1$s" alt="%2$s" class="cck-product-gallery__main-image" loading="eager" decoding="async" fetchpriority="high" />',
+				esc_url( $fallback_asset['url'] ),
+				esc_attr( $product->get_name() )
+			);
+		}
+
+		if ( '' === $main_html ) {
+			return;
+		}
+
+		$badge = $product->is_on_sale() ? __( 'Sale', 'craft-commerce-kit' ) : ( $product->is_featured() ? __( 'Featured', 'craft-commerce-kit' ) : __( 'New', 'craft-commerce-kit' ) );
+
+		echo '<section class="cck-product-gallery" aria-label="' . esc_attr__( 'Product gallery', 'craft-commerce-kit' ) . '">';
+		echo '<div class="cck-product-gallery__main">';
+		echo '<div class="cck-product-gallery__badge"><span>' . esc_html( $badge ) . '</span></div>';
+		echo wp_kses_post( $main_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '</div>';
+
+		echo '<div class="cck-product-gallery__thumbs" aria-label="' . esc_attr__( 'Product gallery thumbnails', 'craft-commerce-kit' ) . '">';
+
+		foreach ( array_slice( $image_ids, 0, 5 ) as $index => $image_id ) {
+			$full_src  = wp_get_attachment_image_url( $image_id, 'woocommerce_single' );
+			$thumb_src = wp_get_attachment_image_url( $image_id, 'woocommerce_thumbnail' );
+
+			if ( ! $full_src || ! $thumb_src ) {
+				continue;
+			}
+
+			echo '<button type="button" class="cck-product-gallery__thumb' . ( 0 === $index ? ' is-active' : '' ) . '" data-cck-gallery-image="' . esc_url( $full_src ) . '" aria-label="' . esc_attr( $product->get_name() ) . '">';
+			echo '<img src="' . esc_url( $thumb_src ) . '" alt="' . esc_attr( $product->get_name() ) . '" loading="lazy" decoding="async" />';
+			echo '</button>';
+		}
+
+		if ( empty( $image_ids ) && ! empty( $fallback_asset['url'] ) ) {
+			echo '<button type="button" class="cck-product-gallery__thumb is-active" data-cck-gallery-image="' . esc_url( $fallback_asset['url'] ) . '" aria-label="' . esc_attr( $product->get_name() ) . '">';
+			echo '<img src="' . esc_url( $fallback_asset['url'] ) . '" alt="' . esc_attr( $product->get_name() ) . '" loading="lazy" decoding="async" />';
+			echo '</button>';
+		}
+
+		cck_wc_render_product_video_thumb( $product );
+
+		echo '</div>';
+		echo '</section>';
 	}
 }
 
@@ -1795,15 +1920,11 @@ if ( ! function_exists( 'cck_register_woocommerce_storefront_hooks' ) ) {
 		remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 		remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
 
-		add_action( 'woocommerce_before_single_product_summary', 'cck_wc_render_gallery_open', 1 );
-		add_action( 'woocommerce_before_single_product_summary', 'cck_wc_render_gallery_badge', 10 );
-		add_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
-		add_action( 'woocommerce_before_single_product_summary', 'cck_wc_render_gallery_close', 99 );
+		add_action( 'woocommerce_before_single_product_summary', 'cck_wc_render_single_product_gallery', 20 );
 
 		add_action( 'woocommerce_single_product_summary', 'cck_wc_render_single_product_summary', 1 );
 		add_action( 'woocommerce_after_single_product_summary', 'cck_wc_render_product_service_strip', 26 );
 
-		add_filter( 'woocommerce_single_product_image_thumbnail_html', 'cck_wc_render_single_product_fallback_image_html', 10, 2 );
 		add_filter( 'woocommerce_cart_item_thumbnail', 'cck_wc_render_cart_item_thumbnail', 10, 3 );
 		add_filter( 'woocommerce_widget_cart_item_image', 'cck_wc_render_widget_cart_item_image', 10, 2 );
 		add_filter( 'woocommerce_product_get_upsell_ids', 'cck_wc_disable_single_product_upsell_ids', 20 );
@@ -2062,13 +2183,7 @@ if ( ! function_exists( 'cck_wc_strip_duplicate_archive_blocks' ) ) {
 		}
 
 		if ( is_product() && 'woocommerce/product-image-gallery' === $block_name ) {
-			ob_start();
-			cck_wc_render_gallery_slots();
-			$thumbs = trim( (string) ob_get_clean() );
-
-			if ( '' !== $thumbs ) {
-				return $block_content . $thumbs;
-			}
+			return '';
 		}
 
 		if ( is_product() ) {

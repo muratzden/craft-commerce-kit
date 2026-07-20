@@ -8,19 +8,34 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_runtime_normalize_product' ) ) {
+	/**
+	 * Normalize a WooCommerce product for runtime product queries.
+	 *
+	 * @param object $product Product object.
+	 * @return array
+	 */
 	function cck_runtime_normalize_product( $product ) {
-		if ( ! is_object( $product ) || ! method_exists( $product, 'get_id' ) ) {
+		if ( ! function_exists( 'cck_contract_normalize_product' ) ) {
 			return array();
 		}
 
-		$product_id = $product->get_id();
+		$contract = cck_contract_normalize_product(
+			$product,
+			array(
+				'context' => 'runtime',
+			)
+		);
+
+		if ( empty( $contract ) ) {
+			return array();
+		}
 
 		return array(
-			'id'         => $product_id,
-			'title'      => $product->get_name(),
-			'url'        => get_permalink( $product_id ),
-			'image_html' => $product->get_image( 'woocommerce_thumbnail' ),
-			'price_html' => $product->get_price_html(),
+			'id'         => isset( $contract['id'] ) ? absint( $contract['id'] ) : 0,
+			'title'      => isset( $contract['identity']['title'] ) ? $contract['identity']['title'] : '',
+			'url'        => isset( $contract['identity']['url'] ) ? $contract['identity']['url'] : '',
+			'image_html' => isset( $contract['media']['featured']['html'] ) ? $contract['media']['featured']['html'] : '',
+			'price_html' => isset( $contract['pricing']['price_html'] ) ? $contract['pricing']['price_html'] : '',
 		);
 	}
 }
