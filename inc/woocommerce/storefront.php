@@ -1037,23 +1037,14 @@ if ( ! function_exists( 'cck_wc_render_product_video_thumb' ) ) {
 	}
 }
 
-if ( ! function_exists( 'cck_wc_render_single_product_gallery' ) ) {
+if ( ! function_exists( 'cck_wc_get_single_product_gallery_image_ids' ) ) {
 	/**
-	 * Render the CCK-owned single product gallery.
+	 * Get gallery image IDs for the CCK single product gallery.
 	 *
-	 * @return void
+	 * @param WC_Product $product Product object.
+	 * @return array
 	 */
-	function cck_wc_render_single_product_gallery() {
-		if ( ! is_product() ) {
-			return;
-		}
-
-		global $product;
-
-		if ( ! $product instanceof WC_Product ) {
-			return;
-		}
-		
+	function cck_wc_get_single_product_gallery_image_ids( WC_Product $product ) {
 		$contract = function_exists( 'cck_contract_normalize_product' ) ? cck_contract_normalize_product( $product, array( 'context' => 'single-product-gallery' ) ) : array();
 		$media    = isset( $contract['media'] ) && is_array( $contract['media'] ) ? $contract['media'] : array();
 
@@ -1071,8 +1062,29 @@ if ( ! function_exists( 'cck_wc_render_single_product_gallery' ) ) {
 			}
 		}
 
-		$image_ids = array_values( array_unique( array_filter( $image_ids ) ) );
+		return array_values( array_unique( array_filter( $image_ids ) ) );
+	}
+}
 
+if ( ! function_exists( 'cck_wc_render_single_product_gallery' ) ) {
+	/**
+	 * Render the CCK-owned single product gallery.
+	 *
+	 * @return void
+	 */
+	function cck_wc_render_single_product_gallery() {
+		if ( ! is_product() ) {
+			return;
+		}
+
+		global $product;
+
+		if ( ! $product instanceof WC_Product ) {
+			return;
+		}
+
+		$image_ids = cck_wc_get_single_product_gallery_image_ids( $product );
+		
 		$fallback_asset = cck_wc_get_product_card_demo_image_asset( $product );
 		$main_html      = '';
 		
