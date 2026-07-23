@@ -23,6 +23,28 @@
 	});
 
 	document.addEventListener('click', function (event) {
+		var galleryThumb = event.target.closest('[data-cck-gallery-image]');
+
+		if (galleryThumb) {
+			var gallery = galleryThumb.closest('.cck-product-gallery');
+			var mainImage = gallery ? gallery.querySelector('.cck-product-gallery__main-image') : null;
+			var nextSrc = galleryThumb.getAttribute('data-cck-gallery-image');
+
+			if (mainImage && nextSrc) {
+				mainImage.src = nextSrc;
+				mainImage.removeAttribute('srcset');
+				mainImage.removeAttribute('sizes');
+
+				gallery.querySelectorAll('.cck-product-gallery__thumb').forEach(function (thumb) {
+					thumb.classList.remove('is-active');
+				});
+
+				galleryThumb.classList.add('is-active');
+			}
+
+			return;
+		}
+
 		var trigger = event.target.closest('[data-cck-product-video]');
 
 		if (trigger) {
