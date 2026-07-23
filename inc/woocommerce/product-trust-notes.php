@@ -34,7 +34,8 @@ if ( ! function_exists( 'cck_shortcode_product_trust_notes' ) ) {
 			'cck_product_trust_notes'
 		);
 
-		return cck_component_trust_block(
+		return cck_render_component(
+		'trust-block',
 			array(
 				'items' => $atts['items'],
 			)
