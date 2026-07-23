@@ -63,7 +63,8 @@ if ( ! function_exists( 'cck_shortcode_tilla_cta' ) ) {
 	function cck_shortcode_tilla_cta() {
 		$brand = cck_get_tilla_leather_brand_pack();
 
-		return cck_component_cta(
+		return cck_render_component(
+			'cta',
 			array(
 				'title'        => $brand['cta_title'],
 				'text'         => $brand['cta_text'],
