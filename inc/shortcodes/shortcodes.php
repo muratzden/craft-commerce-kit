@@ -85,7 +85,8 @@ if ( ! function_exists( 'cck_shortcode_tilla_home' ) ) {
 		$output  = cck_shortcode_tilla_hero();
 		$output .= cck_render_component( 'trust-block' );
 		$output .= '<section class="cck-section"><div class="cck-container">';
-		$output .= cck_component_section_title(
+		$output .= cck_render_component(
+			'section-title',
 			array(
 				'eyebrow' => 'Tilla Leather',
 				'title'   => 'Leather goods with a quieter kind of confidence.',
