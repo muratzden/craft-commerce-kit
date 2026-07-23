@@ -14,7 +14,6 @@ require_once CCK_PLUGIN_DIR . 'inc/components/renderer.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/settings-renderer.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/layout-shell.php';
 
-require_once CCK_PLUGIN_DIR . 'inc/components/hero.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/section-title.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/trust-block.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/image-text.php';
