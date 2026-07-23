@@ -26,7 +26,7 @@ return array(
 			'image_url'       => function_exists( 'cck_get_demo_asset' ) ? cck_get_demo_asset( 'hero.webp', __( 'Atelier hero', 'craft-commerce-kit' ) )['url'] : content_url( 'uploads/woocommerce-placeholder-768x768.webp' ),
 		),
 	),
-	'callback'    => 'cck_component_hero',
+	'callback'    => 'cck_component_package_render_hero',
 	'supports'    => array(
 		'background',
 		'spacing',
