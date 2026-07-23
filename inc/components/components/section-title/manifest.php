@@ -16,7 +16,7 @@ return array(
 			'align'   => 'center',
 		),
 	),
-	'callback'    => 'cck_component_section_title',
+	'callback'    => 'cck_component_package_render_section_title',
 	'supports'    => array( 'spacing', 'typography', 'visibility' ),
 	'settings'    => array(
 		'eyebrow' => array( 'type' => 'text', 'label' => __( 'Eyebrow', 'craft-commerce-kit' ), 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ),
