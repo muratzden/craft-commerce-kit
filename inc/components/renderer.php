@@ -81,7 +81,7 @@ if ( ! function_exists( 'cck_register_core_component_renderers' ) ) {
 			'collection-grid' => 'cck_component_collection_grid',
 			'cta'             => 'cck_component_cta',
 			'image-text'      => 'cck_component_image_text',
-			'section-title'   => 'cck_component_section_title',
+			'section-title'   => 'cck_component_package_render_section_title',
 			'trust-block'     => 'cck_component_trust_block',
 			'trust'           => 'cck_component_trust_block',
 			'usp'             => 'cck_component_package_render_usp',
@@ -97,9 +97,9 @@ if ( ! function_exists( 'cck_register_core_component_renderers' ) ) {
 
 if ( ! function_exists( 'cck_get_component_render_callback' ) ) {
 	/**
-	 * Component render callback adını döndürür.
+	 * Component render callback adÄ±nÄ± dÃ¶ndÃ¼rÃ¼r.
 	 *
-	 * @param string $component_id Component kimliği.
+	 * @param string $component_id Component kimliÄŸi.
 	 * @return string
 	 */
 	function cck_get_component_render_callback( $component_id ) {
@@ -109,7 +109,7 @@ if ( ! function_exists( 'cck_get_component_render_callback' ) ) {
 
 if ( ! function_exists( 'cck_load_component_renderer' ) ) {
 	/**
-	 * Component render dosyasını yükler.
+	 * Component render dosyasÄ±nÄ± yÃ¼kler.
 	 *
 	 * @param array $manifest Component manifest verisi.
 	 * @return callable|string
@@ -119,7 +119,7 @@ if ( ! function_exists( 'cck_load_component_renderer' ) ) {
 		$render_path  = cck_locate_component_template( $component_id, cck_manifest_get( $manifest, '_render', '' ) );
 
 		if ( empty( $component_id ) || empty( $render_path ) || ! file_exists( $render_path ) ) {
-			cck_debug_log( 'Component render dosyası yüklenemedi: ' . cck_to_string( $component_id ) );
+			cck_debug_log( 'Component render dosyasÄ± yÃ¼klenemedi: ' . cck_to_string( $component_id ) );
 			return '';
 		}
 
@@ -145,9 +145,9 @@ if ( ! function_exists( 'cck_load_component_renderer' ) ) {
 
 if ( ! function_exists( 'cck_sanitize_component_atts' ) ) {
 	/**
-	 * Shortcode değerlerini manifest ayarlarına göre temizler.
+	 * Shortcode deÄŸerlerini manifest ayarlarÄ±na gÃ¶re temizler.
 	 *
-	 * @param array $atts     Shortcode değerleri.
+	 * @param array $atts     Shortcode deÄŸerleri.
 	 * @param array $manifest Component manifest verisi.
 	 * @return array
 	 */
@@ -172,10 +172,10 @@ if ( ! function_exists( 'cck_sanitize_component_atts' ) ) {
 
 if ( ! function_exists( 'cck_render_component' ) ) {
 	/**
-	 * Kayıtlı bir component'i güvenli şekilde render eder.
+	 * KayÄ±tlÄ± bir component'i gÃ¼venli ÅŸekilde render eder.
 	 *
-	 * @param string $component_id Component kimliği.
-	 * @param array  $atts         Shortcode değerleri.
+	 * @param string $component_id Component kimliÄŸi.
+	 * @param array  $atts         Shortcode deÄŸerleri.
 	 * @return string
 	 */
 	function cck_render_component( $component_id, $atts = array() ) {
@@ -228,7 +228,7 @@ if ( ! function_exists( 'cck_render_component' ) ) {
 		$manifest     = cck_get_component_manifest( $component_id );
 
 		if ( empty( $manifest ) ) {
-			cck_debug_log( 'Component manifest bulunamadı: ' . $component_id );
+			cck_debug_log( 'Component manifest bulunamadÄ±: ' . $component_id );
 			return '';
 		}
 
@@ -260,9 +260,9 @@ if ( ! function_exists( 'cck_render_component' ) ) {
 
 if ( ! function_exists( 'cck_component_shortcode' ) ) {
 	/**
-	 * Shortcode üzerinden component render eder.
+	 * Shortcode Ã¼zerinden component render eder.
 	 *
-	 * @param array $atts Shortcode değerleri.
+	 * @param array $atts Shortcode deÄŸerleri.
 	 * @return string
 	 */
 	function cck_component_shortcode( $atts ) {
