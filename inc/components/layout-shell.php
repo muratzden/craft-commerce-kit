@@ -576,6 +576,6 @@ if ( ! function_exists( 'cck_render_global_footer' ) ) {
 
 		cck_enqueue_layout_assets();
 
-		echo function_exists( 'cck_component_footer' ) ? cck_component_footer() : cck_render_component( 'footer' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo cck_render_component( 'footer' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
