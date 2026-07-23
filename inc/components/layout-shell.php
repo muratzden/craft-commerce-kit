@@ -328,7 +328,7 @@ if ( ! function_exists( 'cck_component_header' ) ) {
 					<?php endforeach; ?>
 				</nav>
 
-				<?php echo cck_component_header_actions(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php echo cck_render_component( 'header-actions' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 		</header>
 		<?php
