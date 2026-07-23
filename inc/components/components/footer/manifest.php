@@ -15,7 +15,7 @@ return array(
 			'copyright' => sprintf( __( '© %1$s Craft Commerce Kit.', 'craft-commerce-kit' ), gmdate( 'Y' ) ),
 		),
 	),
-	'callback'    => 'cck_component_footer',
+	'callback'    => 'cck_component_package_render_footer',
 	'supports'    => array( 'background', 'spacing', 'typography', 'visibility' ),
 	'settings'    => array(
 		'about'     => array( 'type' => 'textarea', 'label' => __( 'About', 'craft-commerce-kit' ), 'default' => __( 'A premium WooCommerce starter kit for refined artisan commerce.', 'craft-commerce-kit' ), 'sanitize_callback' => 'sanitize_text_field' ),
