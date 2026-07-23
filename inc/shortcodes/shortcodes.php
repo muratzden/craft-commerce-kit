@@ -99,7 +99,8 @@ if ( ! function_exists( 'cck_shortcode_tilla_home' ) ) {
 				'columns' => '3',
 			)
 		);
-		$output .= cck_component_image_text(
+		$output .= cck_render_component(
+			'image-text',
 			array(
 				'title'        => 'Material honesty, shaped by hand.',
 				'text'         => 'Use this block for workshop photography, process notes, or a brand story section.',
