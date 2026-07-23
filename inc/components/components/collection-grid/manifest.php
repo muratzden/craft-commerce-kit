@@ -14,7 +14,7 @@ return array(
 			'columns' => '3',
 		),
 	),
-	'callback'    => 'cck_component_collection_grid',
+	'callback'    => 'cck_component_package_render_collection_grid',
 	'supports'    => array( 'background', 'spacing', 'typography', 'visibility' ),
 	'settings'    => array(
 		'items'   => array( 'type' => 'textarea', 'label' => __( 'Items', 'craft-commerce-kit' ), 'default' => 'Featured,Curated highlights,/shop/featured/,featured.webp|New Arrivals,Fresh seasonal additions,/shop/new-arrivals/,new-arrivals.webp|Best Sellers,Customer-loved essentials,/shop/best-sellers/,best-sellers.webp', 'sanitize_callback' => 'sanitize_text_field' ),
