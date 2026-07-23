@@ -16,7 +16,7 @@ return array(
 			'button_url'   => '/shop/',
 		),
 	),
-	'callback'    => 'cck_component_cta',
+	'callback'    => 'cck_component_package_render_cta',
 	'supports'    => array( 'background', 'spacing', 'typography', 'button', 'visibility' ),
 	'settings'    => array(
 		'title'        => array( 'type' => 'text', 'label' => __( 'Title', 'craft-commerce-kit' ), 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ),
