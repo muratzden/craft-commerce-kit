@@ -39,7 +39,8 @@ if ( ! function_exists( 'cck_shortcode_tilla_hero' ) ) {
 	function cck_shortcode_tilla_hero() {
 		$brand = cck_get_tilla_leather_brand_pack();
 
-		return cck_component_hero(
+		return cck_render_component(
+			'hero',
 			array(
 				'eyebrow'         => $brand['eyebrow'],
 				'title'           => $brand['hero_title'],
