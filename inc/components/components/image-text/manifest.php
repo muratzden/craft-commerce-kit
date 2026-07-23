@@ -18,7 +18,7 @@ return array(
 			'reverse'      => 'true',
 		),
 	),
-	'callback'    => 'cck_component_image_text',
+	'callback'    => 'cck_component_package_render_image_text',
 	'supports'    => array( 'background', 'spacing', 'typography', 'button', 'visibility' ),
 	'settings'    => array(
 		'title'        => array( 'type' => 'text', 'label' => __( 'Title', 'craft-commerce-kit' ), 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ),
