@@ -1651,70 +1651,80 @@ body.cck-woo-active.cck-product-page .wp-site-blocks > .wp-block-group.woocommer
 	flex-direction: column;
 	align-self: stretch;
 	min-width: 0;
-	padding-top: 0;
 	margin-top: 0;
-	transform: translateY(-18px);
+	padding-top: 0;
+	transform: none;
 }
 
-body.cck-woo-active.cck-product-page .woocommerce-product-gallery {
+body.cck-woo-active.cck-product-page .cck-product-gallery {
+	display: grid;
+	gap: 14px;
+	width: 100%;
+	max-width: 680px;
+	margin: 0;
+}
+
+body.cck-woo-active.cck-product-page .cck-product-gallery__main {
 	position: relative;
-	width: 100%;
-	max-width: none;
-	margin-bottom: var(--cck-space-md);
-}
-
-body.cck-woo-active.cck-product-page .wp-block-woocommerce-product-image-gallery {
-	width: 100%;
-	max-width: none;
-	border-radius: var(--cck-radius-card);
-	overflow: hidden;
-}
-
-body.cck-woo-active.cck-product-page .woocommerce-product-gallery__wrapper {
-	border-radius: var(--cck-radius-card);
 	overflow: hidden;
 	border: 1px solid var(--cck-border);
+	border-radius: var(--cck-radius-card);
 	background: var(--cck-paper);
 	box-shadow: var(--cck-shadow-soft);
+	aspect-ratio: 4 / 5;
+	max-height: min(760px, calc(100vh - 150px));
 }
 
-body.cck-woo-active.cck-product-page .woocommerce-product-gallery .flex-viewport {
-	border-radius: var(--cck-radius-card);
-	overflow: hidden;
-}
-
-body.cck-woo-active.cck-product-page .woocommerce-product-gallery__image,
-body.cck-woo-active.cck-product-page .woocommerce-product-gallery__image a {
-	border-radius: var(--cck-radius-card);
-	overflow: hidden;
-}
-
-body.cck-woo-active.cck-product-page .woocommerce-product-gallery__image img {
-	border-radius: inherit;
-}
-
-body.cck-woo-active.cck-product-page .woocommerce-product-gallery__image {
-	position: relative;
-}
-
-body.cck-woo-active.cck-product-page .woocommerce-product-gallery__image img {
+body.cck-woo-active.cck-product-page .cck-product-gallery__main-image {
 	display: block;
 	width: 100%;
-	height: auto;
+	height: 100%;
 	object-fit: cover;
 }
 
-body.cck-woo-active.cck-product-page .flex-control-thumbs {
-	display: none;
+body.cck-woo-active.cck-product-page .cck-product-gallery__badge {
+	position: absolute;
+	top: 16px;
+	left: 16px;
+	z-index: 2;
 }
 
-body.cck-woo-active.cck-product-page .cck-product-media__thumbs {
+body.cck-woo-active.cck-product-page .cck-product-gallery__badge span {
+	display: inline-flex;
+	align-items: center;
+	min-height: 30px;
+	padding: 0 11px;
+	border-radius: 999px;
+	background: rgba(23, 18, 14, 0.88);
+	color: var(--cck-colors-surface);
+	font-size: 0.72rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+body.cck-woo-active.cck-product-page .cck-product-gallery__thumbs {
 	display: grid;
-	grid-template-columns: repeat(5, minmax(0, 1fr));
+	grid-template-columns: repeat(5, minmax(0, 84px));
+	justify-content: start;
 	gap: 12px;
-	margin-top: 14px;
 }
 
+body.cck-woo-active.cck-product-page .cck-wc-summary {
+	margin-top: 0;
+}
+
+@media (max-width: 900px) {
+    body.cck-woo-active.cck-product-page .cck-product-gallery {
+        max-width: none;
+    }
+
+    body.cck-woo-active.cck-product-page .cck-product-gallery__main {
+        max-height: none;
+    }
+}
+
+body.cck-woo-active.cck-product-page .cck-product-gallery__thumb,
 body.cck-woo-active.cck-product-page .cck-product-media__thumb {
 	overflow: hidden;
 	padding: 0;
@@ -1790,6 +1800,8 @@ body.cck-woo-active.cck-product-page .cck-product-media__play svg {
 	fill: currentColor;
 }
 
+body.cck-woo-active.cck-product-page .cck-product-gallery__thumb.is-active,
+body.cck-woo-active.cck-product-page .cck-product-gallery__thumb:hover,
 body.cck-woo-active.cck-product-page .cck-product-media__thumb.is-active,
 body.cck-woo-active.cck-product-page .cck-product-media__thumb:hover {
 	border-color: rgba(139, 90, 53, 0.55);
@@ -1797,6 +1809,7 @@ body.cck-woo-active.cck-product-page .cck-product-media__thumb:hover {
 	transform: translateY(-1px);
 }
 
+body.cck-woo-active.cck-product-page .cck-product-gallery__thumb img,
 body.cck-woo-active.cck-product-page .cck-product-media__thumb-image {
 	display: block;
 	width: 100%;
@@ -2199,7 +2212,7 @@ body.cck-woo-active.single-product .wp-site-blocks > .wp-block-group.woocommerce
 	}
 
 	body.cck-woo-active.cck-product-page .wp-site-blocks > .wp-block-group.woocommerce.product > .wp-block-group.has-global-padding > .wp-block-columns > .wp-block-column:last-child {
-	transform: none;
+		transform: none;
 	}
 }
 
