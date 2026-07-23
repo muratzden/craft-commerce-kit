@@ -7,6 +7,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
+if ( ! function_exists( 'cck_shortcode_component_bridge' ) ) {
+	function cck_shortcode_component_bridge( $component ) {
+		return function( $atts ) use ( $component ) {
+			return cck_render_component( $component, $atts );
+		};
+	}
+}
+
 if ( ! function_exists( 'cck_register_shortcodes' ) ) {
 	/**
 	 * Register public shortcodes.
@@ -14,12 +22,12 @@ if ( ! function_exists( 'cck_register_shortcodes' ) ) {
 	 * @return void
 	 */
 	function cck_register_shortcodes() {
-		add_shortcode( 'cck_hero', 'cck_component_hero' );
-		add_shortcode( 'cck_section_title', 'cck_component_section_title' );
-		add_shortcode( 'cck_trust_block', 'cck_component_trust_block' );
-		add_shortcode( 'cck_image_text', 'cck_component_image_text' );
-		add_shortcode( 'cck_cta', 'cck_component_cta' );
-		add_shortcode( 'cck_collection_grid', 'cck_component_collection_grid' );
+		add_shortcode( 'cck_hero', cck_shortcode_component_bridge( 'hero' ) );
+		add_shortcode( 'cck_section_title', cck_shortcode_component_bridge( 'section-title' ) );
+		add_shortcode( 'cck_trust_block', cck_shortcode_component_bridge( 'trust-block' ) );
+		add_shortcode( 'cck_image_text', cck_shortcode_component_bridge( 'image-text' ) );
+		add_shortcode( 'cck_cta', cck_shortcode_component_bridge( 'cta' ) );
+		add_shortcode( 'cck_collection_grid', cck_shortcode_component_bridge( 'collection-grid' ) );
 		add_shortcode( 'cck_component', 'cck_component_shortcode' );
 		add_shortcode( 'cck_layout', 'cck_layout_shortcode' );
 		add_shortcode( 'cck_experience', 'cck_shortcode_experience' );
