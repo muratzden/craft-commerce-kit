@@ -19,7 +19,6 @@ require_once CCK_PLUGIN_DIR . 'inc/components/section-title.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/trust-block.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/image-text.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/cta.php';
-require_once CCK_PLUGIN_DIR . 'inc/components/footer.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/collection-grid.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/components/product-grid/render.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/components/usp/render.php';
