@@ -83,7 +83,6 @@ if ( ! function_exists( 'cck_register_core_component_renderers' ) ) {
 			'image-text'      => 'cck_component_package_render_image_text',
 			'section-title'   => 'cck_component_package_render_section_title',
 			'trust-block'     => 'cck_component_package_render_trust_block',
-			'trust'           => 'cck_component_trust_block',
 			'usp'             => 'cck_component_package_render_usp',
 			'product-grid'    => 'cck_component_package_render_product_grid',
 			'product_grid'    => 'cck_component_package_render_product_grid',
