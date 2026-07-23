@@ -78,7 +78,7 @@ if ( ! function_exists( 'cck_register_core_component_renderers' ) ) {
 			'layout-assets'   => 'cck_component_layout_assets',
 			'footer'          => 'cck_component_footer',
 			'hero'            => 'cck_component_hero',
-			'collection-grid' => 'cck_component_collection_grid',
+			'collection-grid' => 'cck_component_package_render_collection_grid',
 			'cta'             => 'cck_component_package_render_cta',
 			'image-text'      => 'cck_component_package_render_image_text',
 			'section-title'   => 'cck_component_package_render_section_title',
