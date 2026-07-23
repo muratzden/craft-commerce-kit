@@ -79,7 +79,7 @@ if ( ! function_exists( 'cck_register_core_component_renderers' ) ) {
 			'footer'          => 'cck_component_footer',
 			'hero'            => 'cck_component_hero',
 			'collection-grid' => 'cck_component_collection_grid',
-			'cta'             => 'cck_component_cta',
+			'cta'             => 'cck_component_package_render_cta',
 			'image-text'      => 'cck_component_image_text',
 			'section-title'   => 'cck_component_package_render_section_title',
 			'trust-block'     => 'cck_component_trust_block',
