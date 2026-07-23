@@ -95,7 +95,8 @@ if ( ! function_exists( 'cck_shortcode_tilla_home' ) ) {
 			)
 		);
 		$output .= '</div></section>';
-		$output .= cck_component_collection_grid(
+		$output .= cck_render_component(
+			'collection-grid',
 			array(
 				'items'   => 'Bags,/product-category/bags/|Wallets,/product-category/wallets/|Belts,/product-category/belts/',
 				'columns' => '3',
