@@ -96,10 +96,6 @@ if ( ! function_exists( 'cck_wc_dequeue_legacy_frontend_script' ) ) {
 			return;
 		}
 
-		wp_dequeue_script( 'cck-frontend' );
-		wp_deregister_script( 'cck-frontend' );
-		wp_dequeue_script( 'craft-commerce-kit' );
-		wp_deregister_script( 'craft-commerce-kit' );
 	}
 }
 
