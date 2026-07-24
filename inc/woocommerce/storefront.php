@@ -373,9 +373,6 @@ if ( ! function_exists( 'cck_wc_render_product_card_from_definition' ) ) {
 			</div>
 
 			<div class="cck-product-card__content">
-				<?php if ( ! empty( $card['short_description'] ) ) : ?>
-					<p class="cck-product-card__description"><?php echo esc_html( $card['short_description'] ); ?></p>
-				<?php endif; ?>
 
 				<?php if ( ! empty( $card['rating_html'] ) ) : ?>
 					<div class="cck-product-card__meta">
@@ -745,9 +742,6 @@ if ( ! function_exists( 'cck_wc_render_product_card_markup' ) ) {
 			</div>
 
 			<div class="cck-product-card__content">
-				<?php if ( ! empty( $card['short_description'] ) ) : ?>
-					<p class="cck-product-card__description"><?php echo esc_html( $card['short_description'] ); ?></p>
-				<?php endif; ?>
 
 				<?php if ( ! empty( $card['rating_html'] ) ) : ?>
 					<div class="cck-product-card__meta">
