@@ -605,7 +605,6 @@
 	}
 }
 
-
 .cck-component {
 	box-sizing: border-box;
 }
@@ -1312,17 +1311,6 @@ body.cck-woo-active .wc-block-catalog-sorting select {
 	flex-direction: column;
 	height: 100%;
 	gap: 12px;
-}
-
-.cck-product-card__description {
-	margin: 0;
-	color: var(--cck-colors-muted);
-	line-height: 1.6;
-	display: -webkit-box;
-	-webkit-line-clamp: 3;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-	min-height: calc(1.6em * 3);
 }
 
 .cck-product-card__meta {
