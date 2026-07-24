@@ -75,7 +75,7 @@ if ( ! function_exists( 'cck_register_core_component_renderers' ) ) {
 			'brand-preset'    => 'cck_component_package_render_brand_preset',
 			'header'          => 'cck_component_package_render_header',
 			'header-actions'  => 'cck_component_package_render_header_actions',
-			'layout-assets'   => 'cck_component_layout_assets',
+			'layout-assets'   => 'cck_component_package_render_layout_assets',
 			'footer'          => 'cck_component_package_render_footer',
 			'hero'            => 'cck_component_package_render_hero',
 			'collection-grid' => 'cck_component_package_render_collection_grid',
