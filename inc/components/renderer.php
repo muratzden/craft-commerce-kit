@@ -73,7 +73,7 @@ if ( ! function_exists( 'cck_register_core_component_renderers' ) ) {
 	function cck_register_core_component_renderers() {
 		$renderers = array(
 			'brand-preset'    => 'cck_component_brand_preset',
-			'header'          => 'cck_component_header',
+			'header'          => 'cck_component_package_render_header',
 			'header-actions'  => 'cck_component_package_render_header_actions',
 			'layout-assets'   => 'cck_component_layout_assets',
 			'footer'          => 'cck_component_package_render_footer',
