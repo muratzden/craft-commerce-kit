@@ -1473,16 +1473,6 @@ body.cck-woo-active .wc-block-catalog-sorting select {
 	gap: 8px;
 }
 
-.cck-product-card__actions .button::before,
-.cck-product-card__actions .added_to_cart::before {
-	content: '';
-	display: inline-block;
-	width: 16px;
-	height: 16px;
-	background-color: currentColor;
-	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8h12l-1 12H7L6 8z'/%3E%3Cpath d='M9 8a3 3 0 0 1 6 0'/%3E%3C/svg%3E") center / contain no-repeat;
-	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8h12l-1 12H7L6 8z'/%3E%3Cpath d='M9 8a3 3 0 0 1 6 0'/%3E%3C/svg%3E") center / contain no-repeat;
-}
 
 .cck-product-card__actions .button span,
 .cck-product-card__actions .added_to_cart span {
