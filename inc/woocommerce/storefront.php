@@ -1083,6 +1083,11 @@ if ( ! function_exists( 'cck_wc_render_single_product_gallery_markup' ) ) {
 		echo '<div class="cck-product-gallery__main">';
 		echo '<div class="cck-product-gallery__badge"><span>' . esc_html( $badge ) . '</span></div>';
 		echo wp_kses_post( $main_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+                if ( count( $image_ids ) > 1 ) {
+					echo '<button type="button" class="cck-product-gallery__nav cck-product-gallery__nav--prev" data-cck-gallery-nav="prev" aria-label="' . esc_attr__( 'Previous product image', 'craft-commerce-kit' ) . '">&lsaquo;</button>';
+					echo '<button type="button" class="cck-product-gallery__nav cck-product-gallery__nav--next" data-cck-gallery-nav="next" aria-label="' . esc_attr__( 'Next product image', 'craft-commerce-kit' ) . '">&rsaquo;</button>';
+				}
 		echo '</div>';
 
 		echo '<div class="cck-product-gallery__thumbs" aria-label="' . esc_attr__( 'Product gallery thumbnails', 'craft-commerce-kit' ) . '">';
