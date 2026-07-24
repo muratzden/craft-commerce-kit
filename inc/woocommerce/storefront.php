@@ -463,7 +463,6 @@ if ( ! function_exists( 'cck_wc_cardify_add_to_cart_html' ) ) {
 			return '';
 		}
 
-		$icon = '<span class="cck-product-card__slot-icon">' . cck_render_svg_icon( 'bag' ) . '</span>';
 
 		if ( preg_match( '/^<(a|button)([^>]*)>(.*)<\\/\\1>$/s', $html, $matches ) ) {
 			$tag     = $matches[1];
@@ -476,10 +475,9 @@ if ( ! function_exists( 'cck_wc_cardify_add_to_cart_html' ) ) {
 			}
 
 			return sprintf(
-				'<%1$s%2$s>%3$s<span>%4$s</span></%1$s>',
+				'<%1$s%2$s><span>%3$s</span></%1$s>',
 				$tag,
 				$attrs,
-				$icon,
 				esc_html( $content )
 			);
 		}
@@ -546,9 +544,8 @@ if ( ! function_exists( 'cck_wc_render_product_card_action_link' ) ) {
 		}
 
 		return sprintf(
-			'<a %1$s>%2$s<span>%3$s</span></a>',
+			'<a %1$s><span>%2$s</span></a>',
 			implode( ' ', $attribute_html ),
-			'<span class="cck-product-card__slot-icon">' . cck_render_svg_icon( 'bag' ) . '</span>',
 			esc_html( $button_text )
 		);
 	}
