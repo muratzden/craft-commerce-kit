@@ -373,23 +373,16 @@ if ( ! function_exists( 'cck_wc_render_product_card_from_definition' ) ) {
 			</div>
 
 			<div class="cck-product-card__content">
-				<h3 class="cck-product-card__title">
-					<a href="<?php echo esc_url( cck_array_get( $card, 'url', '#' ) ); ?>"><?php echo esc_html( cck_array_get( $card, 'title', '' ) ); ?></a>
-				</h3>
-
 				<?php if ( ! empty( $card['short_description'] ) ) : ?>
 					<p class="cck-product-card__description"><?php echo esc_html( $card['short_description'] ); ?></p>
 				<?php endif; ?>
 
-				<?php if ( ! empty( $card['rating_html'] ) || ! empty( $card['price_html'] ) ) : ?>
+				<?php if ( ! empty( $card['rating_html'] ) ) : ?>
 					<div class="cck-product-card__meta">
 						<?php if ( ! empty( $card['rating_html'] ) ) : ?>
 							<div class="cck-product-card__rating"><?php echo wp_kses_post( cck_array_get( $card, 'rating_html', '' ) ); ?></div>
 						<?php endif; ?>
 
-						<?php if ( ! empty( $card['price_html'] ) ) : ?>
-							<div class="cck-product-card__price"><?php echo wp_kses_post( cck_array_get( $card, 'price_html', '' ) ); ?></div>
-						<?php endif; ?>
 					</div>
 				<?php endif; ?>
 
@@ -752,23 +745,16 @@ if ( ! function_exists( 'cck_wc_render_product_card_markup' ) ) {
 			</div>
 
 			<div class="cck-product-card__content">
-				<h3 class="cck-product-card__title">
-					<a href="<?php echo esc_url( $card['url'] ); ?>"><?php echo esc_html( $card['title'] ); ?></a>
-				</h3>
-
 				<?php if ( ! empty( $card['short_description'] ) ) : ?>
 					<p class="cck-product-card__description"><?php echo esc_html( $card['short_description'] ); ?></p>
 				<?php endif; ?>
 
-				<?php if ( ! empty( $card['rating_html'] ) || ! empty( $card['price_html'] ) ) : ?>
+				<?php if ( ! empty( $card['rating_html'] ) ) : ?>
 					<div class="cck-product-card__meta">
 						<?php if ( ! empty( $card['rating_html'] ) ) : ?>
 							<div class="cck-product-card__rating"><?php echo wp_kses_post( $card['rating_html'] ); ?></div>
 						<?php endif; ?>
 
-				<?php if ( ! empty( $card['price_html'] ) ) : ?>
-							<div class="cck-product-card__price"><?php echo wp_kses_post( $card['price_html'] ); ?></div>
-						<?php endif; ?>
 					</div>
 				<?php endif; ?>
 
