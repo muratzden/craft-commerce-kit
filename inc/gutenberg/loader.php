@@ -9,6 +9,28 @@ defined( 'ABSPATH' ) || exit;
 
 require_once CCK_PLUGIN_DIR . 'inc/gutenberg/component-adapter.php';
 
+if ( ! function_exists( 'cck_register_gutenberg_editor_assets' ) ) {
+        /**
+         * Register shared Gutenberg editor assets.
+         *
+         * @return void
+         */
+        function cck_register_gutenberg_editor_assets() {
+                wp_register_script(
+                        'cck-block-editor-controls',
+                        CCK_PLUGIN_URL . 'assets/js/gutenberg/block-editor-controls.js',
+                        array(
+                                'wp-element',
+                                'wp-components',
+                        ),
+                        CCK_VERSION,
+                        true
+                );
+        }
+}
+
+add_action( 'init', 'cck_register_gutenberg_editor_assets', 5 );
+
 if ( ! function_exists( 'cck_register_gutenberg_blocks' ) ) {
         /**
          * Register Craft Commerce Kit Gutenberg blocks.
