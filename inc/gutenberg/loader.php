@@ -44,6 +44,7 @@ if ( ! function_exists( 'cck_register_gutenberg_editor_assets' ) ) {
                         array(
                                 'wp-element',
                                 'wp-components',
+                                'wp-block-editor',
                         ),
                         CCK_VERSION,
                         true

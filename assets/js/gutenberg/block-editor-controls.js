@@ -1,13 +1,18 @@
-(function (element, components) {
+(function (element, components, blockEditor) {
     'use strict';
 
     var el = element.createElement;
+    var useState = element.useState;
+
     var TextControl = components.TextControl;
     var TextareaControl = components.TextareaControl;
     var SelectControl = components.SelectControl;
     var ToggleControl = components.ToggleControl;
     var Button = components.Button;
     var BaseControl = components.BaseControl;
+    var Popover = components.Popover;
+
+    var LinkControl = blockEditor.LinkControl;
 
     function setAttribute(settingId, value, setAttributes) {
         var nextAttributes = {};
@@ -15,7 +20,11 @@
         setAttributes(nextAttributes);
     }
 
-    function renderImageControl(settingId, setting, attributes, setAttributes) {
+    function ImagePickerControl(props) {
+        var settingId = props.settingId;
+        var setting = props.setting;
+        var attributes = props.attributes;
+        var setAttributes = props.setAttributes;
         var value = attributes[settingId] || '';
 
         function openMediaLibrary() {
@@ -50,7 +59,6 @@
         return el(
             BaseControl,
             {
-                key: settingId,
                 label: setting.label || settingId,
                 help: setting.description || ''
             },
@@ -68,7 +76,13 @@
                 : null,
             el(
                 'div',
-                null,
+                {
+                    style: {
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '8px'
+                    }
+                },
                 el(
                     Button,
                     {
@@ -94,6 +108,94 @@
         );
     }
 
+    function LinkPickerControl(props) {
+        var settingId = props.settingId;
+        var setting = props.setting;
+        var attributes = props.attributes;
+        var setAttributes = props.setAttributes;
+        var value = attributes[settingId] || '';
+        var state = useState(false);
+        var isOpen = state[0];
+        var setIsOpen = state[1];
+
+        return el(
+            BaseControl,
+            {
+                label: setting.label || settingId,
+                help: setting.description || ''
+            },
+            el(TextControl, {
+                type: 'url',
+                value: value,
+                onChange: function (nextValue) {
+                    setAttribute(settingId, nextValue, setAttributes);
+                }
+            }),
+            el(
+                'div',
+                {
+                    style: {
+                        position: 'relative',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '8px'
+                    }
+                },
+                el(
+                    Button,
+                    {
+                        variant: 'secondary',
+                        onClick: function () {
+                            setIsOpen(!isOpen);
+                        }
+                    },
+                    value ? 'Change Link' : 'Select Link'
+                ),
+                value
+                    ? el(
+                        Button,
+                        {
+                            variant: 'tertiary',
+                            isDestructive: true,
+                            onClick: function () {
+                                setAttribute(settingId, '', setAttributes);
+                                setIsOpen(false);
+                            }
+                        },
+                        'Remove Link'
+                    )
+                    : null,
+                isOpen
+                    ? el(
+                        Popover,
+                        {
+                            placement: 'left-start',
+                            onClose: function () {
+                                setIsOpen(false);
+                            }
+                        },
+                        el(LinkControl, {
+                            value: {
+                                url: value
+                            },
+                            onChange: function (nextValue) {
+                                setAttribute(
+                                    settingId,
+                                    nextValue.url || '',
+                                    setAttributes
+                                );
+                            },
+                            onRemove: function () {
+                                setAttribute(settingId, '', setAttributes);
+                                setIsOpen(false);
+                            }
+                        })
+                    )
+                    : null
+            )
+        );
+    }
+
     function renderControl(settingId, setting, attributes, setAttributes) {
         var controlProps = {
             key: settingId,
@@ -106,12 +208,26 @@
         };
 
         if ('image_url' === settingId) {
-            return renderImageControl(
-                settingId,
-                setting,
-                attributes,
-                setAttributes
-            );
+            return el(ImagePickerControl, {
+                key: settingId,
+                settingId: settingId,
+                setting: setting,
+                attributes: attributes,
+                setAttributes: setAttributes
+            });
+        }
+
+        if (
+            'url' === setting.type &&
+            /_url$/.test(settingId)
+        ) {
+            return el(LinkPickerControl, {
+                key: settingId,
+                settingId: settingId,
+                setting: setting,
+                attributes: attributes,
+                setAttributes: setAttributes
+            });
         }
 
         if ('textarea' === setting.type) {
@@ -154,5 +270,6 @@
     window.cckBlockEditor.renderControl = renderControl;
 }(
     window.wp.element,
-    window.wp.components
+    window.wp.components,
+    window.wp.blockEditor
 ));
