@@ -7,24 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! function_exists( 'cck_render_usp_block' ) ) {
-        /**
-         * Render the USP block through the existing component renderer.
-         *
-         * @param array $attributes Block attributes.
-         * @return string
-         */
-        function cck_render_usp_block( $attributes ) {
-                $attributes         = is_array( $attributes ) ? $attributes : array();
-                $wrapper_attributes = get_block_wrapper_attributes();
-
-                return sprintf(
-                        '<div %1$s>%2$s</div>',
-                        $wrapper_attributes,
-                        cck_render_component( 'usp', $attributes )
-                );
-        }
-}
+require_once CCK_PLUGIN_DIR . 'inc/gutenberg/component-adapter.php';
 
 if ( ! function_exists( 'cck_register_gutenberg_blocks' ) ) {
         /**
@@ -33,12 +16,34 @@ if ( ! function_exists( 'cck_register_gutenberg_blocks' ) ) {
          * @return void
          */
         function cck_register_gutenberg_blocks() {
-                register_block_type(
-                        CCK_PLUGIN_DIR . 'blocks/usp',
-                        array(
-                                'render_callback' => 'cck_render_usp_block',
-                        )
+                $blocks = array(
+                        'usp' => CCK_PLUGIN_DIR . 'blocks/usp',
                 );
+
+                foreach ( $blocks as $component_id => $block_path ) {
+                        $block_type = register_block_type(
+                                $block_path,
+                                array(
+                                        'attributes'      => cck_get_block_attributes_from_manifest( $component_id ),
+                                        'render_callback' => function ( $attributes ) use ( $component_id ) {
+                                                return cck_render_component_block( $component_id, $attributes );
+                                        },
+                                )
+                        );
+
+                        if ( $block_type instanceof WP_Block_Type && ! empty( $block_type->editor_script_handles ) ) {
+                                wp_add_inline_script(
+                                        $block_type->editor_script_handles[0],
+                                        'window.cckBlockEditorSettings = window.cckBlockEditorSettings || {};'
+                                                . 'window.cckBlockEditorSettings['
+                                                . wp_json_encode( $block_type->name )
+                                                . '] = '
+                                                . wp_json_encode( cck_get_block_editor_settings_from_manifest( $component_id ) )
+                                                . ';',
+                                        'before'
+                                );
+                        }
+                }
         }
 }
 

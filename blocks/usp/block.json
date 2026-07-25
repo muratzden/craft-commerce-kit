@@ -7,32 +7,6 @@
   "icon": "star-filled",
   "description": "Three-column unique selling proposition section.",
   "textdomain": "craft-commerce-kit",
-  "attributes": {
-    "item_one_title": {
-      "type": "string",
-      "default": "Handmade Quality"
-    },
-    "item_one_text": {
-      "type": "string",
-      "default": "Designed for product stories that value material, process, and detail."
-    },
-    "item_two_title": {
-      "type": "string",
-      "default": "WooCommerce Ready"
-    },
-    "item_two_text": {
-      "type": "string",
-      "default": "Built to complement WooCommerce storefront flows without replacing native behavior."
-    },
-    "item_three_title": {
-      "type": "string",
-      "default": "Modular Design"
-    },
-    "item_three_text": {
-      "type": "string",
-      "default": "Reusable sections can be rendered independently through the component definition system."
-    }
-  },
   "supports": {
     "align": [
       "wide",

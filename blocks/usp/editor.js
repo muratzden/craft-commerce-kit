@@ -7,6 +7,58 @@
     var PanelBody = components.PanelBody;
     var TextControl = components.TextControl;
     var TextareaControl = components.TextareaControl;
+    var SelectControl = components.SelectControl;
+    var ToggleControl = components.ToggleControl;
+    var editorSettings = (
+        window.cckBlockEditorSettings &&
+        window.cckBlockEditorSettings['craft-commerce-kit/usp']
+    ) || {};
+
+    function renderControl(settingId, setting, attributes, setAttributes) {
+        var controlProps = {
+            key: settingId,
+            label: setting.label || settingId,
+            help: setting.description || '',
+            value: attributes[settingId],
+            onChange: function (value) {
+                var nextAttributes = {};
+                nextAttributes[settingId] = value;
+                setAttributes(nextAttributes);
+            }
+        };
+
+        if ('textarea' === setting.type) {
+            return el(TextareaControl, controlProps);
+        }
+
+        if ('checkbox' === setting.type) {
+            controlProps.checked = Boolean(attributes[settingId]);
+            delete controlProps.value;
+            return el(ToggleControl, controlProps);
+        }
+
+        if ('select' === setting.type) {
+            controlProps.options = Object.keys(setting.options || {}).map(function (value) {
+                return {
+                    label: setting.options[value],
+                    value: value
+                };
+            });
+
+            return el(SelectControl, controlProps);
+        }
+
+        if ('number' === setting.type) {
+            controlProps.type = 'number';
+            controlProps.onChange = function (value) {
+                var nextAttributes = {};
+                nextAttributes[settingId] = Number(value);
+                setAttributes(nextAttributes);
+            };
+        }
+
+        return el(TextControl, controlProps);
+    }
 
     blocks.registerBlockType('craft-commerce-kit/usp', {
         edit: function (props) {
@@ -25,64 +77,16 @@
                     el(
                         PanelBody,
                         {
-                            title: 'First USP Item',
+                            title: 'USP Settings',
                             initialOpen: true
                         },
-                        el(TextControl, {
-                            label: 'First Item Title',
-                            value: attributes.item_one_title,
-                            onChange: function (value) {
-                                setAttributes({ item_one_title: value });
-                            }
-                        }),
-                        el(TextareaControl, {
-                            label: 'First Item Text',
-                            value: attributes.item_one_text,
-                            onChange: function (value) {
-                                setAttributes({ item_one_text: value });
-                            }
-                        })
-                    ),
-                    el(
-                        PanelBody,
-                        {
-                            title: 'Second USP Item',
-                            initialOpen: false
-                        },
-                        el(TextControl, {
-                            label: 'Second Item Title',
-                            value: attributes.item_two_title,
-                            onChange: function (value) {
-                                setAttributes({ item_two_title: value });
-                            }
-                        }),
-                        el(TextareaControl, {
-                            label: 'Second Item Text',
-                            value: attributes.item_two_text,
-                            onChange: function (value) {
-                                setAttributes({ item_two_text: value });
-                            }
-                        })
-                    ),
-                    el(
-                        PanelBody,
-                        {
-                            title: 'Third USP Item',
-                            initialOpen: false
-                        },
-                        el(TextControl, {
-                            label: 'Third Item Title',
-                            value: attributes.item_three_title,
-                            onChange: function (value) {
-                                setAttributes({ item_three_title: value });
-                            }
-                        }),
-                        el(TextareaControl, {
-                            label: 'Third Item Text',
-                            value: attributes.item_three_text,
-                            onChange: function (value) {
-                                setAttributes({ item_three_text: value });
-                            }
+                        Object.keys(editorSettings).map(function (settingId) {
+                            return renderControl(
+                                settingId,
+                                editorSettings[settingId],
+                                attributes,
+                                setAttributes
+                            );
                         })
                     )
                 ),
