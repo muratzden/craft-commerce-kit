@@ -1,0 +1,145 @@
+(function (blocks, element, blockEditor, components) {
+    'use strict';
+
+    var el = element.createElement;
+    var useBlockProps = blockEditor.useBlockProps;
+    var InspectorControls = blockEditor.InspectorControls;
+    var PanelBody = components.PanelBody;
+    var renderControl = window.cckBlockEditor.renderControl;
+    var editorSettings = (
+        window.cckBlockEditorSettings &&
+        window.cckBlockEditorSettings['craft-commerce-kit/hero']
+    ) || {};
+
+    blocks.registerBlockType('craft-commerce-kit/hero', {
+        edit: function (props) {
+            var attributes = props.attributes;
+            var setAttributes = props.setAttributes;
+            var blockProps = useBlockProps({
+                className: 'cck-section cck-hero'
+            });
+
+            return el(
+                element.Fragment,
+                null,
+                el(
+                    InspectorControls,
+                    null,
+                    el(
+                        PanelBody,
+                        {
+                            title: 'Hero Settings',
+                            initialOpen: true
+                        },
+                        Object.keys(editorSettings).map(function (settingId) {
+                            return renderControl(
+                                settingId,
+                                editorSettings[settingId],
+                                attributes,
+                                setAttributes
+                            );
+                        })
+                    )
+                ),
+                el(
+                    'section',
+                    blockProps,
+                    el(
+                        'div',
+                        { className: 'cck-container' },
+                        el(
+                            'div',
+                            { className: 'cck-hero__inner' },
+                            el(
+                                'div',
+                                { className: 'cck-hero__content' },
+                                attributes.eyebrow
+                                    ? el(
+                                        'div',
+                                        { className: 'cck-hero__eyebrow-wrap' },
+                                        el(
+                                            'span',
+                                            { className: 'cck-eyebrow' },
+                                            attributes.eyebrow
+                                        )
+                                    )
+                                    : null,
+                                attributes.title
+                                    ? el(
+                                        'h1',
+                                        { className: 'cck-hero__title' },
+                                        attributes.title
+                                    )
+                                    : null,
+                                attributes.text
+                                    ? el(
+                                        'div',
+                                        { className: 'cck-hero__description' },
+                                        el(
+                                            'p',
+                                            { className: 'cck-hero__text' },
+                                            attributes.text
+                                        )
+                                    )
+                                    : null,
+                                attributes.primary_label || attributes.secondary_label
+                                    ? el(
+                                        'div',
+                                        { className: 'cck-hero__actions' },
+                                        attributes.primary_label
+                                            ? el(
+                                                'span',
+                                                {
+                                                    className: 'cck-button cck-button--primary',
+                                                    role: 'presentation'
+                                                },
+                                                attributes.primary_label
+                                            )
+                                            : null,
+                                        attributes.secondary_label
+                                            ? el(
+                                                'span',
+                                                {
+                                                    className: 'cck-button cck-button--secondary',
+                                                    role: 'presentation'
+                                                },
+                                                attributes.secondary_label
+                                            )
+                                            : null
+                                    )
+                                    : null
+                            ),
+                            el(
+                                'div',
+                                { className: 'cck-hero__media' },
+                                el(
+                                    'div',
+                                    { className: 'cck-hero__media-frame' },
+                                    attributes.image_url
+                                        ? el('img', {
+                                            className: 'cck-hero__image',
+                                            src: attributes.image_url,
+                                            alt: '',
+                                            loading: 'lazy'
+                                        })
+                                        : el('div', {
+                                            className: 'cck-placeholder'
+                                        })
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        },
+
+        save: function () {
+            return null;
+        }
+    });
+}(
+    window.wp.blocks,
+    window.wp.element,
+    window.wp.blockEditor,
+    window.wp.components
+));

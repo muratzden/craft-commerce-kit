@@ -1,0 +1,15 @@
+{
+  "apiVersion": 3,
+  "name": "craft-commerce-kit/hero",
+  "version": "1.0.0",
+  "title": "CCK Hero",
+  "category": "design",
+  "icon": "cover-image",
+  "description": "Premium hero section with text, two buttons, and an image.",
+  "textdomain": "craft-commerce-kit",
+  "supports": {
+    "align": ["wide", "full"],
+    "html": false
+  },
+  "editorScript": "file:./editor.js"
+}

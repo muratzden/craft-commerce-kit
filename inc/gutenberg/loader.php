@@ -43,6 +43,7 @@ if ( ! function_exists( 'cck_register_gutenberg_blocks' ) ) {
                         'section-title' => CCK_PLUGIN_DIR . 'blocks/section-title',
                         'cta'           => CCK_PLUGIN_DIR . 'blocks/cta',
                         'image-text'    => CCK_PLUGIN_DIR . 'blocks/image-text',
+                        'hero'          => CCK_PLUGIN_DIR . 'blocks/hero',
                 );
 
                 foreach ( $blocks as $component_id => $block_path ) {
