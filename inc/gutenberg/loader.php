@@ -23,6 +23,28 @@ if ( ! function_exists( 'cck_register_gutenberg_editor_assets' ) ) {
                                 'wp-element',
                                 'wp-components',
                         ),
+                        filemtime( CCK_PLUGIN_DIR . 'assets/js/gutenberg/block-editor-controls.js' ),
+                        true
+                );
+        }
+}
+
+add_action( 'init', 'cck_register_gutenberg_editor_assets', 5 );
+
+if ( ! function_exists( 'cck_register_gutenberg_editor_assets' ) ) {
+        /**
+         * Register shared Gutenberg editor assets.
+         *
+         * @return void
+         */
+        function cck_register_gutenberg_editor_assets() {
+                wp_register_script(
+                        'cck-block-editor-controls',
+                        CCK_PLUGIN_URL . 'assets/js/gutenberg/block-editor-controls.js',
+                        array(
+                                'wp-element',
+                                'wp-components',
+                        ),
                         CCK_VERSION,
                         true
                 );
@@ -30,6 +52,23 @@ if ( ! function_exists( 'cck_register_gutenberg_editor_assets' ) ) {
 }
 
 add_action( 'init', 'cck_register_gutenberg_editor_assets', 5 );
+
+if ( ! function_exists( 'cck_enqueue_gutenberg_editor_media' ) ) {
+        /**
+         * Load WordPress media assets in the block editor.
+         *
+         * @return void
+         */
+        function cck_enqueue_gutenberg_editor_media() {
+                wp_enqueue_media();
+        }
+}
+
+add_action( 'enqueue_block_editor_assets', 'cck_enqueue_gutenberg_editor_media' );
+
+if ( ! function_exists( 'cck_register_gutenberg_blocks' ) ) {
+        // Mevcut blok kayıt kodu burada devam edecek.
+}
 
 if ( ! function_exists( 'cck_register_gutenberg_blocks' ) ) {
         /**
