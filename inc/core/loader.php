@@ -23,6 +23,11 @@ require_once CCK_PLUGIN_DIR . 'inc/core/loader-runtime.php';
 require_once CCK_PLUGIN_DIR . 'inc/core/loader-rendering.php';
 
 /*
+ * Gutenberg Integration
+ */
+require_once CCK_PLUGIN_DIR . 'inc/gutenberg/loader.php';
+
+/*
  * Brand Runtime
  */
 require_once CCK_PLUGIN_DIR . 'inc/core/loader-brand-runtime.php';

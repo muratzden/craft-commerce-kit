@@ -68,7 +68,11 @@ if ( ! function_exists( 'cck_should_enqueue_frontend_assets' ) ) {
 		if ( is_singular() ) {
 			$post = get_post();
 
-			return $post instanceof WP_Post && cck_content_has_frontend_shortcode( $post->post_content );
+                        return $post instanceof WP_Post
+                                && (
+                                        cck_content_has_frontend_shortcode( $post->post_content )
+                                        || has_block( 'craft-commerce-kit/usp', $post->post_content )
+                                );
 		}
 
 		return false;
