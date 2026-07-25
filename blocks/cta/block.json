@@ -1,0 +1,18 @@
+{
+  "apiVersion": 3,
+  "name": "craft-commerce-kit/cta",
+  "version": "1.0.0",
+  "title": "CCK CTA",
+  "category": "design",
+  "icon": "megaphone",
+  "description": "Call-to-action section with title, text, button label, and URL.",
+  "textdomain": "craft-commerce-kit",
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false
+  },
+  "editorScript": "file:./editor.js"
+}
