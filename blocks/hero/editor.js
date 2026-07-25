@@ -4,6 +4,7 @@
     var el = element.createElement;
     var useBlockProps = blockEditor.useBlockProps;
     var InspectorControls = blockEditor.InspectorControls;
+    var RichText = blockEditor.RichText;
     var PanelBody = components.PanelBody;
     var renderControl = window.cckBlockEditor.renderControl;
     var editorSettings = (
@@ -53,59 +54,74 @@
                             el(
                                 'div',
                                 { className: 'cck-hero__content' },
-                                attributes.eyebrow
-                                    ? el(
-                                        'div',
-                                        { className: 'cck-hero__eyebrow-wrap' },
-                                        el(
-                                            'span',
-                                            { className: 'cck-eyebrow' },
-                                            attributes.eyebrow
-                                        )
-                                    )
-                                    : null,
-                                attributes.title
-                                    ? el(
-                                        'h1',
-                                        { className: 'cck-hero__title' },
-                                        attributes.title
-                                    )
-                                    : null,
-                                attributes.text
-                                    ? el(
-                                        'div',
-                                        { className: 'cck-hero__description' },
-                                        el(
-                                            'p',
-                                            { className: 'cck-hero__text' },
-                                            attributes.text
-                                        )
-                                    )
-                                    : null,
-                                attributes.primary_label || attributes.secondary_label
-                                    ? el(
-                                        'div',
-                                        { className: 'cck-hero__actions' },
-                                        attributes.primary_label
-                                            ? el(
-                                                'span',
-                                                {
-                                                    className: 'cck-button cck-button--primary',
-                                                    role: 'presentation'
-                                                },
-                                                attributes.primary_label
-                                            )
-                                            : null,
-                                        attributes.secondary_label
-                                            ? el(
-                                                'span',
-                                                {
-                                                    className: 'cck-button cck-button--secondary',
-                                                    role: 'presentation'
-                                                },
-                                                attributes.secondary_label
-                                            )
-                                            : null
+                                el(
+                            'div',
+                            { className: 'cck-hero__eyebrow-wrap' },
+                            el(RichText, {
+                                tagName: 'span',
+                                className: 'cck-eyebrow',
+                                value: attributes.eyebrow,
+                                placeholder: 'Eyebrow…',
+                                allowedFormats: [],
+                                onChange: function (value) {
+                                    setAttributes({
+                                        eyebrow: value
+                                    });
+                                }
+                            })
+                        ),
+                               el(RichText, {
+                                    tagName: 'h1',
+                                    className: 'cck-hero__title',
+                                    value: attributes.title,
+                                    placeholder: 'Hero title…',
+                                    allowedFormats: [],
+                                    onChange: function (value) {
+                                        setAttributes({
+                                            title: value
+                                        });
+                                    }
+                                }),
+                                el(
+                                'div',
+                                { className: 'cck-hero__description' },
+                                el(RichText, {
+                                    tagName: 'p',
+                                    className: 'cck-hero__text',
+                                    value: attributes.text,
+                                    placeholder: 'Hero description…',
+                                    allowedFormats: [],
+                                    onChange: function (value) {
+                                        setAttributes({
+                                            text: value
+                                        });
+                                    }
+                                })
+                            ),
+                                el(RichText, {
+                                    tagName: 'span',
+                                    className: 'cck-button cck-button--primary',
+                                    value: attributes.primary_label,
+                                    placeholder: 'Primary button…',
+                                    allowedFormats: [],
+                                    onChange: function (value) {
+                                        setAttributes({
+                                            primary_label: value
+                                        });
+                                    }
+                                }),
+                                       el(RichText, {
+                                            tagName: 'span',
+                                            className: 'cck-button cck-button--secondary',
+                                            value: attributes.secondary_label,
+                                            placeholder: 'Secondary button…',
+                                            allowedFormats: [],
+                                            onChange: function (value) {
+                                                setAttributes({
+                                                    secondary_label: value
+                                                });
+                                            }
+                                        })
                                     )
                                     : null
                             ),
