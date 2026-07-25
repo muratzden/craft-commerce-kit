@@ -17,7 +17,8 @@ if ( ! function_exists( 'cck_register_gutenberg_blocks' ) ) {
          */
         function cck_register_gutenberg_blocks() {
                 $blocks = array(
-                        'usp' => CCK_PLUGIN_DIR . 'blocks/usp',
+                        'usp'           => CCK_PLUGIN_DIR . 'blocks/usp',
+                        'section-title' => CCK_PLUGIN_DIR . 'blocks/section-title',
                 );
 
                 foreach ( $blocks as $component_id => $block_path ) {

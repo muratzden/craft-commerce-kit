@@ -22,6 +22,16 @@ return array(
 		'eyebrow' => array( 'type' => 'text', 'label' => __( 'Eyebrow', 'craft-commerce-kit' ), 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ),
 		'title'   => array( 'type' => 'text', 'label' => __( 'Title', 'craft-commerce-kit' ), 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ),
 		'text'    => array( 'type' => 'textarea', 'label' => __( 'Text', 'craft-commerce-kit' ), 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ),
-		'align'   => array( 'type' => 'text', 'label' => __( 'Alignment', 'craft-commerce-kit' ), 'default' => 'left', 'sanitize_callback' => 'sanitize_key' ),
+		'align'   => array(
+                        'type'              => 'select',
+                        'label'             => __( 'Alignment', 'craft-commerce-kit' ),
+                        'default'           => 'left',
+                        'options'           => array(
+                                'left'   => __( 'Left', 'craft-commerce-kit' ),
+                                'center' => __( 'Center', 'craft-commerce-kit' ),
+                                'right'  => __( 'Right', 'craft-commerce-kit' ),
+                        ),
+                        'sanitize_callback' => 'sanitize_key',
+                ),
 	),
 );

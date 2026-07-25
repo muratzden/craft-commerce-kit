@@ -1,0 +1,18 @@
+{
+  "apiVersion": 3,
+  "name": "craft-commerce-kit/section-title",
+  "version": "1.0.0",
+  "title": "CCK Section Title",
+  "category": "design",
+  "icon": "heading",
+  "description": "Section heading with eyebrow, title, text, and alignment controls.",
+  "textdomain": "craft-commerce-kit",
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false
+  },
+  "editorScript": "file:./editor.js"
+}
