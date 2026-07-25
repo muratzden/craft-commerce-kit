@@ -15,7 +15,7 @@ return array(
 			'button_label' => __( 'Visit the Workshop', 'craft-commerce-kit' ),
 			'button_url'   => '/workshop/',
 			'image_url'    => function_exists( 'cck_get_demo_asset' ) ? cck_get_demo_asset( 'story.webp', __( 'Story image', 'craft-commerce-kit' ) )['url'] : content_url( 'uploads/woocommerce-placeholder-768x768.webp' ),
-			'reverse'      => 'true',
+			'reverse'      => true,
 		),
 	),
 	'callback'    => 'cck_component_package_render_image_text',
@@ -26,6 +26,6 @@ return array(
 		'button_label' => array( 'type' => 'text', 'label' => __( 'Button Label', 'craft-commerce-kit' ), 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ),
 		'button_url'   => array( 'type' => 'url', 'label' => __( 'Button URL', 'craft-commerce-kit' ), 'default' => '', 'sanitize_callback' => 'esc_url_raw' ),
 		'image_url'    => array( 'type' => 'url', 'label' => __( 'Image URL', 'craft-commerce-kit' ), 'default' => function_exists( 'cck_get_demo_asset' ) ? cck_get_demo_asset( 'story.webp', __( 'Story image', 'craft-commerce-kit' ) )['url'] : '', 'sanitize_callback' => 'esc_url_raw' ),
-		'reverse'      => array( 'type' => 'checkbox', 'label' => __( 'Reverse', 'craft-commerce-kit' ), 'default' => 'false', 'sanitize_callback' => 'sanitize_text_field' ),
+		'reverse'      => array( 'type' => 'checkbox', 'label' => __( 'Reverse', 'craft-commerce-kit' ), 'default' => false, 'sanitize_callback' => 'cck_to_bool' ),
 	),
 );

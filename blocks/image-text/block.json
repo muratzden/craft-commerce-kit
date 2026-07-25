@@ -1,0 +1,15 @@
+{
+  "apiVersion": 3,
+  "name": "craft-commerce-kit/image-text",
+  "version": "1.0.0",
+  "title": "CCK Image Text",
+  "category": "design",
+  "icon": "align-pull-left",
+  "description": "Image and text section with optional button and reversed layout.",
+  "textdomain": "craft-commerce-kit",
+  "supports": {
+    "align": ["wide", "full"],
+    "html": false
+  },
+  "editorScript": "file:./editor.js"
+}
