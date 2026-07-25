@@ -129,6 +129,7 @@ if ( ! function_exists( 'cck_validate_component_settings' ) ) {
 				'description'       => cck_array_get( $setting, 'description', '' ),
 				'default'           => cck_array_get( $setting, 'default', '' ),
 				'required'          => cck_to_bool( cck_array_get( $setting, 'required', false ) ),
+                                'options'           => cck_array_get( $setting, 'options', array() ),
 				'sanitize_callback' => cck_sanitize_callback_name( cck_array_get( $setting, 'sanitize_callback', 'sanitize_text_field' ) ),
 			);
 		}

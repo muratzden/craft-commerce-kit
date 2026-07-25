@@ -60,6 +60,10 @@ return array(
 			'description'       => __( 'Show latest or featured products.', 'craft-commerce-kit' ),
 			'default'           => 'latest',
 			'required'          => false,
+                        'options'           => array(
+                                'latest'   => __( 'Latest Products', 'craft-commerce-kit' ),
+                                'featured' => __( 'Featured Products', 'craft-commerce-kit' ),
+                        ),
 			'sanitize_callback' => 'sanitize_key',
 		),
 	),
