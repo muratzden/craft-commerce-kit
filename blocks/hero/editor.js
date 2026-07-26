@@ -16,8 +16,27 @@
         edit: function (props) {
             var attributes = props.attributes;
             var setAttributes = props.setAttributes;
+            var surface = attributes.surface || 'background';
+
+            var allowedSurfaces = [
+                'transparent',
+                'background',
+                'surface',
+                'surface-alt',
+                'dark'
+            ];
+
+            if (allowedSurfaces.indexOf(surface) === -1) {
+                surface = 'background';
+            }
+
             var blockProps = useBlockProps({
-                className: 'cck-section cck-hero'
+                className: [
+                    'cck-section',
+                    'cck-hero',
+                    'cck-surface',
+                    'cck-surface--' + surface
+                ].join(' ')
             });
 
             return el(
