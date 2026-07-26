@@ -46,6 +46,27 @@ if ( ! function_exists( 'cck_get_design_tokens' ) ) {
 			),
 		);
 
+		$active_brand = function_exists( 'cck_get_active_brand' )
+			? cck_get_active_brand()
+			: array();
+
+		$brand_tokens = isset( $active_brand['tokens'] ) && is_array( $active_brand['tokens'] )
+			? $active_brand['tokens']
+			: array();
+
+		foreach ( $brand_tokens as $group => $values ) {
+			if ( ! is_array( $values ) ) {
+				continue;
+			}
+
+			$tokens[ $group ] = array_merge(
+				isset( $tokens[ $group ] ) && is_array( $tokens[ $group ] )
+					? $tokens[ $group ]
+					: array(),
+				$values
+			);
+		}
+
 		return apply_filters( 'cck_design_tokens', $tokens );
 	}
 }

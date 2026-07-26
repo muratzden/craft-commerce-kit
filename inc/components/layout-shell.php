@@ -145,7 +145,9 @@ if ( ! function_exists( 'cck_get_active_brand_preset_id' ) ) {
 	 * @return string
 	 */
 	function cck_get_active_brand_preset_id() {
-		$preset_id = get_option( 'cck_active_brand_preset', 'tilla-leather' );
+		$preset_id = function_exists( 'cck_get_active_brand_id' )
+			? cck_get_active_brand_id()
+			: get_option( 'cck_active_brand_preset', 'tilla-leather' );
 		$preset_id = sanitize_key( apply_filters( 'cck_active_brand_preset_id', $preset_id ) );
 
 		return '' !== $preset_id ? $preset_id : 'tilla-leather';

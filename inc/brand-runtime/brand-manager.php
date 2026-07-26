@@ -53,7 +53,15 @@ if ( ! function_exists( 'cck_get_active_brand_id' ) ) {
 			}
 		}
 
-		return 'default';
+		$brand_id = sanitize_key(
+	get_option( 'cck_active_brand', 'tilla-leather' )
+);
+
+if ( '' !== $brand_id && ! empty( cck_get_brand( $brand_id ) ) ) {
+	return $brand_id;
+}
+
+return 'default';
 	}
 }
 
