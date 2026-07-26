@@ -33,6 +33,40 @@ if ( ! function_exists( 'cck_get_brand' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cck_get_saved_brand_profile_runtime' ) ) {
+	/**
+	 * Get the saved single-brand profile for runtime use.
+	 *
+	 * @return array
+	 */
+	function cck_get_saved_brand_profile_runtime() {
+		$profile = get_option( 'cck_brand_profile', array() );
+
+		if ( ! is_array( $profile ) ) {
+			return array();
+		}
+
+		$profile['id'] = isset( $profile['id'] )
+			? sanitize_key( $profile['id'] )
+			: '';
+
+		$profile['brand_name'] = isset( $profile['brand_name'] )
+			? sanitize_text_field( $profile['brand_name'] )
+			: '';
+
+		if ( '' === $profile['id'] || '' === $profile['brand_name'] ) {
+			return array();
+		}
+
+		if ( isset( $profile['experience'] ) ) {
+			$profile['experience'] = sanitize_key(
+				$profile['experience']
+			);
+		}
+
+		return $profile;
+	}
+}
 if ( ! function_exists( 'cck_get_active_brand_id' ) ) {
 	function cck_get_active_brand_id( $context = array() ) {
 		if ( is_array( $context ) && ! empty( $context['brand_id'] ) ) {
@@ -47,39 +81,75 @@ if ( ! function_exists( 'cck_get_active_brand_id' ) ) {
 			$experience = sanitize_key( $context['experience'] );
 
 			foreach ( cck_registry_all( 'brand' ) as $brand_id => $brand ) {
-				if ( is_array( $brand ) && isset( $brand['experience'] ) && $experience === sanitize_key( $brand['experience'] ) ) {
+				if (
+					is_array( $brand ) &&
+					isset( $brand['experience'] ) &&
+					$experience === sanitize_key( $brand['experience'] )
+				) {
 					return $brand_id;
 				}
 			}
 		}
 
+		$profile = cck_get_saved_brand_profile_runtime();
+
+		if ( ! empty( $profile ) ) {
+			return $profile['id'];
+		}
+
 		$brand_id = sanitize_key(
-	get_option( 'cck_active_brand', 'tilla-leather' )
-);
+			get_option( 'cck_active_brand', 'tilla-leather' )
+		);
 
-if ( '' !== $brand_id && ! empty( cck_get_brand( $brand_id ) ) ) {
-	return $brand_id;
-}
+		if ( '' !== $brand_id && ! empty( cck_get_brand( $brand_id ) ) ) {
+			return $brand_id;
+		}
 
-return 'default';
+		return 'default';
 	}
 }
 
 if ( ! function_exists( 'cck_get_active_brand' ) ) {
 	function cck_get_active_brand( $context = array() ) {
-		return cck_get_brand( cck_get_active_brand_id( $context ) );
+		$brand_id = cck_get_active_brand_id( $context );
+		$profile  = cck_get_saved_brand_profile_runtime();
+
+		if (
+			! empty( $profile ) &&
+			isset( $profile['id'] ) &&
+			$brand_id === $profile['id']
+		) {
+			return $profile;
+		}
+
+		return cck_get_brand( $brand_id );
 	}
 }
 
 if ( ! function_exists( 'cck_resolve_brand_attributes' ) ) {
 	function cck_resolve_brand_attributes( $brand_id, array $context = array() ) {
-		$brand = cck_get_brand( $brand_id );
+		unset( $context );
+
+		$brand_id = sanitize_key( $brand_id );
+		$profile  = cck_get_saved_brand_profile_runtime();
+
+		if (
+			! empty( $profile ) &&
+			isset( $profile['id'] ) &&
+			$brand_id === $profile['id']
+		) {
+			$brand = $profile;
+		} else {
+			$brand = cck_get_brand( $brand_id );
+		}
 
 		if ( empty( $brand ) ) {
 			return array();
 		}
 
-		return isset( $brand['attributes'] ) && is_array( $brand['attributes'] ) ? $brand['attributes'] : $brand;
+		return isset( $brand['attributes'] ) && is_array( $brand['attributes'] )
+			? $brand['attributes']
+			: $brand;
 	}
 }
 

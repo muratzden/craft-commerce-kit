@@ -21,5 +21,11 @@ define( 'CCK_PLUGIN_FILE', __FILE__ );
 define( 'CCK_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCK_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CCK_DEBUG', defined( 'WP_DEBUG' ) && WP_DEBUG );
+require_once CCK_PLUGIN_DIR . 'inc/setup/activation.php';
+
+register_activation_hook(
+	CCK_PLUGIN_FILE,
+	'cck_activate_plugin_setup'
+);
 
 require_once CCK_PLUGIN_DIR . 'inc/core/loader.php';
