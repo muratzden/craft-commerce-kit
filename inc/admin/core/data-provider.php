@@ -46,38 +46,84 @@ if ( ! function_exists( 'cck_get_admin_overview_data' ) ) {
 	 * @return array
 	 */
 	function cck_get_admin_overview_data() {
-		$components  = function_exists( 'cck_get_component_registry' ) ? cck_get_component_registry() : array();
-		$experiences  = function_exists( 'cck_get_experiences' ) ? cck_get_experiences() : array();
-		$published_experiences = function_exists( 'cck_get_published_experiences' ) ? cck_get_published_experiences() : array();
-		$publish_overview = function_exists( 'cck_get_experience_publish_overview_data' ) ? cck_get_experience_publish_overview_data() : array();
-		$brands       = function_exists( 'cck_registry_all' ) ? cck_registry_all( 'brand' ) : array();
-		$active_brand = function_exists( 'cck_get_active_brand' ) ? cck_get_active_brand() : array();
-		$active_brand_id = function_exists( 'cck_get_active_brand_id' ) ? cck_get_active_brand_id() : '';
+		$components = function_exists( 'cck_get_component_registry' )
+			? cck_get_component_registry()
+			: array();
+
+		$experiences = function_exists( 'cck_get_experiences' )
+			? cck_get_experiences()
+			: array();
+
+		$published_experiences = function_exists( 'cck_get_published_experiences' )
+			? cck_get_published_experiences()
+			: array();
+
+		$publish_overview = function_exists( 'cck_get_experience_publish_overview_data' )
+			? cck_get_experience_publish_overview_data()
+			: array();
+
+		$brand_profile = function_exists( 'cck_get_brand_profile' )
+			? cck_get_brand_profile()
+			: array();
+
+		$active_brand = function_exists( 'cck_get_active_brand' )
+			? cck_get_active_brand()
+			: array();
+
+		$active_brand_id = function_exists( 'cck_get_active_brand_id' )
+			? cck_get_active_brand_id()
+			: '';
+
 		$active_brand_name = '';
+		$brand_experience  = '';
 
 		if ( is_array( $active_brand ) ) {
-			$active_brand_name = ! empty( $active_brand['name'] ) ? $active_brand['name'] : ( ! empty( $active_brand['brand_name'] ) ? $active_brand['brand_name'] : '' );
+			$active_brand_name = ! empty( $active_brand['brand_name'] )
+				? $active_brand['brand_name']
+				: ( ! empty( $active_brand['name'] ) ? $active_brand['name'] : '' );
+
+			$brand_experience = ! empty( $active_brand['experience'] )
+				? sanitize_key( $active_brand['experience'] )
+				: '';
 		}
+
+		$setup_completed = 1 === (int) get_option(
+			'cck_setup_completed',
+			0
+		);
 
 		$environment = cck_get_admin_environment_summary();
 
 		return array(
-			'plugin_version'        => defined( 'CCK_VERSION' ) ? CCK_VERSION : '',
-			'registered_components' => count( $components ),
-			'registered_experiences'=> count( $experiences ),
-			'published_experiences' => count( $published_experiences ),
-			'registered_brands'     => count( $brands ),
-			'active_brand_id'       => $active_brand_id,
-			'active_brand_name'     => $active_brand_name,
-			'default_brand'         => function_exists( 'cck_get_brand' ) ? cck_get_brand( 'default' ) : array(),
-			'woocommerce_active'    => function_exists( 'cck_is_woocommerce_active' ) ? cck_is_woocommerce_active() : false,
-			'environment'           => $environment,
-			'homepage_experience_id'=> isset( $publish_overview['homepage_experience_id'] ) ? $publish_overview['homepage_experience_id'] : '',
-			'homepage_label'        => isset( $publish_overview['homepage_label'] ) ? $publish_overview['homepage_label'] : __( 'Not set', 'craft-commerce-kit' ),
-			'homepage_page_title'    => isset( $publish_overview['homepage_page_title'] ) ? $publish_overview['homepage_page_title'] : '',
-			'last_published_id'     => isset( $publish_overview['last_published_id'] ) ? $publish_overview['last_published_id'] : '',
-			'last_published_label'  => isset( $publish_overview['last_published_label'] ) ? $publish_overview['last_published_label'] : __( 'Not published yet', 'craft-commerce-kit' ),
-			'environment_summary'   => sprintf(
+			'plugin_version'         => defined( 'CCK_VERSION' ) ? CCK_VERSION : '',
+			'registered_components'  => count( $components ),
+			'registered_experiences' => count( $experiences ),
+			'published_experiences'  => count( $published_experiences ),
+			'active_brand_id'        => $active_brand_id,
+			'active_brand_name'      => $active_brand_name,
+			'brand_experience'       => $brand_experience,
+			'brand_profile_exists'   => ! empty( $brand_profile ),
+			'setup_completed'        => $setup_completed,
+			'woocommerce_active'     => function_exists( 'cck_is_woocommerce_active' )
+				? cck_is_woocommerce_active()
+				: false,
+			'environment'            => $environment,
+			'homepage_experience_id' => isset( $publish_overview['homepage_experience_id'] )
+				? $publish_overview['homepage_experience_id']
+				: '',
+			'homepage_label'         => isset( $publish_overview['homepage_label'] )
+				? $publish_overview['homepage_label']
+				: __( 'Not set', 'craft-commerce-kit' ),
+			'homepage_page_title'    => isset( $publish_overview['homepage_page_title'] )
+				? $publish_overview['homepage_page_title']
+				: '',
+			'last_published_id'      => isset( $publish_overview['last_published_id'] )
+				? $publish_overview['last_published_id']
+				: '',
+			'last_published_label'   => isset( $publish_overview['last_published_label'] )
+				? $publish_overview['last_published_label']
+				: __( 'Not published yet', 'craft-commerce-kit' ),
+			'environment_summary'    => sprintf(
 				'%1$s / PHP %2$s / %3$s',
 				isset( $environment['wp_version'] ) ? $environment['wp_version'] : '',
 				isset( $environment['php_version'] ) ? $environment['php_version'] : '',
@@ -86,7 +132,6 @@ if ( ! function_exists( 'cck_get_admin_overview_data' ) ) {
 		);
 	}
 }
-
 if ( ! function_exists( 'cck_get_admin_component_rows' ) ) {
 	/**
 	 * Get component catalog rows.
