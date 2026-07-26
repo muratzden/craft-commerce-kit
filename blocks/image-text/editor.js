@@ -16,9 +16,33 @@
             var attributes = props.attributes;
             var setAttributes = props.setAttributes;
             var reverse = Boolean(attributes.reverse);
+            var surface = attributes.surface || 'transparent';
+
+            var allowedSurfaces = [
+                'transparent',
+                'background',
+                'surface',
+                'surface-alt',
+                'dark'
+            ];
+
+            if (allowedSurfaces.indexOf(surface) === -1) {
+                surface = 'transparent';
+            }
+
+            var classes = [
+                'cck-section',
+                'cck-image-text',
+                'cck-surface',
+                'cck-surface--' + surface
+            ];
+
+            if (reverse) {
+                classes.push('cck-image-text--reverse');
+            }
+
             var blockProps = useBlockProps({
-                className: 'cck-section cck-image-text' +
-                    (reverse ? ' cck-image-text--reverse' : '')
+                className: classes.join(' ')
             });
 
             return el(
