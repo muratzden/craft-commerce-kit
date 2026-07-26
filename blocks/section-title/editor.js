@@ -16,8 +16,37 @@
             var attributes = props.attributes;
             var setAttributes = props.setAttributes;
             var align = attributes.align || 'left';
+            var surface = attributes.surface || 'transparent';
+
+            var allowedAlignments = [
+                'left',
+                'center',
+                'right'
+            ];
+
+            var allowedSurfaces = [
+                'transparent',
+                'background',
+                'surface',
+                'surface-alt',
+                'dark'
+            ];
+
+            if (allowedAlignments.indexOf(align) === -1) {
+                align = 'left';
+            }
+
+            if (allowedSurfaces.indexOf(surface) === -1) {
+                surface = 'transparent';
+            }
+
             var blockProps = useBlockProps({
-                className: 'cck-section-title cck-section-title--' + align
+                className: [
+                    'cck-section-title',
+                    'cck-section-title--' + align,
+                    'cck-surface',
+                    'cck-surface--' + surface
+                ].join(' ')
             });
 
             return el(
@@ -46,7 +75,11 @@
                     'div',
                     blockProps,
                     attributes.eyebrow
-                        ? el('p', { className: 'cck-eyebrow' }, attributes.eyebrow)
+                        ? el(
+                            'p',
+                            { className: 'cck-eyebrow' },
+                            attributes.eyebrow
+                        )
                         : null,
                     attributes.title
                         ? el('h2', null, attributes.title)

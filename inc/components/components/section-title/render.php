@@ -25,18 +25,46 @@ if ( ! function_exists( 'cck_component_package_render_section_title' ) ) {
 				'title'   => '',
 				'text'    => '',
 				'align'   => 'left',
+				'surface' => 'transparent',
 			)
 		);
 
-		$align = in_array( $atts['align'], array( 'left', 'center', 'right' ), true )
+		$allowed_alignments = array(
+			'left',
+			'center',
+			'right',
+		);
+
+		$allowed_surfaces = array(
+			'transparent',
+			'background',
+			'surface',
+			'surface-alt',
+			'dark',
+		);
+
+		$align = in_array( $atts['align'], $allowed_alignments, true )
 			? $atts['align']
 			: 'left';
 
+		$surface = in_array( $atts['surface'], $allowed_surfaces, true )
+			? $atts['surface']
+			: 'transparent';
+
+		$classes = array(
+			'cck-section-title',
+			'cck-section-title--' . $align,
+			'cck-surface',
+			'cck-surface--' . $surface,
+		);
+
 		ob_start();
 		?>
-		<div class="cck-section-title cck-section-title--<?php echo esc_attr( $align ); ?>">
+		<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 			<?php if ( '' !== $atts['eyebrow'] ) : ?>
-				<p class="cck-eyebrow"><?php echo esc_html( $atts['eyebrow'] ); ?></p>
+				<p class="cck-eyebrow">
+					<?php echo esc_html( $atts['eyebrow'] ); ?>
+				</p>
 			<?php endif; ?>
 
 			<?php if ( '' !== $atts['title'] ) : ?>

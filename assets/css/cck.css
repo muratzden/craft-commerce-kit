@@ -2938,4 +2938,94 @@ body.cck-woo-active.woocommerce-account .cck-wishlist-list__media img {
                 margin-top: 22px;
                 padding-inline: 20px;
         }
+
+		.cck-surface {
+			color: var(--cck-colors-text);
+		}
+
+		.cck-surface--transparent {
+			background: transparent;
+		}
+
+		.cck-surface--background {
+			background: var(--cck-colors-background);
+		}
+
+		.cck-surface--surface {
+			background: var(--cck-colors-surface);
+		}
+
+		.cck-surface--surface-alt {
+			background: var(--cck-colors-surface-alt);
+		}
+}
+
+@media (max-width: 560px) {
+	.cck-cta {
+		padding-block: 40px;
+	}
+
+	.cck-cta__inner {
+		padding: 30px 24px;
+		border-radius: 20px;
+	}
+
+	.cck-cta__inner h2 {
+		font-size: clamp(1.8rem, 9vw, 2.35rem);
+	}
+
+	.cck-cta__inner p {
+		margin-top: 14px;
+		line-height: 1.55;
+	}
+
+	.cck-cta__inner .cck-button {
+		width: auto;
+		min-height: 46px;
+		margin-top: 22px;
+		padding-inline: 20px;
+	}
+}
+
+.cck-surface {
+	color: var(--cck-colors-text);
+}
+
+.cck-surface--transparent {
+	background: transparent;
+}
+
+.cck-surface--background {
+	background: var(--cck-colors-background);
+}
+
+.cck-surface--surface {
+	background: var(--cck-colors-surface);
+}
+
+.cck-surface--surface-alt {
+	background: var(--cck-colors-surface-alt);
+}
+
+.cck-surface--dark {
+	background: var(--cck-colors-dark);
+	color: var(--cck-colors-surface);
+}
+
+.cck-surface--dark h1,
+.cck-surface--dark h2,
+.cck-surface--dark h3,
+.cck-surface--dark h4,
+.cck-surface--dark h5,
+.cck-surface--dark h6 {
+	color: inherit;
+}
+
+.cck-surface--dark p {
+	color: rgba(255, 255, 255, 0.78);
+}
+
+.cck-section-title:not(.cck-surface--transparent) {
+	padding: var(--cck-space-xl);
+	border-radius: var(--cck-radius-xl);
 }
