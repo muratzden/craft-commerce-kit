@@ -20,7 +20,8 @@ if ( ! function_exists( 'cck_render_brand_profile_form' ) ) {
 			'action'       => '',
 			'nonce_action' => '',
 			'submit_label' => __( 'Save Brand Settings', 'craft-commerce-kit' ),
-			'form_class'   => '',
+			'form_class'       => '',
+			'brand_id_readonly' => false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -42,7 +43,8 @@ if ( ! function_exists( 'cck_render_brand_profile_form' ) ) {
 
 		$action       = sanitize_key( $args['action'] );
 		$nonce_action = sanitize_key( $args['nonce_action'] );
-		$form_class   = sanitize_html_class( $args['form_class'] );
+		$form_class       = sanitize_html_class( $args['form_class'] );
+		$brand_id_readonly = ! empty( $args['brand_id_readonly'] );
 
 		if ( '' === $action || '' === $nonce_action ) {
 			return;
@@ -93,10 +95,14 @@ if ( ! function_exists( 'cck_render_brand_profile_form' ) ) {
 							type="text"
 							class="regular-text"
 							value="<?php echo esc_attr( $profile['id'] ); ?>"
-							required
+							<?php echo $brand_id_readonly ? 'readonly="readonly"' : ''; ?>
 						>
 						<p class="description">
-							<?php esc_html_e( 'Use a lowercase slug such as tilla-leather.', 'craft-commerce-kit' ); ?>
+							<?php if ( $brand_id_readonly ) : ?>
+								<?php esc_html_e( 'The Brand ID is locked after setup to preserve runtime references.', 'craft-commerce-kit' ); ?>
+							<?php else : ?>
+								<?php esc_html_e( 'Leave blank to generate an ID from the brand name.', 'craft-commerce-kit' ); ?>
+							<?php endif; ?>
 						</p>
 					</td>
 				</tr>

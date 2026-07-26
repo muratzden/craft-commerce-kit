@@ -29,13 +29,21 @@ if ( ! function_exists( 'cck_render_brand_page' ) ) {
 		);
 		?>
 
+		<?php
+		$error_messages = array(
+			'missing_brand_name' => __( 'Enter a brand name.', 'craft-commerce-kit' ),
+			'invalid_brand_id'   => __( 'Enter a valid brand ID.', 'craft-commerce-kit' ),
+			'invalid_cta_url'    => __( 'Enter a valid HTTP or HTTPS CTA URL.', 'craft-commerce-kit' ),
+		);
+		?>
+
 		<?php if ( 'saved' === $status ) : ?>
 			<div class="notice notice-success is-dismissible">
 				<p><?php esc_html_e( 'Brand settings saved.', 'craft-commerce-kit' ); ?></p>
 			</div>
-		<?php elseif ( 'invalid' === $status ) : ?>
+		<?php elseif ( isset( $error_messages[ $status ] ) ) : ?>
 			<div class="notice notice-error">
-				<p><?php esc_html_e( 'Enter a valid brand name and brand ID.', 'craft-commerce-kit' ); ?></p>
+				<p><?php echo esc_html( $error_messages[ $status ] ); ?></p>
 			</div>
 		<?php endif; ?>
 
@@ -52,7 +60,8 @@ if ( ! function_exists( 'cck_render_brand_page' ) ) {
 						'action'       => 'cck_save_brand_profile',
 						'nonce_action' => 'cck_save_brand_profile',
 						'submit_label' => __( 'Save Brand Settings', 'craft-commerce-kit' ),
-						'form_class'   => 'cck-brand-settings-form',
+						'form_class'       => 'cck-brand-settings-form',
+						'brand_id_readonly' => true,
 					)
 				);
 				?>

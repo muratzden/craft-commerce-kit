@@ -84,11 +84,13 @@ if ( ! function_exists( 'cck_handle_setup_submission' ) ) {
 			? wp_unslash( $_POST['cck_brand_profile'] )
 			: array();
 
-		if ( ! cck_save_brand_profile( $profile ) ) {
+		$result = cck_save_brand_profile( $profile );
+
+		if ( is_wp_error( $result ) ) {
 			wp_safe_redirect(
 				add_query_arg(
 					'cck_setup_status',
-					'invalid',
+					sanitize_key( $result->get_error_code() ),
 					admin_url( 'admin.php?page=craft-commerce-kit-setup' )
 				)
 			);
@@ -136,9 +138,10 @@ if ( ! function_exists( 'cck_handle_brand_profile_update' ) ) {
 				? wp_unslash( $_POST['cck_brand_profile'] )
 				: array();
 
-		$status = cck_save_brand_profile( $profile )
-			? 'saved'
-			: 'invalid';
+		$result = cck_save_brand_profile( $profile );
+		$status = is_wp_error( $result )
+			? sanitize_key( $result->get_error_code() )
+			: 'saved';
 
 		if ( 'saved' === $status ) {
 			update_option( 'cck_setup_completed', 1, false );
