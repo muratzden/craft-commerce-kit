@@ -49,24 +49,16 @@ $atts['reverse'],
 FILTER_VALIDATE_BOOLEAN
 );
 
-$allowed_surfaces = array(
-'transparent',
-'background',
-'surface',
-'surface-alt',
-'dark',
-);
-
-$surface = in_array( $atts['surface'], $allowed_surfaces, true )
-? $atts['surface']
-: 'transparent';
-
-$classes = array(
-'cck-section',
-'cck-image-text',
-'cck-surface',
-'cck-surface--' . $surface,
-);
+		$classes = array_merge(
+			array(
+				'cck-section',
+				'cck-image-text',
+			),
+			cck_component_get_surface_classes(
+				$atts['surface'],
+				'transparent'
+			)
+		);
 
 if ( $is_reverse ) {
 $classes[] = 'cck-image-text--reverse';

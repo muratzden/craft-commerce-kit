@@ -32,24 +32,15 @@ if ( ! function_exists( 'cck_component_package_render_hero' ) ) {
 				'surface'         => 'background',
 			)
 		);
-
-		$allowed_surfaces = array(
-			'transparent',
-			'background',
-			'surface',
-			'surface-alt',
-			'dark',
-		);
-
-		$surface = in_array( $atts['surface'], $allowed_surfaces, true )
-			? $atts['surface']
-			: 'background';
-
-		$classes = array(
-			'cck-section',
-			'cck-hero',
-			'cck-surface',
-			'cck-surface--' . $surface,
+		$classes = array_merge(
+			array(
+				'cck-section',
+				'cck-hero',
+			),
+			cck_component_get_surface_classes(
+				$atts['surface'],
+				'background'
+			)
 		);
 
 		if ( function_exists( 'cck_component_platform_render_hero_adapter' ) ) {

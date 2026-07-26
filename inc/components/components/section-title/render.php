@@ -35,27 +35,19 @@ if ( ! function_exists( 'cck_component_package_render_section_title' ) ) {
 			'right',
 		);
 
-		$allowed_surfaces = array(
-			'transparent',
-			'background',
-			'surface',
-			'surface-alt',
-			'dark',
-		);
-
 		$align = in_array( $atts['align'], $allowed_alignments, true )
 			? $atts['align']
 			: 'left';
 
-		$surface = in_array( $atts['surface'], $allowed_surfaces, true )
-			? $atts['surface']
-			: 'transparent';
-
-		$classes = array(
-			'cck-section-title',
-			'cck-section-title--' . $align,
-			'cck-surface',
-			'cck-surface--' . $surface,
+		$classes = array_merge(
+			array(
+				'cck-section-title',
+				'cck-section-title--' . $align,
+			),
+			cck_component_get_surface_classes(
+				$atts['surface'],
+				'transparent'
+			)
 		);
 
 		ob_start();

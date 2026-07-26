@@ -128,13 +128,8 @@ return array(
 			'type'              => 'select',
 			'label'             => __( 'Background', 'craft-commerce-kit' ),
 			'default'           => 'background',
-			'options'           => array(
-				'transparent' => __( 'Transparent', 'craft-commerce-kit' ),
-				'background'  => __( 'Brand Background', 'craft-commerce-kit' ),
-				'surface'     => __( 'Surface', 'craft-commerce-kit' ),
-				'surface-alt' => __( 'Alternate Surface', 'craft-commerce-kit' ),
-				'dark'        => __( 'Dark', 'craft-commerce-kit' ),
-			),
+			'options'           => cck_component_get_surface_options(),
+
 			'sanitize_callback' => 'sanitize_key',
 		),
 	),

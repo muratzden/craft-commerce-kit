@@ -1,4 +1,4 @@
-﻿(function (blocks, element, blockEditor, components) {
+(function (blocks, element, blockEditor, components) {
     'use strict';
 
     var el = element.createElement;

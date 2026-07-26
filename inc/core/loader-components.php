@@ -7,6 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
+require_once CCK_PLUGIN_DIR . 'inc/components/contracts/surface.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/component-interface.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/manifest-validator.php';
 require_once CCK_PLUGIN_DIR . 'inc/components/registry.php';

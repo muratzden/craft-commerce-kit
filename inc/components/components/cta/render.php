@@ -29,23 +29,15 @@ if ( ! function_exists( 'cck_component_package_render_cta' ) ) {
 			)
 		);
 
-		$allowed_surfaces = array(
-			'transparent',
-			'background',
-			'surface',
-			'surface-alt',
-			'dark',
-		);
-
-		$surface = in_array( $atts['surface'], $allowed_surfaces, true )
-			? $atts['surface']
-			: 'transparent';
-
-		$classes = array(
-			'cck-section',
-			'cck-cta',
-			'cck-surface',
-			'cck-surface--' . $surface,
+		$classes = array_merge(
+			array(
+				'cck-section',
+				'cck-cta',
+			),
+			cck_component_get_surface_classes(
+				$atts['surface'],
+				'transparent'
+			)
 		);
 
 		ob_start();
