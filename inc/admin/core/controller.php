@@ -73,14 +73,7 @@ if ( ! function_exists( 'cck_get_admin_screen_registry' ) ) {
 				'slug'        => 'craft-commerce-kit-brands',
 				'callback'    => 'cck_render_brand_page',
 			),
-			'settings' => array(
-				'id'          => 'settings',
-				'label'       => __( 'Settings', 'craft-commerce-kit' ),
-				'page_title'  => __( 'Settings', 'craft-commerce-kit' ),
-				'description' => __( 'Available configurable settings and security-safe defaults.', 'craft-commerce-kit' ),
-				'slug'        => 'craft-commerce-kit-settings',
-				'callback'    => 'cck_render_settings_page',
-			),
+
 		);
 	}
 }

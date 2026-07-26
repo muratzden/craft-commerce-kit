@@ -318,16 +318,3 @@ if ( ! function_exists( 'cck_get_admin_brand_rows' ) ) {
 		return $rows;
 	}
 }
-
-if ( ! function_exists( 'cck_get_admin_settings_data' ) ) {
-	/**
-	 * Get settings view data.
-	 *
-	 * @return array
-	 */
-	function cck_get_admin_settings_data() {
-		return array(
-			'message' => __( 'No configurable settings are currently available.', 'craft-commerce-kit' ),
-		);
-	}
-}
