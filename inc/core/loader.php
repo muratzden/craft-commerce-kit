@@ -55,6 +55,7 @@ require_once CCK_PLUGIN_DIR . 'inc/core/loader-admin.php';
  * Setup Wizard
  */
 require_once CCK_PLUGIN_DIR . 'inc/setup/profile.php';
+require_once CCK_PLUGIN_DIR . 'inc/setup/form.php';
 require_once CCK_PLUGIN_DIR . 'inc/setup/controller.php';
 require_once CCK_PLUGIN_DIR . 'inc/setup/view.php';
 
