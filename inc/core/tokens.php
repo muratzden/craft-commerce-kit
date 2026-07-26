@@ -63,16 +63,22 @@ if ( ! function_exists( 'cck_token_css_name' ) ) {
 	}
 }
 
-if ( ! function_exists( 'cck_print_design_tokens' ) ) {
+if ( ! function_exists( 'cck_get_design_tokens_css' ) ) {
 	/**
-	 * Print CSS custom properties.
+	 * Build design token CSS for a selector.
 	 *
-	 * @return void
+	 * @param string $selector CSS selector.
+	 * @return string
 	 */
-	function cck_print_design_tokens() {
-		$tokens = cck_get_design_tokens();
+	function cck_get_design_tokens_css( $selector = ':root' ) {
+		$tokens   = cck_get_design_tokens();
+		$selector = trim( $selector );
 
-		echo '<style id="cck-design-tokens">:root{';
+		if ( '' === $selector ) {
+			$selector = ':root';
+		}
+
+		$css = $selector . '{';
 
 		foreach ( $tokens as $group => $values ) {
 			if ( ! is_array( $values ) ) {
@@ -80,14 +86,28 @@ if ( ! function_exists( 'cck_print_design_tokens' ) ) {
 			}
 
 			foreach ( $values as $key => $value ) {
-				printf(
-					'%s:%s;',
-					esc_html( cck_token_css_name( $group, $key ) ),
-					esc_html( $value )
-				);
+				$css .= cck_token_css_name( $group, $key );
+				$css .= ':';
+				$css .= sanitize_text_field( $value );
+				$css .= ';';
 			}
 		}
 
-		echo '}</style>' . "\n";
+		$css .= '}';
+
+		return $css;
+	}
+}
+
+if ( ! function_exists( 'cck_print_design_tokens' ) ) {
+	/**
+	 * Print CSS custom properties.
+	 *
+	 * @return void
+	 */
+	function cck_print_design_tokens() {
+		echo '<style id="cck-design-tokens">';
+		echo esc_html( cck_get_design_tokens_css( ':root' ) );
+		echo '</style>' . "\n";
 	}
 }
