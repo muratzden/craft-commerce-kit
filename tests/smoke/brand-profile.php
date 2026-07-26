@@ -85,6 +85,12 @@ $original_setup = get_option(
 );
 
 try {
+	update_option(
+		'cck_setup_completed',
+		0,
+		false
+	);
+
 	$base_profile = array(
 		'id'         => 'smoke-test-brand',
 		'brand_name' => 'Smoke Test Brand',
@@ -166,6 +172,29 @@ try {
 		is_array( $result ) &&
 		'atelier' === $result['experience'],
 		'Unsupported experience falls back to atelier.'
+	);
+
+	update_option(
+		'cck_brand_profile',
+		$base_profile,
+		false
+	);
+
+	update_option(
+		'cck_setup_completed',
+		1,
+		false
+	);
+
+	$tampered_id = $base_profile;
+	$tampered_id['id'] = 'tampered-brand-id';
+
+	$result = cck_validate_brand_profile( $tampered_id );
+
+	cck_smoke_assert(
+		is_array( $result ) &&
+		'smoke-test-brand' === $result['id'],
+		'Completed setup preserves the saved Brand ID.'
 	);
 
 	$result = cck_save_brand_profile( $base_profile );

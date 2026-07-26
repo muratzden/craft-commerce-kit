@@ -102,7 +102,16 @@ if ( ! function_exists( 'cck_validate_brand_profile' ) ) {
 			? sanitize_key( $profile['id'] )
 			: '';
 
-		if ( '' === $brand_id ) {
+		$current_brand_id = isset( $current['id'] )
+			? sanitize_key( $current['id'] )
+			: '';
+
+		if (
+			1 === (int) get_option( 'cck_setup_completed', 0 ) &&
+			'' !== $current_brand_id
+		) {
+			$brand_id = $current_brand_id;
+		} elseif ( '' === $brand_id ) {
 			$brand_id = sanitize_title( $brand_name );
 		}
 
