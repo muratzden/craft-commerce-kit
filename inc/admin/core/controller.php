@@ -19,9 +19,17 @@ if ( ! function_exists( 'cck_get_admin_screen_registry' ) ) {
 				'id'          => 'overview',
 				'label'       => __( 'Overview', 'craft-commerce-kit' ),
 				'page_title'  => __( 'Overview', 'craft-commerce-kit' ),
-				'description' => __( 'Plugin status, catalog counts, and runtime health at a glance.', 'craft-commerce-kit' ),
+				'description' => __( 'Plugin status, profile state, and runtime health at a glance.', 'craft-commerce-kit' ),
 				'slug'        => 'craft-commerce-kit',
 				'callback'    => 'cck_render_admin_page',
+			),
+			'brands' => array(
+				'id'          => 'brands',
+				'label'       => __( 'Brand Settings', 'craft-commerce-kit' ),
+				'page_title'  => __( 'Brand Settings', 'craft-commerce-kit' ),
+				'description' => __( 'Manage the single brand profile used by the storefront and block editor.', 'craft-commerce-kit' ),
+				'slug'        => 'craft-commerce-kit-brands',
+				'callback'    => 'cck_render_brand_page',
 			),
 			'components' => array(
 				'id'          => 'components',
@@ -31,14 +39,6 @@ if ( ! function_exists( 'cck_get_admin_screen_registry' ) ) {
 				'slug'        => 'craft-commerce-kit-components',
 				'callback'    => 'cck_render_components_page',
 			),
-			'layouts' => array(
-				'id'          => 'layouts',
-				'label'       => __( 'Layouts', 'craft-commerce-kit' ),
-				'page_title'  => __( 'Layouts', 'craft-commerce-kit' ),
-				'description' => __( 'Manual component composition and reusable layout sequences.', 'craft-commerce-kit' ),
-				'slug'        => 'craft-commerce-kit-layouts',
-				'callback'    => 'cck_render_layouts_page',
-			),
 			'component-preview' => array(
 				'id'          => 'component-preview',
 				'label'       => __( 'Component Preview', 'craft-commerce-kit' ),
@@ -47,6 +47,14 @@ if ( ! function_exists( 'cck_get_admin_screen_registry' ) ) {
 				'slug'        => 'craft-commerce-kit-component-preview',
 				'callback'    => 'cck_render_component_preview_page',
 				'hidden'      => true,
+			),
+			'layouts' => array(
+				'id'          => 'layouts',
+				'label'       => __( 'Layouts', 'craft-commerce-kit' ),
+				'page_title'  => __( 'Layouts', 'craft-commerce-kit' ),
+				'description' => __( 'Manual component composition and reusable layout sequences.', 'craft-commerce-kit' ),
+				'slug'        => 'craft-commerce-kit-layouts',
+				'callback'    => 'cck_render_layouts_page',
 			),
 			'experiences' => array(
 				'id'          => 'experiences',
@@ -65,19 +73,17 @@ if ( ! function_exists( 'cck_get_admin_screen_registry' ) ) {
 				'callback'    => 'cck_render_experience_preview_page',
 				'hidden'      => true,
 			),
-			'brands' => array(
-				'id'          => 'brands',
-				'label'       => __( 'Brand Settings', 'craft-commerce-kit' ),
-				'page_title'  => __( 'Brand Settings', 'craft-commerce-kit' ),
-				'description' => __( 'Manage the single brand profile used by the storefront and block editor.', 'craft-commerce-kit' ),
-				'slug'        => 'craft-commerce-kit-brands',
-				'callback'    => 'cck_render_brand_page',
+			'system' => array(
+				'id'          => 'system',
+				'label'       => __( 'System', 'craft-commerce-kit' ),
+				'page_title'  => __( 'System', 'craft-commerce-kit' ),
+				'description' => __( 'Compatibility, environment, and runtime readiness checks.', 'craft-commerce-kit' ),
+				'slug'        => 'craft-commerce-kit-system',
+				'callback'    => 'cck_render_system_page',
 			),
-
 		);
 	}
 }
-
 if ( ! function_exists( 'cck_get_admin_screen_ids' ) ) {
 	/**
 	 * Get admin screen IDs in canonical order.
