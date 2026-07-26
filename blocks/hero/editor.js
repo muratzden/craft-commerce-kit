@@ -1,4 +1,4 @@
-(function (blocks, element, blockEditor, components) {
+﻿(function (blocks, element, blockEditor, components) {
     'use strict';
 
     var el = element.createElement;
@@ -55,22 +55,22 @@
                                 'div',
                                 { className: 'cck-hero__content' },
                                 el(
-                            'div',
-                            { className: 'cck-hero__eyebrow-wrap' },
-                            el(RichText, {
-                                tagName: 'span',
-                                className: 'cck-eyebrow',
-                                value: attributes.eyebrow,
-                                placeholder: 'Eyebrow…',
-                                allowedFormats: [],
-                                onChange: function (value) {
-                                    setAttributes({
-                                        eyebrow: value
-                                    });
-                                }
-                            })
-                        ),
-                               el(RichText, {
+                                    'div',
+                                    { className: 'cck-hero__eyebrow-wrap' },
+                                    el(RichText, {
+                                        tagName: 'span',
+                                        className: 'cck-eyebrow',
+                                        value: attributes.eyebrow,
+                                        placeholder: 'Eyebrow…',
+                                        allowedFormats: [],
+                                        onChange: function (value) {
+                                            setAttributes({
+                                                eyebrow: value
+                                            });
+                                        }
+                                    })
+                                ),
+                                el(RichText, {
                                     tagName: 'h1',
                                     className: 'cck-hero__title',
                                     value: attributes.title,
@@ -83,45 +83,56 @@
                                     }
                                 }),
                                 el(
-                                'div',
-                                { className: 'cck-hero__description' },
-                                el(RichText, {
-                                    tagName: 'p',
-                                    className: 'cck-hero__text',
-                                    value: attributes.text,
-                                    placeholder: 'Hero description…',
-                                    allowedFormats: [],
-                                    onChange: function (value) {
-                                        setAttributes({
-                                            text: value
-                                        });
-                                    }
-                                })
-                            ),
-                                el(RichText, {
-                                    tagName: 'span',
-                                    className: 'cck-button cck-button--primary',
-                                    value: attributes.primary_label,
-                                    placeholder: 'Primary button…',
-                                    allowedFormats: [],
-                                    onChange: function (value) {
-                                        setAttributes({
-                                            primary_label: value
-                                        });
-                                    }
-                                }),
-                                       el(RichText, {
-                                            tagName: 'span',
-                                            className: 'cck-button cck-button--secondary',
-                                            value: attributes.secondary_label,
-                                            placeholder: 'Secondary button…',
-                                            allowedFormats: [],
-                                            onChange: function (value) {
-                                                setAttributes({
-                                                    secondary_label: value
-                                                });
-                                            }
-                                        })
+                                    'div',
+                                    { className: 'cck-hero__description' },
+                                    el(RichText, {
+                                        tagName: 'p',
+                                        className: 'cck-hero__text',
+                                        value: attributes.text,
+                                        placeholder: 'Hero description…',
+                                        allowedFormats: [],
+                                        onChange: function (value) {
+                                            setAttributes({
+                                                text: value
+                                            });
+                                        }
+                                    })
+                                ),
+                                (
+                                    attributes.primary_label ||
+                                    attributes.secondary_label
+                                )
+                                    ? el(
+                                        'div',
+                                        { className: 'cck-hero__actions' },
+                                        attributes.primary_label
+                                            ? el(RichText, {
+                                                tagName: 'span',
+                                                className: 'cck-button cck-button--primary',
+                                                value: attributes.primary_label,
+                                                placeholder: 'Primary button…',
+                                                allowedFormats: [],
+                                                onChange: function (value) {
+                                                    setAttributes({
+                                                        primary_label: value
+                                                    });
+                                                }
+                                            })
+                                            : null,
+                                        attributes.secondary_label
+                                            ? el(RichText, {
+                                                tagName: 'span',
+                                                className: 'cck-button cck-button--secondary',
+                                                value: attributes.secondary_label,
+                                                placeholder: 'Secondary button…',
+                                                allowedFormats: [],
+                                                onChange: function (value) {
+                                                    setAttributes({
+                                                        secondary_label: value
+                                                    });
+                                                }
+                                            })
+                                            : null
                                     )
                                     : null
                             ),
@@ -138,9 +149,12 @@
                                             alt: '',
                                             loading: 'lazy'
                                         })
-                                        : el('div', {
-                                            className: 'cck-placeholder'
-                                        })
+                                        : el(
+                                            'div',
+                                            {
+                                                className: 'cck-placeholder'
+                                            }
+                                        )
                                 )
                             )
                         )
