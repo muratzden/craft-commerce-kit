@@ -67,9 +67,9 @@ if ( ! function_exists( 'cck_get_admin_screen_registry' ) ) {
 			),
 			'brands' => array(
 				'id'          => 'brands',
-				'label'       => __( 'Brands', 'craft-commerce-kit' ),
-				'page_title'  => __( 'Brands', 'craft-commerce-kit' ),
-				'description' => __( 'Registered brand catalog and active brand state.', 'craft-commerce-kit' ),
+				'label'       => __( 'Brand Settings', 'craft-commerce-kit' ),
+				'page_title'  => __( 'Brand Settings', 'craft-commerce-kit' ),
+				'description' => __( 'Manage the single brand profile used by the storefront and block editor.', 'craft-commerce-kit' ),
 				'slug'        => 'craft-commerce-kit-brands',
 				'callback'    => 'cck_render_brand_page',
 			),

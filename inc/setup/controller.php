@@ -113,3 +113,51 @@ add_action(
 	'admin_post_cck_complete_setup',
 	'cck_handle_setup_submission'
 );
+if ( ! function_exists( 'cck_handle_brand_profile_update' ) ) {
+	/**
+	 * Save the permanent Brand Settings form.
+	 *
+	 * @return void
+	 */
+	function cck_handle_brand_profile_update() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die(
+				esc_html__(
+					'Sorry, you are not allowed to perform this action.',
+					'craft-commerce-kit'
+				)
+			);
+		}
+
+		check_admin_referer( 'cck_save_brand_profile' );
+
+		$profile = isset( $_POST['cck_brand_profile'] ) &&
+			is_array( $_POST['cck_brand_profile'] )
+				? wp_unslash( $_POST['cck_brand_profile'] )
+				: array();
+
+		$status = cck_save_brand_profile( $profile )
+			? 'saved'
+			: 'invalid';
+
+		if ( 'saved' === $status ) {
+			update_option( 'cck_setup_completed', 1, false );
+		}
+
+		wp_safe_redirect(
+			add_query_arg(
+				'cck_brand_status',
+				$status,
+				admin_url(
+					'admin.php?page=craft-commerce-kit-brands'
+				)
+			)
+		);
+		exit;
+	}
+}
+
+add_action(
+	'admin_post_cck_save_brand_profile',
+	'cck_handle_brand_profile_update'
+);
