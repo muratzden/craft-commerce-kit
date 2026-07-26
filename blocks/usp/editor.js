@@ -15,8 +15,28 @@
         edit: function (props) {
             var attributes = props.attributes;
             var setAttributes = props.setAttributes;
+            var surface = attributes.surface || 'surface';
+
+            var allowedSurfaces = [
+                'transparent',
+                'background',
+                'surface',
+                'surface-alt',
+                'dark'
+            ];
+
+            if (allowedSurfaces.indexOf(surface) === -1) {
+                surface = 'surface';
+            }
+
             var blockProps = useBlockProps({
-                className: 'cck-component cck-usp'
+                className: [
+                    'cck-section',
+                    'cck-component',
+                    'cck-usp',
+                    'cck-surface',
+                    'cck-surface--' + surface
+                ].join(' ')
             });
 
             return el(
@@ -58,8 +78,12 @@
                                     className: 'cck-usp-item',
                                     key: index
                                 },
-                                el('h3', null, attributes[keys[0]]),
-                                el('p', null, attributes[keys[1]])
+                                attributes[keys[0]]
+                                    ? el('h3', null, attributes[keys[0]])
+                                    : null,
+                                attributes[keys[1]]
+                                    ? el('p', null, attributes[keys[1]])
+                                    : null
                             );
                         })
                     )

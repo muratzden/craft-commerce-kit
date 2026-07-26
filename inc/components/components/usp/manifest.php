@@ -1,6 +1,6 @@
 <?php
 /**
- * USP component manifest dosyası.
+ * USP component manifest.
  *
  * @package CraftCommerceKit
  */
@@ -14,6 +14,7 @@ return array(
 	'version'     => '1.0.0',
 	'category'    => 'ui',
 	'icon'        => 'star-filled',
+
 	'preview'     => array(
 		'attributes' => array(
 			'item_one_title'   => __( 'Handmade Quality', 'craft-commerce-kit' ),
@@ -22,16 +23,21 @@ return array(
 			'item_two_text'    => __( 'Built to complement WooCommerce storefront flows without replacing native behavior.', 'craft-commerce-kit' ),
 			'item_three_title' => __( 'Modular Design', 'craft-commerce-kit' ),
 			'item_three_text'  => __( 'Reusable sections can be rendered independently through the component definition system.', 'craft-commerce-kit' ),
+			'surface'          => 'surface',
 		),
 	),
+
 	'callback'    => 'cck_component_package_render_usp',
+
 	'supports'    => array(
 		'background',
 		'spacing',
 		'typography',
 		'animation',
 		'visibility',
+		'surface',
 	),
+
 	'settings'    => array(
 		'item_one_title'   => array(
 			'type'              => 'text',
@@ -41,14 +47,16 @@ return array(
 			'required'          => true,
 			'sanitize_callback' => 'sanitize_text_field',
 		),
+
 		'item_one_text'    => array(
 			'type'              => 'textarea',
 			'label'             => __( 'First Item Text', 'craft-commerce-kit' ),
 			'description'       => __( 'Text for the first USP item.', 'craft-commerce-kit' ),
 			'default'           => __( 'Designed for product stories that value material, process, and detail.', 'craft-commerce-kit' ),
 			'required'          => false,
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => 'sanitize_textarea_field',
 		),
+
 		'item_two_title'   => array(
 			'type'              => 'text',
 			'label'             => __( 'Second Item Title', 'craft-commerce-kit' ),
@@ -57,14 +65,16 @@ return array(
 			'required'          => true,
 			'sanitize_callback' => 'sanitize_text_field',
 		),
+
 		'item_two_text'    => array(
 			'type'              => 'textarea',
 			'label'             => __( 'Second Item Text', 'craft-commerce-kit' ),
 			'description'       => __( 'Text for the second USP item.', 'craft-commerce-kit' ),
 			'default'           => __( 'Built to complement WooCommerce storefront flows without replacing native behavior.', 'craft-commerce-kit' ),
 			'required'          => false,
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => 'sanitize_textarea_field',
 		),
+
 		'item_three_title' => array(
 			'type'              => 'text',
 			'label'             => __( 'Third Item Title', 'craft-commerce-kit' ),
@@ -73,13 +83,28 @@ return array(
 			'required'          => true,
 			'sanitize_callback' => 'sanitize_text_field',
 		),
+
 		'item_three_text'  => array(
 			'type'              => 'textarea',
 			'label'             => __( 'Third Item Text', 'craft-commerce-kit' ),
 			'description'       => __( 'Text for the third USP item.', 'craft-commerce-kit' ),
 			'default'           => __( 'Reusable sections can be rendered independently through the component definition system.', 'craft-commerce-kit' ),
 			'required'          => false,
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => 'sanitize_textarea_field',
+		),
+
+		'surface'          => array(
+			'type'              => 'select',
+			'label'             => __( 'Background', 'craft-commerce-kit' ),
+			'default'           => 'surface',
+			'options'           => array(
+				'transparent' => __( 'Transparent', 'craft-commerce-kit' ),
+				'background'  => __( 'Brand Background', 'craft-commerce-kit' ),
+				'surface'     => __( 'Surface', 'craft-commerce-kit' ),
+				'surface-alt' => __( 'Alternate Surface', 'craft-commerce-kit' ),
+				'dark'        => __( 'Dark', 'craft-commerce-kit' ),
+			),
+			'sanitize_callback' => 'sanitize_key',
 		),
 	),
 );
