@@ -446,6 +446,7 @@
 	min-height: 360px;
 	border: 1px solid var(--cck-colors-border);
 	border-radius: var(--cck-radius-xl);
+	overflow: hidden;
 	background: var(--cck-colors-dark);
 	box-shadow: var(--cck-shadow-sm);
 	text-decoration: none;
