@@ -74,19 +74,23 @@
                 el(
                     'div',
                     blockProps,
-                    attributes.eyebrow
-                        ? el(
-                            'p',
-                            { className: 'cck-eyebrow' },
-                            attributes.eyebrow
-                        )
-                        : null,
-                    attributes.title
-                        ? el('h2', null, attributes.title)
-                        : null,
-                    attributes.text
-                        ? el('p', null, attributes.text)
-                        : null
+                    el(
+                    'p',
+                    { className: 'cck-eyebrow' },
+                    attributes.eyebrow || 'Eyebrow'
+                ),
+
+                el(
+                    'h2',
+                    null,
+                    attributes.title || 'Section Title'
+                ),
+
+                el(
+                    'p',
+                    null,
+                    attributes.text || 'Describe this section...'
+                )
                 )
             );
         },

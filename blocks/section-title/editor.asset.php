@@ -7,5 +7,5 @@ return array(
                 'wp-components',
                 'cck-block-editor-controls',
         ),
-        'version'      => CCK_VERSION,
+        'version'      => filemtime( __DIR__ . '/editor.js' ),
 );
