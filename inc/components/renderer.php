@@ -255,6 +255,30 @@ if ( ! function_exists( 'cck_render_component' ) ) {
 				$allowed_html['img']['sizes']    = true;
 			}
 
+			$allowed_html['svg'] = array(
+				'viewbox'     => true,
+				'aria-hidden' => true,
+				'focusable'   => true,
+			);
+
+			$allowed_html['path'] = array(
+				'd' => true,
+			);
+
+			$allowed_html['circle'] = array(
+				'cx' => true,
+				'cy' => true,
+				'r'  => true,
+			);
+
+			$allowed_html['rect'] = array(
+				'x'      => true,
+				'y'      => true,
+				'width'  => true,
+				'height' => true,
+				'rx'     => true,
+			);
+
 			echo wp_kses( $html, $allowed_html );
 		}
 
