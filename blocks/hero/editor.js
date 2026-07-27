@@ -5,7 +5,10 @@
     var useBlockProps = blockEditor.useBlockProps;
     var InspectorControls = blockEditor.InspectorControls;
     var RichText = blockEditor.RichText;
+    var MediaUpload = blockEditor.MediaUpload;
+    var MediaUploadCheck = blockEditor.MediaUploadCheck;
     var PanelBody = components.PanelBody;
+    var Button = components.Button;
     var renderControl = window.cckBlockEditor.renderControl;
     var editorSettings = (
         window.cckBlockEditorSettings &&
@@ -161,19 +164,46 @@
                                 el(
                                     'div',
                                     { className: 'cck-hero__media-frame' },
-                                    attributes.image_url
-                                        ? el('img', {
-                                            className: 'cck-hero__image',
-                                            src: attributes.image_url,
-                                            alt: '',
-                                            loading: 'lazy'
-                                        })
-                                        : el(
-                                            'div',
-                                            {
-                                                className: 'cck-placeholder'
+                                    el(
+                                        MediaUploadCheck,
+                                        null,
+                                        el(MediaUpload, {
+                                            allowedTypes: ['image'],
+                                            value: attributes.image_id || 0,
+
+                                            onSelect: function (media) {
+                                                setAttributes({
+                                                    image_id: media.id,
+                                                    image_url: media.url
+                                                });
+                                            },
+
+                                            render: function (obj) {
+
+                                                if (attributes.image_url) {
+                                                    return el('img', {
+                                                        className: 'cck-hero__image',
+                                                        src: attributes.image_url,
+                                                        alt: '',
+                                                        loading: 'lazy',
+                                                        onClick: obj.open,
+                                                        style: {
+                                                            cursor: 'pointer'
+                                                        }
+                                                    });
+                                                }
+
+                                                return el(
+                                                    Button,
+                                                    {
+                                                        variant: 'primary',
+                                                        onClick: obj.open
+                                                    },
+                                                    'Select image'
+                                                );
                                             }
-                                        )
+                                        })
+                                    )
                                 )
                             )
                         )

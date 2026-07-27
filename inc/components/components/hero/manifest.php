@@ -110,6 +110,15 @@ return array(
 			'sanitize_callback' => 'esc_url_raw',
 		),
 
+		'image_id' => array(
+			'type'              => 'number',
+			'label'             => __( 'Image ID', 'craft-commerce-kit' ),
+			'description'       => __( 'WordPress media attachment ID.', 'craft-commerce-kit' ),
+			'default'           => 0,
+			'required'          => false,
+			'sanitize_callback' => 'absint',
+		),
+
 		'image_url'       => array(
 			'type'              => 'url',
 			'label'             => __( 'Image URL', 'craft-commerce-kit' ),
