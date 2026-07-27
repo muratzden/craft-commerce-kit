@@ -110,7 +110,7 @@ return array(
 			'sanitize_callback' => 'esc_url_raw',
 		),
 
-		'image_id' => array(
+		'image_id'        => array(
 			'type'              => 'number',
 			'label'             => __( 'Image ID', 'craft-commerce-kit' ),
 			'description'       => __( 'WordPress media attachment ID.', 'craft-commerce-kit' ),
