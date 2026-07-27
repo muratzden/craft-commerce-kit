@@ -56,7 +56,7 @@ if ( ! function_exists( 'cck_content_has_frontend_shortcode' ) ) {
 
 if ( ! function_exists( 'cck_should_enqueue_frontend_assets' ) ) {
 	/**
-	 * Determine whether frontend assets should be loaded on this request.
+	 * Determine whether frontend assets should be loaded.
 	 *
 	 * @return bool
 	 */
@@ -65,17 +65,22 @@ if ( ! function_exists( 'cck_should_enqueue_frontend_assets' ) ) {
 			return false;
 		}
 
-		if ( is_singular() ) {
-			$post = get_post();
-
-                        return $post instanceof WP_Post
-                                && (
-                                        cck_content_has_frontend_shortcode( $post->post_content )
-                                        || has_block( 'craft-commerce-kit/usp', $post->post_content )
-                                );
+		if ( ! is_singular() ) {
+			return false;
 		}
 
-		return false;
+		$post = get_post();
+
+		if ( ! $post instanceof WP_Post ) {
+			return false;
+		}
+
+		return cck_content_has_frontend_shortcode( $post->post_content )
+			|| has_block( 'craft-commerce-kit/usp', $post->post_content )
+			|| has_block( 'craft-commerce-kit/section-title', $post->post_content )
+			|| has_block( 'craft-commerce-kit/cta', $post->post_content )
+			|| has_block( 'craft-commerce-kit/image-text', $post->post_content )
+			|| has_block( 'craft-commerce-kit/hero', $post->post_content );
 	}
 }
 
@@ -100,7 +105,7 @@ if ( ! function_exists( 'cck_enqueue_frontend_assets' ) ) {
 		wp_enqueue_style(
 			'craft-commerce-kit',
 			CCK_PLUGIN_URL . 'assets/css/cck.css',
-			array(),
+			array( 'dashicons' ),
 			file_exists( $css_path ) ? filemtime( $css_path ) : CCK_VERSION
 		);
 
@@ -131,18 +136,18 @@ if ( ! function_exists( 'cck_enqueue_assets' ) ) {
 
 if ( ! function_exists( 'cck_enqueue_assets_for_shortcode' ) ) {
 	/**
-	 * Enqueue frontend assets just before a CCK shortcode renders.
+	 * Enqueue frontend assets before a CCK shortcode renders.
 	 *
-	 * @param mixed  $return Short-circuit return value.
+	 * @param mixed  $output Short-circuit return value.
 	 * @param string $tag    Shortcode tag.
 	 * @return mixed
 	 */
-	function cck_enqueue_assets_for_shortcode( $return, $tag ) {
+	function cck_enqueue_assets_for_shortcode( $output, $tag ) {
 		if ( in_array( $tag, cck_get_frontend_shortcodes(), true ) ) {
 			cck_enqueue_frontend_assets();
 		}
 
-		return $return;
+		return $output;
 	}
 }
 
@@ -168,14 +173,20 @@ if ( ! function_exists( 'cck_enqueue_admin_assets' ) ) {
 			file_exists( $css_path ) ? filemtime( $css_path ) : CCK_VERSION
 		);
 
-		if ( false !== strpos( (string) $hook_suffix, 'craft-commerce-kit-component-preview' ) || false !== strpos( (string) $hook_suffix, 'craft-commerce-kit-experience-preview' ) || false !== strpos( (string) $hook_suffix, 'craft-commerce-kit-layouts' ) ) {
+		if (
+			false !== strpos( (string) $hook_suffix, 'craft-commerce-kit-component-preview' )
+			|| false !== strpos( (string) $hook_suffix, 'craft-commerce-kit-experience-preview' )
+			|| false !== strpos( (string) $hook_suffix, 'craft-commerce-kit-layouts' )
+		) {
 			$frontend_css_path = CCK_PLUGIN_DIR . 'assets/css/cck.css';
 
 			wp_enqueue_style(
 				'craft-commerce-kit-preview',
 				CCK_PLUGIN_URL . 'assets/css/cck.css',
-				array(),
-				file_exists( $frontend_css_path ) ? filemtime( $frontend_css_path ) : CCK_VERSION
+				array( 'dashicons' ),
+				file_exists( $frontend_css_path )
+					? filemtime( $frontend_css_path )
+					: CCK_VERSION
 			);
 		}
 
