@@ -1,0 +1,18 @@
+{
+  "apiVersion": 3,
+  "name": "craft-commerce-kit/product-grid",
+  "version": "1.0.0",
+  "title": "CCK Product Grid",
+  "category": "design",
+  "icon": "products",
+  "description": "Latest or featured WooCommerce products grid.",
+  "textdomain": "craft-commerce-kit",
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false
+  },
+  "editorScript": "file:./editor.js"
+}
