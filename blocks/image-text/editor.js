@@ -4,7 +4,11 @@
     var el = element.createElement;
     var useBlockProps = blockEditor.useBlockProps;
     var InspectorControls = blockEditor.InspectorControls;
+    var RichText = blockEditor.RichText;
+    var MediaUpload = blockEditor.MediaUpload;
+    var MediaUploadCheck = blockEditor.MediaUploadCheck;
     var PanelBody = components.PanelBody;
+    var Button = components.Button;
     var renderControl = window.cckBlockEditor.renderControl;
     var editorSettings = (
         window.cckBlockEditorSettings &&
@@ -57,14 +61,21 @@
                             title: 'Image Text Settings',
                             initialOpen: true
                         },
-                        Object.keys(editorSettings).map(function (settingId) {
-                            return renderControl(
-                                settingId,
-                                editorSettings[settingId],
-                                attributes,
-                                setAttributes
-                            );
-                        })
+                        Object.keys(editorSettings)
+                            .filter(function (settingId) {
+                                return [
+                                    'image_id',
+                                    'image_url'
+                                ].indexOf(settingId) === -1;
+                            })
+                            .map(function (settingId) {
+                                return renderControl(
+                                    settingId,
+                                    editorSettings[settingId],
+                                    attributes,
+                                    setAttributes
+                                );
+                            })
                     )
                 ),
                 el(
@@ -76,34 +87,124 @@
                         el(
                             'div',
                             { className: 'cck-image-text__media' },
-                            attributes.image_url
-                                ? el('img', {
-                                    src: attributes.image_url,
-                                    alt: '',
-                                    loading: 'lazy'
+                            el(
+                                MediaUploadCheck,
+                                null,
+                                el(MediaUpload, {
+                                    allowedTypes: ['image'],
+                                    value: attributes.image_id || 0,
+                                    onSelect: function (media) {
+                                        setAttributes({
+                                            image_id: media.id || 0,
+                                            image_url: media.url || ''
+                                        });
+                                    },
+                                    render: function (obj) {
+                                        if (attributes.image_url) {
+                                            return el(
+                                                element.Fragment,
+                                                null,
+                                                el('img', {
+                                                    src: attributes.image_url,
+                                                    alt: '',
+                                                    loading: 'lazy',
+                                                    onClick: obj.open,
+                                                    style: {
+                                                        cursor: 'pointer'
+                                                    }
+                                                }),
+                                                el(
+                                                    'div',
+                                                    {
+                                                        style: {
+                                                            display: 'flex',
+                                                            gap: '8px',
+                                                            justifyContent: 'center',
+                                                            marginTop: '12px'
+                                                        }
+                                                    },
+                                                    el(
+                                                        Button,
+                                                        {
+                                                            variant: 'secondary',
+                                                            onClick: obj.open
+                                                        },
+                                                        'Replace image'
+                                                    ),
+                                                    el(
+                                                        Button,
+                                                        {
+                                                            variant: 'tertiary',
+                                                            isDestructive: true,
+                                                            onClick: function () {
+                                                                setAttributes({
+                                                                    image_id: 0,
+                                                                    image_url: ''
+                                                                });
+                                                            }
+                                                        },
+                                                        'Remove image'
+                                                    )
+                                                )
+                                            );
+                                        }
+
+                                        return el(
+                                            'div',
+                                            {
+                                                className: 'cck-placeholder cck-placeholder--image-text'
+                                            },
+                                            el(
+                                                Button,
+                                                {
+                                                    variant: 'primary',
+                                                    onClick: obj.open
+                                                },
+                                                'Select image'
+                                            )
+                                        );
+                                    }
                                 })
-                                : el('div', {
-                                    className: 'cck-placeholder cck-placeholder--image-text'
-                                })
+                            )
                         ),
                         el(
                             'div',
                             { className: 'cck-image-text__content' },
-                            attributes.title
-                                ? el('h2', null, attributes.title)
-                                : null,
-                            attributes.text
-                                ? el('p', null, attributes.text)
-                                : null,
+                            el(RichText, {
+                                tagName: 'h2',
+                                value: attributes.title,
+                                placeholder: 'Image Text title...',
+                                allowedFormats: [],
+                                onChange: function (value) {
+                                    setAttributes({
+                                        title: value
+                                    });
+                                }
+                            }),
+                            el(RichText, {
+                                tagName: 'p',
+                                value: attributes.text,
+                                placeholder: 'Image Text description...',
+                                allowedFormats: [],
+                                onChange: function (value) {
+                                    setAttributes({
+                                        text: value
+                                    });
+                                }
+                            }),
                             attributes.button_label
-                                ? el(
-                                    'span',
-                                    {
-                                        className: 'cck-button cck-button--primary',
-                                        role: 'presentation'
-                                    },
-                                    attributes.button_label
-                                )
+                                ? el(RichText, {
+                                    tagName: 'span',
+                                    className: 'cck-button cck-button--primary',
+                                    value: attributes.button_label,
+                                    placeholder: 'Button label...',
+                                    allowedFormats: [],
+                                    onChange: function (value) {
+                                        setAttributes({
+                                            button_label: value
+                                        });
+                                    }
+                                })
                                 : null
                         )
                     )
