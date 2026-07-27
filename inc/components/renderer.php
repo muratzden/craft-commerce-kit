@@ -132,6 +132,7 @@ if ( ! function_exists( 'cck_load_component_renderer' ) ) {
 			return $callback;
 		}
 
+		// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Passed to included render files.
 		return function ( $values, $manifest ) use ( $render_path ) {
 			$atts = $values;
 			ob_start();
@@ -161,7 +162,7 @@ if ( ! function_exists( 'cck_sanitize_component_atts' ) ) {
 				continue;
 			}
 
-			$sanitize_callback = cck_sanitize_callback_name( cck_array_get( $setting, 'sanitize_callback', 'sanitize_text_field' ) );
+			$sanitize_callback     = cck_sanitize_callback_name( cck_array_get( $setting, 'sanitize_callback', 'sanitize_text_field' ) );
 			$values[ $setting_id ] = call_user_func( $sanitize_callback, wp_unslash( $atts[ $setting_id ] ) );
 		}
 
@@ -224,7 +225,7 @@ if ( ! function_exists( 'cck_render_component' ) ) {
 			return (string) $output;
 		}
 
-		$manifest     = cck_get_component_manifest( $component_id );
+		$manifest = cck_get_component_manifest( $component_id );
 
 		if ( empty( $manifest ) ) {
 			cck_debug_log( 'Component manifest bulunamadı: ' . $component_id );
@@ -246,7 +247,15 @@ if ( ! function_exists( 'cck_render_component' ) ) {
 		$html = call_user_func( $callback, $values, $manifest );
 
 		if ( is_string( $html ) ) {
-			echo wp_kses_post( $html );
+			$allowed_html = wp_kses_allowed_html( 'post' );
+
+			if ( isset( $allowed_html['img'] ) ) {
+				$allowed_html['img']['decoding'] = true;
+				$allowed_html['img']['srcset']   = true;
+				$allowed_html['img']['sizes']    = true;
+			}
+
+			echo wp_kses( $html, $allowed_html );
 		}
 
 		$output = ob_get_clean();
