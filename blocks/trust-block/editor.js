@@ -12,13 +12,22 @@
         window.cckBlockEditorSettings['craft-commerce-kit/trust-block']
     ) || {};
 
+    function toPlainText(value) {
+        var wrapper = document.createElement('div');
+
+        wrapper.innerHTML = value || '';
+
+        return (wrapper.textContent || wrapper.innerText || '')
+            .replace(/\|/g, ' ')
+            .replace(/::/g, ':');
+    }
     function parseItems(value) {
         return (value || '')
             .split('|')
             .map(function (item) {
                 var parts = item.trim().split('::');
-                var title = (parts.shift() || '').trim();
-                var text = parts.join('::').trim();
+                var title = toPlainText((parts.shift() || '').trim());
+                var text = toPlainText(parts.join('::').trim());
 
                 return {
                     title: title,
@@ -32,7 +41,7 @@
 
     function serializeItems(items) {
         return items.map(function (item) {
-            return item.title.trim() + '::' + item.text.trim();
+            return toPlainText(item.title) + '::' + toPlainText(item.text);
         }).join('|');
     }
 
