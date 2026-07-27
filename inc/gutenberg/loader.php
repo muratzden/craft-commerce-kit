@@ -36,33 +36,51 @@ if ( ! function_exists( 'cck_register_gutenberg_editor_assets' ) ) {
 
 add_action( 'init', 'cck_register_gutenberg_editor_assets', 5 );
 
+if ( ! function_exists( 'cck_enqueue_gutenberg_block_assets' ) ) {
+	/**
+	 * Load shared component styles and active design tokens
+	 * inside the Gutenberg canvas.
+	 *
+	 * @return void
+	 */
+	function cck_enqueue_gutenberg_block_assets() {
+	    if ( ! is_admin() ) {
+	        return;
+	    }
+
+	    $style_path = CCK_PLUGIN_DIR . 'assets/css/cck.css';
+
+	    wp_enqueue_style(
+	        'cck-components',
+	        CCK_PLUGIN_URL . 'assets/css/cck.css',
+	        array( 'dashicons' ),
+	        file_exists( $style_path )
+	            ? filemtime( $style_path )
+	            : CCK_VERSION
+	    );
+
+	    if ( function_exists( 'cck_get_design_tokens_css' ) ) {
+	        wp_add_inline_style(
+	            'cck-components',
+	            cck_get_design_tokens_css( '.editor-styles-wrapper' )
+	        );
+	    }
+	}
+}
+
+add_action(
+	'enqueue_block_assets',
+	'cck_enqueue_gutenberg_block_assets'
+);
+
 if ( ! function_exists( 'cck_enqueue_gutenberg_editor_assets' ) ) {
 	/**
-	 * Load shared component styles, active design tokens and
-	 * WordPress media assets in the block editor.
+	 * Load WordPress media assets in the block editor.
 	 *
 	 * @return void
 	 */
 	function cck_enqueue_gutenberg_editor_assets() {
-		$style_path = CCK_PLUGIN_DIR . 'assets/css/cck.css';
-
-		wp_enqueue_style(
-			'cck-components',
-			CCK_PLUGIN_URL . 'assets/css/cck.css',
-			array(),
-			file_exists( $style_path )
-				? filemtime( $style_path )
-				: CCK_VERSION
-		);
-
-		if ( function_exists( 'cck_get_design_tokens_css' ) ) {
-			wp_add_inline_style(
-				'cck-components',
-				cck_get_design_tokens_css( '.editor-styles-wrapper' )
-			);
-		}
-
-		wp_enqueue_media();
+	    wp_enqueue_media();
 	}
 }
 
