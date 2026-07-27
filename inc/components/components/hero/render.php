@@ -18,7 +18,7 @@ if ( ! function_exists( 'cck_component_package_render_hero' ) ) {
 	function cck_component_package_render_hero( $atts = array(), $manifest = array() ) {
 		unset( $manifest );
 
-		$atts = wp_parse_args(
+		$atts    = wp_parse_args(
 			is_array( $atts ) ? $atts : array(),
 			array(
 				'eyebrow'         => '',
@@ -28,6 +28,7 @@ if ( ! function_exists( 'cck_component_package_render_hero' ) ) {
 				'primary_url'     => '',
 				'secondary_label' => '',
 				'secondary_url'   => '',
+				'image_id'        => 0,
 				'image_url'       => '',
 				'surface'         => 'background',
 			)
@@ -51,6 +52,20 @@ if ( ! function_exists( 'cck_component_package_render_hero' ) ) {
 			}
 		}
 
+		$image_html = '';
+
+		if ( ! empty( $atts['image_id'] ) ) {
+			$image_html = wp_get_attachment_image(
+				absint( $atts['image_id'] ),
+				'full',
+				false,
+				array(
+					'class'    => 'cck-hero__image',
+					'loading'  => 'lazy',
+					'decoding' => 'async',
+				)
+			);
+		}
 		ob_start();
 		?>
 		<section class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
@@ -104,7 +119,9 @@ if ( ! function_exists( 'cck_component_package_render_hero' ) ) {
 
 					<div class="cck-hero__media">
 						<div class="cck-hero__media-frame">
-							<?php if ( '' !== $atts['image_url'] ) : ?>
+							<?php if ( '' !== $image_html ) : ?>
+								<?php echo wp_kses_post( $image_html ); ?>
+							<?php elseif ( '' !== $atts['image_url'] ) : ?>
 								<img
 									class="cck-hero__image"
 									src="<?php echo esc_url( $atts['image_url'] ); ?>"
