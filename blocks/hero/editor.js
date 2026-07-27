@@ -54,8 +54,15 @@
                             title: 'Hero Settings',
                             initialOpen: true
                         },
-                        Object.keys(editorSettings).map(function (settingId) {
-                            return renderControl(
+                        Object.keys(editorSettings)
+                            .filter(function (settingId) {
+                                return [
+                                    'image_id',
+                                    'image_url'
+                                ].indexOf(settingId) === -1;
+                            })
+                            .map(function (settingId) {
+                                return renderControl(
                                 settingId,
                                 editorSettings[settingId],
                                 attributes,
@@ -181,16 +188,53 @@
                                             render: function (obj) {
 
                                                 if (attributes.image_url) {
-                                                    return el('img', {
-                                                        className: 'cck-hero__image',
-                                                        src: attributes.image_url,
-                                                        alt: '',
-                                                        loading: 'lazy',
-                                                        onClick: obj.open,
-                                                        style: {
-                                                            cursor: 'pointer'
-                                                        }
-                                                    });
+                                                    return el(
+                                                        element.Fragment,
+                                                        null,
+                                                        el('img', {
+                                                            className: 'cck-hero__image',
+                                                            src: attributes.image_url,
+                                                            alt: '',
+                                                            loading: 'lazy',
+                                                            onClick: obj.open,
+                                                            style: {
+                                                                cursor: 'pointer'
+                                                            }
+                                                        }),
+                                                        el(
+                                                            'div',
+                                                            {
+                                                                style: {
+                                                                    display: 'flex',
+                                                                    gap: '8px',
+                                                                    justifyContent: 'center',
+                                                                    marginTop: '12px'
+                                                                }
+                                                            },
+                                                            el(
+                                                                Button,
+                                                                {
+                                                                    variant: 'secondary',
+                                                                    onClick: obj.open
+                                                                },
+                                                                'Replace image'
+                                                            ),
+                                                            el(
+                                                                Button,
+                                                                {
+                                                                    variant: 'tertiary',
+                                                                    isDestructive: true,
+                                                                    onClick: function () {
+                                                                        setAttributes({
+                                                                            image_id: 0,
+                                                                            image_url: ''
+                                                                        });
+                                                                    }
+                                                                },
+                                                                'Remove image'
+                                                            )
+                                                        )
+                                                    );
                                                 }
 
                                                 return el(
