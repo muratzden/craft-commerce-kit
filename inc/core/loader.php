@@ -71,7 +71,7 @@ if ( ! function_exists( 'cck_should_load_layout_loader' ) ) {
 	 * @return bool
 	 */
 	function cck_should_load_layout_loader() {
-		if ( is_admin() || wp_doing_ajax() ) {
+		if ( is_admin() || wp_doing_ajax() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 			return true;
 		}
 
@@ -105,7 +105,7 @@ if ( ! function_exists( 'cck_maybe_load_layout_loader' ) ) {
 	}
 }
 
-if ( is_admin() || wp_doing_ajax() ) {
+if ( is_admin() || wp_doing_ajax() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 	require_once CCK_PLUGIN_DIR . 'inc/core/loader-layouts.php';
 } else {
 	add_action( 'wp', 'cck_maybe_load_layout_loader', 0 );

@@ -9,9 +9,9 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'cck_normalize_layout_component' ) ) {
 	/**
-	 * Layout component tanımını ileride JSON yapısına uyumlu olacak şekilde normalize eder.
+	 * Normalize a layout component definition.
 	 *
-	 * @param mixed $component Layout component tanımı.
+	 * @param mixed $component Layout component definition.
 	 * @return array
 	 */
 	function cck_normalize_layout_component( $component ) {
@@ -23,8 +23,22 @@ if ( ! function_exists( 'cck_normalize_layout_component' ) ) {
 		}
 
 		if ( is_array( $component ) ) {
-			$component_id = sanitize_key( cck_array_get( $component, 'id', cck_array_get( $component, 'type', cck_array_get( $component, 'component', '' ) ) ) );
-			$atts         = cck_array_get( $component, 'atts', cck_array_get( $component, 'attributes', array() ) );
+			$component_id = sanitize_key(
+				cck_array_get(
+					$component,
+					'id',
+					cck_array_get(
+						$component,
+						'type',
+						cck_array_get( $component, 'component', '' )
+					)
+				)
+			);
+			$atts = cck_array_get(
+				$component,
+				'atts',
+				cck_array_get( $component, 'attributes', array() )
+			);
 
 			return array(
 				'id'   => $component_id,
@@ -41,24 +55,29 @@ if ( ! function_exists( 'cck_normalize_layout_component' ) ) {
 
 if ( ! function_exists( 'cck_render_layout' ) ) {
 	/**
-	 * Kayıtlı bir layout içindeki componentleri sırayla render eder.
+	 * Render the components of a registered layout in sequence.
 	 *
-	 * @param string $layout_id Layout kimliği.
-	 * @param array  $data      İleride JSON/veri tabanlı render için ayrılan veri.
+	 * @param string $layout_id Registered layout ID.
+	 * @param array  $data      Composition context and future overrides.
 	 * @return string
 	 */
 	function cck_render_layout( $layout_id, $data = array() ) {
 		$layout_id = sanitize_key( $layout_id );
-		$layout    = cck_get_layout( $layout_id );
+		$queue     = cck_compose_layout( $layout_id, (array) $data );
 
-		if ( empty( $layout ) ) {
-			cck_debug_log( 'Layout bulunamadı: ' . $layout_id );
+		if ( is_wp_error( $queue ) ) {
+			cck_debug_log(
+				sprintf(
+					'Layout composition failed [%1$s]: %2$s',
+					$layout_id,
+					$queue->get_error_message()
+				)
+			);
+
 			return '';
 		}
 
-		$components = cck_manifest_get( $layout, 'components', array() );
-
-		if ( empty( $components ) || ! is_array( $components ) ) {
+		if ( empty( $queue ) ) {
 			return '';
 		}
 
@@ -66,14 +85,18 @@ if ( ! function_exists( 'cck_render_layout' ) ) {
 
 		$output = '';
 
-		foreach ( $components as $component ) {
-			$component = cck_normalize_layout_component( $component );
+		foreach ( $queue as $component ) {
+			$component_id = sanitize_key( cck_array_get( $component, 'id', '' ) );
+			$atts         = cck_array_get( $component, 'atts', array() );
 
-			if ( empty( $component['id'] ) ) {
+			if ( empty( $component_id ) ) {
 				continue;
 			}
 
-			$output .= cck_render_component( $component['id'], $component['atts'] );
+			$output .= cck_render_component(
+				$component_id,
+				is_array( $atts ) ? $atts : array()
+			);
 		}
 
 		return $output;
@@ -82,9 +105,9 @@ if ( ! function_exists( 'cck_render_layout' ) ) {
 
 if ( ! function_exists( 'cck_layout_shortcode' ) ) {
 	/**
-	 * Shortcode üzerinden layout render eder.
+	 * Render a registered layout through the layout shortcode.
 	 *
-	 * @param array $atts Shortcode değerleri.
+	 * @param array $atts Shortcode attributes.
 	 * @return string
 	 */
 	function cck_layout_shortcode( $atts ) {
