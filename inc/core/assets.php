@@ -80,7 +80,10 @@ if ( ! function_exists( 'cck_should_enqueue_frontend_assets' ) ) {
 			|| has_block( 'craft-commerce-kit/section-title', $post->post_content )
 			|| has_block( 'craft-commerce-kit/cta', $post->post_content )
 			|| has_block( 'craft-commerce-kit/image-text', $post->post_content )
-			|| has_block( 'craft-commerce-kit/hero', $post->post_content );
+			|| has_block( 'craft-commerce-kit/hero', $post->post_content )
+			|| has_block( 'craft-commerce-kit/trust-block', $post->post_content )
+			|| has_block( 'craft-commerce-kit/collection-grid', $post->post_content )
+			|| has_block( 'craft-commerce-kit/product-grid', $post->post_content );
 	}
 }
 
