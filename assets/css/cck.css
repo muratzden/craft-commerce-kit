@@ -435,7 +435,7 @@
 
 .cck-collection-grid__inner {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	grid-template-columns: repeat(var(--cck-grid-columns, 2), minmax(0, 1fr));
 	gap: var(--cck-space-md);
 }
 
