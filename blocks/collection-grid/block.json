@@ -1,0 +1,18 @@
+{
+  "apiVersion": 3,
+  "name": "craft-commerce-kit/collection-grid",
+  "version": "1.0.0",
+  "title": "CCK Collection Grid",
+  "category": "design",
+  "icon": "screenoptions",
+  "description": "Collection links with images and configurable columns.",
+  "textdomain": "craft-commerce-kit",
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false
+  },
+  "editorScript": "file:./editor.js"
+}
