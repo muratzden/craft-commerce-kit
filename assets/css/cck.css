@@ -6,9 +6,9 @@
 	--cck-space-xl: var(--cck-spacing-xl, 64px);
 	--cck-space-2xl: var(--cck-spacing-xxl, 96px);
 	--cck-space-3xl: 128px;
-	--cck-radius-sm: var(--cck-radius-sm, 10px);
-	--cck-radius-md: var(--cck-radius-md, 16px);
-	--cck-radius-lg: var(--cck-radius-lg, 24px);
+	--cck-radius-sm: 10px;
+	--cck-radius-md: 16px;
+	--cck-radius-lg: 24px;
 	--cck-radius-xl: 32px;
 	--cck-shadow-sm: 0 12px 28px rgba(23, 18, 14, 0.08);
 	--cck-shadow-md: 0 20px 50px rgba(23, 18, 14, 0.12);
