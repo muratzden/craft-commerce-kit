@@ -36,6 +36,7 @@ require_once CCK_PLUGIN_DIR . 'inc/core/loader-brand-runtime.php';
  * Add-ons
  */
 require_once CCK_PLUGIN_DIR . 'inc/addons/registry.php';
+require_once CCK_PLUGIN_DIR . 'inc/addons/status.php';
 
 /*
  * Experience Packs
