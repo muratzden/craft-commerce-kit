@@ -35,6 +35,10 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 			<?php else : ?>
 				<div class="cck-admin-component-grid">
 					<?php foreach ( $components as $component ) : ?>
+                                                <?php
+                                                $global_component_ids = array( 'brand-preset', 'header', 'header-actions', 'footer', 'layout-assets' );
+                                                $component_surface_label = in_array( $component['id'], $global_component_ids, true ) ? __( 'Global', 'craft-commerce-kit' ) : __( 'Content', 'craft-commerce-kit' );
+                                                ?>
 						<article class="cck-admin-component-card">
 							<div class="cck-admin-card__heading">
 								<h3><?php echo esc_html( $component['label'] ); ?></h3>
@@ -48,6 +52,7 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 									<span><?php echo esc_html( sprintf( __( 'Version %s', 'craft-commerce-kit' ), $component['version'] ) ); ?></span>
 								<?php endif; ?>
 								<span><?php echo esc_html( sprintf( __( '%d supports', 'craft-commerce-kit' ), (int) $component['supports_count'] ) ); ?></span>
+                                                                <span><?php echo esc_html( $component_surface_label ); ?></span>
 								<span><?php echo esc_html( sprintf( __( '%d defaults', 'craft-commerce-kit' ), (int) $component['defaults_count'] ) ); ?></span>
 								<span><?php echo esc_html( sprintf( __( '%d schema fields', 'craft-commerce-kit' ), (int) $component['schema_fields_count'] ) ); ?></span>
 							</div>
