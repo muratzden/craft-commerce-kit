@@ -18,24 +18,26 @@ if ( ! function_exists( 'cck_component_package_render_footer' ) ) {
 	function cck_component_package_render_footer( $atts = array(), $manifest = array() ) {
 		unset( $manifest );
 
-		$atts = wp_parse_args(
+		$preset = function_exists( 'cck_get_active_brand_preset' )
+			? cck_get_active_brand_preset()
+			: array();
+		$atts   = wp_parse_args(
 			is_array( $atts ) ? $atts : array(),
 			array(
-				'about'     => __( 'A premium WooCommerce starter kit for refined artisan commerce.', 'craft-commerce-kit' ),
+				'brand_name' => '',
+				'brand_url'  => '',
+				'about'      => __( 'A premium WooCommerce starter kit for refined artisan commerce.', 'craft-commerce-kit' ),
 				'email'     => __( 'hello@example.com', 'craft-commerce-kit' ),
 				'copyright' => sprintf( __( 'Â© %1$s Craft Commerce Kit.', 'craft-commerce-kit' ), gmdate( 'Y' ) ),
 			)
 		);
 
-		$brand_name = __( 'Craft Commerce Kit', 'craft-commerce-kit' );
-
-		if ( function_exists( 'cck_get_active_brand_preset' ) ) {
-			$brand_name = cck_array_get(
-				cck_get_active_brand_preset(),
-				'brand_name',
-				$brand_name
-			);
-		}
+		$atts['brand_name'] = '' !== trim( (string) $atts['brand_name'] )
+			? $atts['brand_name']
+			: cck_array_get( $preset, 'brand_name', __( 'Craft Commerce Kit', 'craft-commerce-kit' ) );
+		$atts['brand_url']  = '' !== trim( (string) $atts['brand_url'] )
+			? $atts['brand_url']
+			: cck_array_get( $preset, 'brand_url', home_url( '/' ) );
 
 		ob_start();
 		?>
@@ -43,9 +45,9 @@ if ( ! function_exists( 'cck_component_package_render_footer' ) ) {
 			<div class="cck-container">
 				<div class="cck-footer__panel">
 					<div class="cck-footer__brand">
-						<a class="cck-footer__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+						<a class="cck-footer__logo" href="<?php echo esc_url( $atts['brand_url'] ); ?>">
 							<span class="cck-footer__logo-mark" aria-hidden="true">CCK</span>
-							<span class="cck-footer__logo-text"><?php echo esc_html( $brand_name ); ?></span>
+							<span class="cck-footer__logo-text"><?php echo esc_html( $atts['brand_name'] ); ?></span>
 						</a>
 						<p class="cck-footer__about"><?php echo esc_html( $atts['about'] ); ?></p>
 					</div>
