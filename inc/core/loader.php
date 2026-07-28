@@ -33,12 +33,6 @@ require_once CCK_PLUGIN_DIR . 'inc/gutenberg/loader.php';
 require_once CCK_PLUGIN_DIR . 'inc/core/loader-brand-runtime.php';
 
 /*
- * Add-ons
- */
-require_once CCK_PLUGIN_DIR . 'inc/addons/registry.php';
-require_once CCK_PLUGIN_DIR . 'inc/addons/status.php';
-
-/*
  * Experience Packs
  */
 require_once CCK_PLUGIN_DIR . 'inc/core/loader-experiences.php';

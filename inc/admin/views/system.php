@@ -57,16 +57,6 @@ if ( ! function_exists( 'cck_render_system_page' ) ) {
 			? cck_is_woocommerce_active()
 			: false;
 
-		$cck_addon_statuses = cck_get_addon_statuses();
-		$active_cck_addons  = count(
-			array_filter(
-				$cck_addon_statuses,
-				static function ( $addon_status ) {
-					return 'active' === $addon_status['state'];
-				}
-			)
-		);
-
 		$brand_name = ! empty( $active_brand['brand_name'] )
 			? $active_brand['brand_name']
 			: __( 'Not configured', 'craft-commerce-kit' );
@@ -130,15 +120,6 @@ if ( ! function_exists( 'cck_render_system_page' ) ) {
 					: 'warning',
 			),
 			array(
-				'label'  => __( 'CCK Add-ons', 'craft-commerce-kit' ),
-				'value'  => sprintf(
-					/* translators: %s: Active add-on count. */
-					__( '%s active', 'craft-commerce-kit' ),
-					number_format_i18n( $active_cck_addons )
-				),
-				'status' => $active_cck_addons > 0 ? 'ready' : 'unavailable',
-			),
-			array(
 				'label'  => __( 'Registered Components', 'craft-commerce-kit' ),
 				'value'  => (string) count( $components ),
 				'status' => ! empty( $components ) ? 'ready' : 'warning',
@@ -177,12 +158,6 @@ if ( ! function_exists( 'cck_render_system_page' ) ) {
 			'ready'       => __( 'Ready', 'craft-commerce-kit' ),
 			'warning'     => __( 'Warning', 'craft-commerce-kit' ),
 			'unavailable' => __( 'Unavailable', 'craft-commerce-kit' ),
-		);
-
-		$addon_status_labels = array(
-			'active'        => __( 'Active', 'craft-commerce-kit' ),
-			'inactive'      => __( 'Inactive', 'craft-commerce-kit' ),
-			'not-installed' => __( 'Not installed', 'craft-commerce-kit' ),
 		);
 
 		cck_render_admin_workspace_open(
@@ -232,72 +207,6 @@ if ( ! function_exists( 'cck_render_system_page' ) ) {
 					</div>
 				</article>
 			<?php endforeach; ?>
-		</div>
-
-		<div class="cck-admin-card cck-admin-card--wide">
-			<div class="cck-admin-card__heading">
-				<h2><?php esc_html_e( 'CCK Add-ons', 'craft-commerce-kit' ); ?></h2>
-				<span class="cck-admin-status <?php echo esc_attr( $active_cck_addons > 0 ? 'cck-admin-status--active' : 'cck-admin-status--muted' ); ?>">
-					<?php
-					echo esc_html(
-						sprintf(
-							/* translators: %s: Registered add-on count. */
-							_n(
-								'%s add-on',
-								'%s add-ons',
-								count( $cck_addon_statuses ),
-								'craft-commerce-kit'
-							),
-							number_format_i18n( count( $cck_addon_statuses ) )
-						)
-					);
-					?>
-				</span>
-			</div>
-
-			<p class="cck-admin-muted">
-				<?php esc_html_e( 'Standalone CCK packages detected in this WordPress installation. Status is informational; no automatic changes are performed.', 'craft-commerce-kit' ); ?>
-			</p>
-
-			<table class="widefat striped">
-				<thead>
-					<tr>
-						<th scope="col"><?php esc_html_e( 'Add-on', 'craft-commerce-kit' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Version', 'craft-commerce-kit' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Status', 'craft-commerce-kit' ); ?></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ( $cck_addon_statuses as $addon_status ) : ?>
-						<?php
-						$addon_state = isset( $addon_status['state'] )
-							? $addon_status['state']
-							: 'not-installed';
-						$addon_status_label = isset( $addon_status_labels[ $addon_state ] )
-							? $addon_status_labels[ $addon_state ]
-							: __( 'Unknown', 'craft-commerce-kit' );
-						?>
-						<tr>
-							<td>
-								<strong><?php echo esc_html( $addon_status['name'] ); ?></strong><br>
-								<code><?php echo esc_html( $addon_status['plugin_file'] ); ?></code>
-							</td>
-							<td>
-								<?php if ( '' !== $addon_status['version'] ) : ?>
-									<?php echo esc_html( $addon_status['version'] ); ?>
-								<?php else : ?>
-									&mdash;
-								<?php endif; ?>
-							</td>
-							<td>
-								<span class="cck-admin-status <?php echo esc_attr( 'active' === $addon_state ? 'cck-admin-status--active' : 'cck-admin-status--muted' ); ?>">
-									<?php echo esc_html( $addon_status_label ); ?>
-								</span>
-							</td>
-						</tr>
-					<?php endforeach; ?>
-				</tbody>
-			</table>
 		</div>
 
 		<div class="notice notice-info inline">
