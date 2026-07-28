@@ -23,13 +23,13 @@ return array(
 		'brand_name' => array(
 			'type'              => 'text',
 			'label'             => __( 'Brand Name', 'craft-commerce-kit' ),
-			'default'           => __( 'Craft Commerce Kit', 'craft-commerce-kit' ),
+			'default'           => '',
 			'sanitize_callback' => 'sanitize_text_field',
 		),
 		'brand_url'  => array(
 			'type'              => 'url',
 			'label'             => __( 'Brand URL', 'craft-commerce-kit' ),
-			'default'           => '/',
+			'default'           => '',
 			'sanitize_callback' => 'esc_url_raw',
 		),
 		'about'      => array( 'type' => 'textarea', 'label' => __( 'About', 'craft-commerce-kit' ), 'default' => __( 'A premium WooCommerce starter kit for refined artisan commerce.', 'craft-commerce-kit' ), 'sanitize_callback' => 'sanitize_text_field' ),
