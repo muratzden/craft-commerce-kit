@@ -369,7 +369,15 @@ if ( ! function_exists( 'cck_wc_render_product_card_from_definition' ) ) {
 			</div>
 
 			<div class="cck-product-card__content">
+				<div class="cck-product-card__identity">
+					<a class="cck-product-card__title-link" href="<?php echo esc_url( cck_array_get( $card, 'url', '#' ) ); ?>">
+						<h3 class="cck-product-card__title"><?php echo esc_html( cck_array_get( $card, 'title', '' ) ); ?></h3>
+					</a>
 
+					<?php if ( '' !== cck_array_get( $card, 'price_html', '' ) ) : ?>
+						<div class="cck-product-card__price"><?php echo wp_kses_post( cck_array_get( $card, 'price_html', '' ) ); ?></div>
+					<?php endif; ?>
+				</div>
 				<?php if ( ! empty( $card['rating_html'] ) ) : ?>
 					<div class="cck-product-card__meta">
 						<?php if ( ! empty( $card['rating_html'] ) ) : ?>
@@ -727,7 +735,15 @@ if ( ! function_exists( 'cck_wc_render_product_card_markup' ) ) {
 			</div>
 
 			<div class="cck-product-card__content">
+				<div class="cck-product-card__identity">
+					<a class="cck-product-card__title-link" href="<?php echo esc_url( cck_array_get( $card, 'url', '#' ) ); ?>">
+						<h3 class="cck-product-card__title"><?php echo esc_html( cck_array_get( $card, 'title', '' ) ); ?></h3>
+					</a>
 
+					<?php if ( '' !== cck_array_get( $card, 'price_html', '' ) ) : ?>
+						<div class="cck-product-card__price"><?php echo wp_kses_post( cck_array_get( $card, 'price_html', '' ) ); ?></div>
+					<?php endif; ?>
+				</div>
 				<?php if ( ! empty( $card['rating_html'] ) ) : ?>
 					<div class="cck-product-card__meta">
 						<?php if ( ! empty( $card['rating_html'] ) ) : ?>
