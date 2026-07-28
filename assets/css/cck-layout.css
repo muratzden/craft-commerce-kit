@@ -77,20 +77,27 @@ body.cck-layout-active footer.wp-block-template-part {
 .cck-header-action,
 .cck-cart-action {
 	align-items: center;
+	border-radius: 999px;
 	color: inherit;
 	display: inline-flex;
+	height: 40px;
 	justify-content: center;
+	line-height: 1;
 	min-height: 40px;
-	min-width: 32px;
+	min-width: 40px;
 	position: relative;
 	text-decoration: none;
+	width: 40px;
 }
 
 .cck-header-action__icon,
 .cck-header-action svg,
 .cck-cart-action svg {
+	align-items: center;
 	display: inline-flex;
 	height: 22px;
+	justify-content: center;
+	line-height: 0;
 	width: 22px;
 }
 
@@ -111,21 +118,30 @@ body.cck-layout-active footer.wp-block-template-part {
 	stroke: currentColor;
 }
 
+.cck-header-action:focus-visible,
+.cck-cart-action:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
 .cck-header-action__count {
 	align-items: center;
 	background: var(--cck-colors-heading, #241812);
 	border-radius: 999px;
+	box-sizing: border-box;
 	color: var(--cck-colors-background, #fffaf3);
 	display: none;
 	font-size: 0.68rem;
 	font-weight: 700;
 	height: 18px;
 	justify-content: center;
+	line-height: 1;
 	min-width: 18px;
 	padding: 0 5px;
+	pointer-events: none;
 	position: absolute;
-	right: -5px;
-	top: 2px;
+	right: 0;
+	top: 0;
 }
 
 .cck-header-action__count[data-count] {
