@@ -18,6 +18,16 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 
 		$screen     = cck_get_admin_screen( 'components' );
 		$components = cck_get_admin_component_rows();
+                $global_component_ids     = array( 'brand-preset', 'header', 'header-actions', 'footer', 'layout-assets' );
+                $global_components_count = 0;
+
+                foreach ( $components as $component ) {
+                        if ( isset( $component['id'] ) && in_array( $component['id'], $global_component_ids, true ) ) {
+                                ++$global_components_count;
+                        }
+                }
+
+                $content_components_count = count( $components ) - $global_components_count;
 
 		cck_render_admin_workspace_open( $screen['page_title'], $screen['description'] );
 		?>
@@ -25,6 +35,8 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 			<div class="cck-admin-card__heading">
 				<h2><?php esc_html_e( 'Registered Components', 'craft-commerce-kit' ); ?></h2>
 				<span class="cck-admin-badge"><?php echo esc_html( number_format_i18n( count( $components ) ) ); ?></span>
+                                <span class="cck-admin-badge"><?php echo esc_html( sprintf( __( 'Global %s', 'craft-commerce-kit' ), number_format_i18n( $global_components_count ) ) ); ?></span>
+                                <span class="cck-admin-badge"><?php echo esc_html( sprintf( __( 'Content %s', 'craft-commerce-kit' ), number_format_i18n( $content_components_count ) ) ); ?></span>
 			</div>
 
 			<?php if ( empty( $components ) ) : ?>
@@ -36,7 +48,6 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 				<div class="cck-admin-component-grid">
 					<?php foreach ( $components as $component ) : ?>
                                                 <?php
-                                                $global_component_ids = array( 'brand-preset', 'header', 'header-actions', 'footer', 'layout-assets' );
                                                 $component_surface_label = in_array( $component['id'], $global_component_ids, true ) ? __( 'Global', 'craft-commerce-kit' ) : __( 'Content', 'craft-commerce-kit' );
                                                 ?>
 						<article class="cck-admin-component-card">
@@ -95,3 +106,4 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 		cck_render_admin_workspace_close();
 	}
 }
+
