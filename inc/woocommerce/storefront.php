@@ -661,14 +661,6 @@ if ( ! function_exists( 'cck_wc_get_product_card_definition' ) ) {
 		$wishlist_slot   = apply_filters( 'cck_wc_product_card_wishlist_slot', '', $product, $context );
 		$quick_view_slot = apply_filters( 'cck_wc_product_card_quick_view_slot', '', $product, $context );
 
-		if ( '' === $wishlist_slot ) {
-			$wishlist_slot = cck_wc_cardify_action_html( '', 'heart', __( 'Wishlist', 'craft-commerce-kit' ), 'cck-product-card__slot-button--wishlist' );
-		}
-
-		if ( '' === $quick_view_slot ) {
-			$quick_view_slot = cck_wc_cardify_action_html( '', 'eye', __( 'Quick view', 'craft-commerce-kit' ), 'cck-product-card__slot-button--quick-view' );
-		}
-
 		$add_to_cart_html = cck_wc_render_product_card_action_link( $product );
 
 		if ( '' === $add_to_cart_html && function_exists( 'woocommerce_template_loop_add_to_cart' ) ) {
@@ -1231,8 +1223,6 @@ if ( ! function_exists( 'cck_wc_render_single_product_summary' ) ) {
 
 		echo '<div class="cck-wc-summary__actions">';
 		woocommerce_template_single_add_to_cart();
-		echo '<button type="button" class="cck-button cck-button--secondary cck-wc-summary__slot" aria-label="' . esc_attr__( 'Wishlist', 'craft-commerce-kit' ) . '">' . cck_render_svg_icon( 'heart' ) . '<span>' . esc_html__( 'Wishlist', 'craft-commerce-kit' ) . '</span></button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '<button type="button" class="cck-button cck-button--ghost cck-wc-summary__slot" aria-label="' . esc_attr__( 'Quick view', 'craft-commerce-kit' ) . '">' . cck_render_svg_icon( 'eye' ) . '<span>' . esc_html__( 'Quick view', 'craft-commerce-kit' ) . '</span></button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</div>';
 
 		$categories = wp_strip_all_tags( wc_get_product_category_list( $product->get_id(), ', ' ) );
