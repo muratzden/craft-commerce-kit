@@ -23,7 +23,6 @@ if ( ! function_exists( 'cck_component_package_render_header_actions' ) ) {
 		$urls   = cck_get_layout_action_urls();
 		$labels = array(
 			'account'  => __( 'Account', 'craft-commerce-kit' ),
-			'wishlist' => __( 'Wishlist', 'craft-commerce-kit' ),
 			'cart'     => __( 'Cart', 'craft-commerce-kit' ),
 		);
 
@@ -35,12 +34,6 @@ if ( ! function_exists( 'cck_component_package_render_header_actions' ) ) {
 			<a class="cck-header-action cck-header-action--account" href="<?php echo esc_url( $urls['account'] ); ?>" aria-label="<?php echo esc_attr( $labels['account'] ); ?>">
 				<span class="cck-header-action__icon" aria-hidden="true"><?php echo cck_render_layout_action_icon( 'user' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 				<span class="screen-reader-text"><?php echo esc_html( $labels['account'] ); ?></span>
-			</a>
-
-			<a class="cck-header-action cck-header-action--wishlist" href="<?php echo esc_url( $urls['wishlist'] ); ?>" aria-label="<?php echo esc_attr( $labels['wishlist'] ); ?>">
-				<span class="cck-header-action__icon" aria-hidden="true"><?php echo cck_render_layout_action_icon( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-				<span class="cck-header-action__count" data-cck-wishlist-count<?php echo $counts['wishlist'] > 0 ? ' data-count="' . esc_attr( (string) $counts['wishlist'] ) . '"' : ''; ?>><?php echo $counts['wishlist'] > 0 ? esc_html( (string) $counts['wishlist'] ) : ''; ?></span>
-				<span class="screen-reader-text"><?php echo esc_html( $labels['wishlist'] ); ?></span>
 			</a>
 
 			<a class="cck-cart-action cck-header-action--cart" href="<?php echo esc_url( $urls['cart'] ); ?>" aria-label="<?php echo esc_attr( $labels['cart'] ); ?>">
