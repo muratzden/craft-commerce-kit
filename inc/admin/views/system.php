@@ -57,6 +57,22 @@ if ( ! function_exists( 'cck_render_system_page' ) ) {
 			? cck_is_woocommerce_active()
 			: false;
 
+                $cck_addon_slugs = array(
+                        'cck-delivery-estimate-options',
+                        'cck-gift-package-options',
+                        'cck-leather-color-options',
+                        'cck-personalization-options',
+                        'cck-quick-view-options',
+                        'cck-wishlist-options',
+                );
+                $active_cck_addons = 0;
+
+                foreach ( $cck_addon_slugs as $cck_addon_slug ) {
+                        if ( is_plugin_active( $cck_addon_slug . '/' . $cck_addon_slug . '.php' ) ) {
+                                ++$active_cck_addons;
+                        }
+                }
+
 		$brand_name = ! empty( $active_brand['brand_name'] )
 			? $active_brand['brand_name']
 			: __( 'Not configured', 'craft-commerce-kit' );
@@ -119,6 +135,15 @@ if ( ! function_exists( 'cck_render_system_page' ) ) {
 					? 'ready'
 					: 'warning',
 			),
+                        array(
+                                'label'  => __( 'CCK Add-ons', 'craft-commerce-kit' ),
+                                'value'  => sprintf(
+                                        /* translators: %s: Active add-on count. */
+                                        __( '%s active', 'craft-commerce-kit' ),
+                                        number_format_i18n( $active_cck_addons )
+                                ),
+                                'status' => $active_cck_addons > 0 ? 'ready' : 'unavailable',
+                        ),
 			array(
 				'label'  => __( 'Registered Components', 'craft-commerce-kit' ),
 				'value'  => (string) count( $components ),
