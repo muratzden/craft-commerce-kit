@@ -555,6 +555,10 @@ if ( ! function_exists( 'cck_render_global_header' ) ) {
 			return;
 		}
 
+		if ( function_exists( 'cck_is_published_experience_page' ) && cck_is_published_experience_page() ) {
+			return;
+		}
+
 		cck_enqueue_layout_assets();
 
 		echo cck_render_component( 'header' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
