@@ -8,6 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 return array(
+	'header',
 	'hero',
 	'intro',
 	'product-grid',
