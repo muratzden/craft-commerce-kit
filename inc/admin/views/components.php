@@ -66,6 +66,13 @@ if ( ! function_exists( 'cck_render_components_page' ) ) {
 								<dt><?php esc_html_e( 'Supports', 'craft-commerce-kit' ); ?></dt>
 								<dd><?php echo esc_html( (string) $component['supports_count'] ); ?></dd>
 							</dl>
+                                                        <?php
+                                                        $manifest = function_exists( 'cck_get_component_manifest' ) ? cck_get_component_manifest( $component['id'] ) : array();
+
+                                                        if ( function_exists( 'cck_render_component_settings_preview' ) && is_array( $manifest ) ) {
+                                                                echo cck_render_component_settings_preview( $manifest ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Settings renderer escapes field output.
+                                                        }
+                                                        ?>
 
 							<div class="cck-admin-template-actions">
 								<?php if ( ! empty( $component['preview_url'] ) ) : ?>
