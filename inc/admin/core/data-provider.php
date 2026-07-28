@@ -167,7 +167,7 @@ if ( ! function_exists( 'cck_get_admin_component_rows' ) ) {
 				'supports_count'      => count( $supports ),
 				'defaults_count'      => count( function_exists( 'cck_get_component_defaults' ) ? cck_get_component_defaults( $component_id ) : array() ),
 				'schema_fields_count'  => count( $settings ),
-				'status'              => is_string( $callback ) && '' !== $callback && is_callable( $callback ) ? __( 'Callable', 'craft-commerce-kit' ) : __( 'Missing callback', 'craft-commerce-kit' ),
+				'status'              => is_string( $callback ) && '' !== $callback ? __( 'Callable', 'craft-commerce-kit' ) : __( 'Missing callback', 'craft-commerce-kit' ),
 				'aliases'             => isset( $aliases[ $component_id ] ) ? $aliases[ $component_id ] : array(),
 			);
 		}
