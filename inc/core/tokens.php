@@ -11,9 +11,10 @@ if ( ! function_exists( 'cck_get_design_tokens' ) ) {
 	/**
 	 * Get design tokens.
 	 *
+	 * @param string $brand_id Optional registered brand identifier.
 	 * @return array
 	 */
-	function cck_get_design_tokens() {
+	function cck_get_design_tokens( $brand_id = '' ) {
 		$tokens = array(
 			'colors'  => array(
 				'background'  => '#F7F3EA',
@@ -46,9 +47,15 @@ if ( ! function_exists( 'cck_get_design_tokens' ) ) {
 			),
 		);
 
-		$active_brand = function_exists( 'cck_get_active_brand' )
-			? cck_get_active_brand()
-			: array();
+		$brand_id = sanitize_key( $brand_id );
+
+		if ( '' !== $brand_id && function_exists( 'cck_get_brand' ) ) {
+			$active_brand = cck_get_brand( $brand_id );
+		} else {
+			$active_brand = function_exists( 'cck_get_active_brand' )
+				? cck_get_active_brand()
+				: array();
+		}
 
 		$brand_tokens = isset( $active_brand['tokens'] ) && is_array( $active_brand['tokens'] )
 			? $active_brand['tokens']
@@ -89,10 +96,11 @@ if ( ! function_exists( 'cck_get_design_tokens_css' ) ) {
 	 * Build design token CSS for a selector.
 	 *
 	 * @param string $selector CSS selector.
+	 * @param string $brand_id Optional registered brand identifier.
 	 * @return string
 	 */
-	function cck_get_design_tokens_css( $selector = ':root' ) {
-		$tokens   = cck_get_design_tokens();
+	function cck_get_design_tokens_css( $selector = ':root', $brand_id = '' ) {
+		$tokens   = cck_get_design_tokens( $brand_id );
 		$selector = trim( $selector );
 
 		if ( '' === $selector ) {
