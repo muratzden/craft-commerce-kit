@@ -40,7 +40,24 @@ if ( ! function_exists( 'cck_render_experience' ) ) {
 			return '';
 		}
 
-		$output = '<div class="cck-experience cck-experience-' . esc_attr( $id ) . ' cck-layout-' . esc_attr( $layout ) . '">';
+		$experience_class = 'cck-experience-' . sanitize_html_class( $id );
+		$brand_id         = function_exists( 'cck_get_active_brand_id' )
+			? cck_get_active_brand_id( array( 'experience' => $id ) )
+			: '';
+		$output           = '';
+
+		if ( '' !== $brand_id && function_exists( 'cck_get_design_tokens_css' ) ) {
+			$output .= '<style>';
+			$output .= esc_html(
+				cck_get_design_tokens_css(
+					'.' . $experience_class,
+					$brand_id
+				)
+			);
+			$output .= '</style>';
+		}
+
+		$output .= '<div class="cck-experience ' . esc_attr( $experience_class ) . ' cck-layout-' . esc_attr( $layout ) . '">';
 
 		foreach ( $sections as $section ) {
 			$output .= cck_render_experience_section( $id, $section );
